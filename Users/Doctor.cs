@@ -14,5 +14,26 @@ namespace HospitalSystem.Users
         {
             DoctorID++;
         }
+
+        public void DisplayMenu()
+        {
+            Console.Clear();
+
+            Menu doctorMenu = new Menu();
+            doctorMenu.Subtitle("Doctor Menu");
+
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
+
+            Console.WriteLine("Please choose an option:");
+            Console.WriteLine("1. List doctor details");
+            Console.WriteLine("2. List patients");
+            Console.WriteLine("3. List appointments");
+            Console.WriteLine("4. Check particular patient");
+            Console.WriteLine("5. List appointments with patient");
+            Console.WriteLine("6. Logout");
+            Console.WriteLine("7. Exit");
+
+            Console.ReadKey();
+        }
     }
 }

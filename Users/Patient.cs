@@ -13,11 +13,14 @@ namespace HospitalSystem.Users
             PatientID++;
         }
 
-        public void DisplayMenuOptions()
+        public void DisplayMenu()
         {
             Console.Clear();
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Management System Victor Zottmann\n");
+            Menu patientMenu = new Menu();
+            patientMenu.Subtitle("Patient Menu");
+
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
 
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1. List patient details");
@@ -25,7 +28,7 @@ namespace HospitalSystem.Users
             Console.WriteLine("3. List all appointments");
             Console.WriteLine("4. Book appointment");
             Console.WriteLine("5. Exit to login");
-            Console.WriteLine("6. Exit System");
+            Console.WriteLine("6. Exit system");
         }
 
         // Maybe overload this later to display details in relation to user permissions (admin vs user)
@@ -34,15 +37,15 @@ namespace HospitalSystem.Users
             Console.Clear();
 
             Menu patientMenu = new Menu();
-            patientMenu.MenuSubtitle("My Details");
+            patientMenu.Subtitle("My Details");
 
-            Console.WriteLine($"{FirstName} {LastName}'s Details\n");
+            Console.WriteLine($"{this.FirstName} {this.LastName}'s Details\n");
 
-            Console.WriteLine($"Patient ID: {PatientID}");
-            Console.WriteLine($"Full name: {FirstName} {LastName}");
-            Console.WriteLine($"Address: {Address}");
-            Console.WriteLine($"Email: {Email}");
-            Console.WriteLine($"Phone: {Phone}");
+            Console.WriteLine($"Patient ID: {this.PatientID}");
+            Console.WriteLine($"Full name: {this.FirstName} {this.LastName}");
+            Console.WriteLine($"Address: {this.Address}");
+            Console.WriteLine($"Email: {this.Email}");
+            Console.WriteLine($"Phone: {this.Phone}");
 
             // read key to close program
             Console.ReadKey();
