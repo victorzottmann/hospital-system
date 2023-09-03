@@ -10,6 +10,12 @@ namespace HospitalSystem.Users
         private Doctor AssignedDoctor { get; }
         private int PatientID = 10000;
 
+        private List<string> Appointments { get; } = new List<string>()
+        {
+            "cold symptoms",
+            "regular checkup with doc"
+        };
+
         public Patient(Doctor doctor, string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
@@ -81,6 +87,33 @@ namespace HospitalSystem.Users
             DisplayMenu();
         }
 
+        public void ListAllAppointments()
+        {
+            Console.Clear();
+
+            Menu patientAppointments = new Menu();
+            patientAppointments.Subtitle("My Appointments");
+
+            Doctor doctor = AssignedDoctor;
+            int doctorStrLength = doctor.ToString().Length;
+
+            Console.WriteLine($"Appointments for {this.FirstName} {this.LastName}\n");
+
+            Console.WriteLine("Doctor | Patient | Description");
+            Console.WriteLine(new string('-', doctorStrLength));
+
+            foreach (var appointment in this.Appointments)
+            {
+                Console.WriteLine(
+                    $"{doctor.FirstName} {doctor.LastName} | " +
+                    $"{this.FirstName} {this.LastName} | " +
+                    $"{appointment}"
+                );
+            }
+
+            Console.ReadKey();
+        }
+
         public void ProcessSelectedOption(string input)
         {
             switch (input)
@@ -90,6 +123,9 @@ namespace HospitalSystem.Users
                     break;
                 case "2":
                     ListMyDoctorDetails();
+                    break;
+                case "3":
+                    ListAllAppointments();
                     break;
             }
         }
