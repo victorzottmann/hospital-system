@@ -26,7 +26,7 @@ namespace HospitalSystem
         {
             Console.Clear();
 
-            AppMenu patientMenu = new AppMenu();
+            Menu patientMenu = new Menu();
             patientMenu.MenuSubtitle("Patient Menu");
 
             string patientFullName = $"{this.FirstName} {this.LastName}";
@@ -40,7 +40,7 @@ namespace HospitalSystem
         {
             Console.Clear();
 
-            AppMenu patientMenu = new AppMenu();
+            Menu patientMenu = new Menu();
             patientMenu.MenuSubtitle("My Details");
 
             string patientFullName = $"{this.FirstName} {this.LastName}";

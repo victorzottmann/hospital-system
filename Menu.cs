@@ -2,7 +2,7 @@
 
 namespace HospitalSystem
 {
-    public class AppMenu
+    public class Menu
     {
         private string Title = "DOTNET Hospital Management System";
 
