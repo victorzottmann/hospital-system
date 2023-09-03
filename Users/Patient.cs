@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Net;
-using System.Numerics;
+using System.Collections.Generic;
 
 namespace HospitalSystem.Users
 {
@@ -9,6 +7,8 @@ namespace HospitalSystem.Users
     {
         private Doctor AssignedDoctor { get; }
         private int PatientID = 10000;
+
+        private List<Doctor> RegisteredDoctors { get; } = new List<Doctor>();
 
         private List<string> Appointments { get; } = new List<string>()
         {
@@ -20,7 +20,13 @@ namespace HospitalSystem.Users
             : base(firstName, lastName, email, phone, address)
         {
             AssignedDoctor = doctor;
+            RegisteredDoctors.Add(doctor);
             PatientID++;
+        }
+
+        public void RegisterDoctor(Doctor doctor)
+        {
+            RegisteredDoctors.Add(doctor);
         }
 
         public void DisplayMenu()
@@ -114,6 +120,52 @@ namespace HospitalSystem.Users
             Console.ReadKey();
         }
 
+        public void BookAppointment()
+        {
+            Console.Clear();
+
+            Menu bookAppointment = new Menu();
+            bookAppointment.Subtitle("Book Appointment");
+
+            Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with\n");
+
+            for (int i = 0; i < this.RegisteredDoctors.Count; i++)
+            {
+                Doctor doctor = RegisteredDoctors[i];
+                Console.WriteLine($"{i+1}. {doctor.FirstName} {doctor.LastName}");
+            }
+
+            Console.WriteLine("\nPlease choose a doctor:");
+            string input = Console.ReadLine()!;
+
+            bool optionSelected = int.TryParse(input, out int selection);
+
+            if (optionSelected)
+            {
+                Doctor doctor = RegisteredDoctors[selection - 1];
+                Console.WriteLine($"\nYou are booking an appointment with {doctor.FirstName} {doctor.LastName}");
+                
+                Console.Write("Description of the appointment: ");
+                string description = Console.ReadLine()!;
+
+                if (description != null)
+                {
+                    Console.WriteLine("The appointment was booked successfully");
+                }
+                /*
+                else
+                {
+                    prompt the user to input it again 
+                }
+                */
+
+                Console.WriteLine("Press any key to return to the Patient Menu:");
+            }
+
+            Console.ReadKey();
+            DisplayMenu();
+        }
+
         public void ProcessSelectedOption(string input)
         {
             switch (input)
@@ -126,6 +178,9 @@ namespace HospitalSystem.Users
                     break;
                 case "3":
                     ListAllAppointments();
+                    break;
+                case "4":
+                    BookAppointment();
                     break;
             }
         }

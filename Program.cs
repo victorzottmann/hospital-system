@@ -7,13 +7,16 @@ namespace HospitalSystem
     {
         static void Main(string[] args)
         {
-            Address doctorAddress = new Address("456 Albert Ave", "Sydney", "NSW");
+            Address doctorJacobAddress = new Address("456 Albert Ave", "Sydney", "NSW");
+            Doctor doctorJacob = new Doctor("Jacob", "Smith", "d@smith.com", "234567890", doctorJacobAddress.ToString());
+
+            Address doctorSamAddress = new Address("456 Albert Ave", "Sydney", "NSW");
+            Doctor doctorSam = new Doctor("Sam", "Smith", "d@smith.com", "234567890", doctorSamAddress.ToString());
+
             Address patientAddress = new Address("123 Victoria Ave", "Sydney", "NSW");
+            Patient patient = new Patient(doctorJacob, "Victor", "Zottmann", "v@z.com", "123456789", patientAddress.ToString());
 
-            Doctor doctor = new Doctor("Jacob", "Smith", "d@smith.com", "234567890", doctorAddress.ToString());
-            Patient patient = new Patient(doctor, "Victor", "Zottmann", "v@z.com", "123456789", patientAddress.ToString());
-
-            doctor.AddPatient(patient);
+            doctorJacob.AddPatient(patient);
 
             patient.DisplayMenu();
         }
