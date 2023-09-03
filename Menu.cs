@@ -1,5 +1,4 @@
 ﻿using System;
-using HospitalSystem.Users;
 
 namespace HospitalSystem
 {

@@ -10,7 +10,8 @@ namespace HospitalSystem.Users
     {
         private int AdministratorID = 30000;
 
-        public Administrator(string firstName, string lastName, string email, string phone, string address) : base(firstName, lastName, email, phone, address)
+        public Administrator(string firstName, string lastName, string email, string phone, string address)
+            : base(firstName, lastName, email, phone, address)
         {
             AdministratorID++;
         }
@@ -22,8 +23,8 @@ namespace HospitalSystem.Users
             Menu adminMenu = new Menu();
             adminMenu.Subtitle("Administrator Menu");
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}");
-            
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {FirstName} {LastName}");
+
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1. List all doctors");
             Console.WriteLine("2. Check doctor details");

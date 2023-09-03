@@ -8,11 +8,11 @@ namespace HospitalSystem.Users
 {
     public class User
     {
-        protected string FirstName { get; set; }
-        protected string LastName { get; set; }
-        protected string Email { get; set; }
-        protected string Phone { get; set; }
-        protected string Address { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Address { get; set; }
 
         public User(string firstName, string lastName, string email, string phone, string address)
         {

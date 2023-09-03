@@ -7,10 +7,13 @@ namespace HospitalSystem.Users
 {
     public class Patient : User
     {
+        private Doctor AssignedDoctor { get; }
         private int PatientID = 10000;
 
-        public Patient(string firstName, string lastName, string email, string phone, string address) : base(firstName, lastName, email, phone, address)
+        public Patient(Doctor doctor, string firstName, string lastName, string email, string phone, string address)
+            : base(firstName, lastName, email, phone, address)
         {
+            AssignedDoctor = doctor;
             PatientID++;
         }
 
@@ -21,7 +24,7 @@ namespace HospitalSystem.Users
             Menu patientMenu = new Menu();
             patientMenu.Subtitle("Patient Menu");
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {FirstName} {LastName}\n");
 
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1. List patient details");
@@ -29,7 +32,7 @@ namespace HospitalSystem.Users
             Console.WriteLine("3. List all appointments");
             Console.WriteLine("4. Book appointment");
             Console.WriteLine("5. Exit to login");
-            Console.WriteLine("6. Exit system");
+            Console.WriteLine("6. Exit system\n");
 
             string input = Console.ReadLine()!;
             ProcessSelectedOption(input);
@@ -40,19 +43,42 @@ namespace HospitalSystem.Users
         {
             Console.Clear();
 
-            Menu patientMenu = new Menu();
-            patientMenu.Subtitle("My Details");
+            Menu patientDetails = new Menu();
+            patientDetails.Subtitle("My Details");
 
-            Console.WriteLine($"{this.FirstName} {this.LastName}'s Details\n");
+            Console.WriteLine($"{FirstName} {LastName}'s Details\n");
 
-            Console.WriteLine($"Patient ID: {this.PatientID}");
-            Console.WriteLine($"Full name: {this.FirstName} {this.LastName}");
-            Console.WriteLine($"Address: {this.Address}");
-            Console.WriteLine($"Email: {this.Email}");
-            Console.WriteLine($"Phone: {this.Phone}");
+            Console.WriteLine($"Patient ID: {PatientID}");
+            Console.WriteLine($"Full name: {FirstName} {LastName}");
+            Console.WriteLine($"Address: {Address}");
+            Console.WriteLine($"Email: {Email}");
+            Console.WriteLine($"Phone: {Phone}");
 
-            // read key to close program
+            Console.WriteLine("\n\nPress any key to the Patient Menu:");
             Console.ReadKey();
+
+            DisplayMenu();
+        }
+
+        public void ListMyDoctorDetails()
+        {
+            Console.Clear();
+
+            Menu patientDoctorDetails = new Menu();
+            patientDoctorDetails.Subtitle("My Doctor");
+
+            Doctor doctor = AssignedDoctor;
+            int doctorStrLength = doctor.ToString().Length;
+
+            Console.WriteLine("Your doctor:\n");
+            Console.WriteLine("Name: | Email Address | Phone | Address");
+            Console.WriteLine(new string('-', doctorStrLength));
+            Console.WriteLine(doctor);
+
+            Console.WriteLine("\n\nPress any key to the Patient Menu:");
+            Console.ReadKey();
+
+            DisplayMenu();
         }
 
         public void ProcessSelectedOption(string input)
@@ -61,6 +87,9 @@ namespace HospitalSystem.Users
             {
                 case "1":
                     ListPatientDetails();
+                    break;
+                case "2":
+                    ListMyDoctorDetails();
                     break;
             }
         }

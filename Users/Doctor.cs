@@ -10,10 +10,15 @@ namespace HospitalSystem.Users
     {
         private int DoctorID = 20000;
 
-        public Doctor(string firstName, string lastName, string email, string phone, string address) : base(firstName, lastName, email, phone, address)
+        private List<Patient> AssignedPatients { get; } = new List<Patient>();
+
+        public Doctor(string firstName, string lastName, string email, string phone, string address)
+            : base(firstName, lastName, email, phone, address)
         {
             DoctorID++;
         }
+
+        public List<Patient> GetAssignedPatients() => AssignedPatients;
 
         public void DisplayMenu()
         {
@@ -22,7 +27,7 @@ namespace HospitalSystem.Users
             Menu doctorMenu = new Menu();
             doctorMenu.Subtitle("Doctor Menu");
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {FirstName} {LastName}\n");
 
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1. List doctor details");
@@ -33,7 +38,17 @@ namespace HospitalSystem.Users
             Console.WriteLine("6. Logout");
             Console.WriteLine("7. Exit");
 
-            Console.ReadKey();
+            Console.Read();
+        }
+
+        public void AddPatient(Patient patient)
+        {
+            AssignedPatients.Add(patient);
+        }
+
+        public override string ToString()
+        {
+            return $"{FirstName} {LastName} | {Email} | {Phone} | {Address}";
         }
     }
 }
