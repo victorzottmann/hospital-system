@@ -6,7 +6,7 @@ namespace HospitalSystem
     {
         private string Title = "DOTNET Hospital Management System";
 
-        public void Display(string subtitle)
+        public void MenuSubtitle(string subtitle)
         {
             // 33 chars for "DOTNET Hospital Management System"
             int titleLength = Title.Length; 
@@ -28,6 +28,19 @@ namespace HospitalSystem
             //"                       Login => 17 spaces + 5 chars (14 + 3 + 5)
             //"             Patient Menu => 13 spaces + 12 chars (10 + 3 + 12)
             Console.WriteLine($"{subtitle.PadLeft(padding + 3 + subtitleLength)}\n");
+        }
+
+        public void DisplayMenuOptions(string userFullName)
+        {
+            Console.WriteLine($"Welcome to DOTNET Hospital Management System {userFullName}\n");
+
+            Console.WriteLine("Please choose an option:");
+            Console.WriteLine("1. List patient details");
+            Console.WriteLine("2. List my doctor details");
+            Console.WriteLine("3. List all appointments");
+            Console.WriteLine("4. Book appointment");
+            Console.WriteLine("5. Exit to login");
+            Console.WriteLine("6. Exit System");
         }
     }
 }

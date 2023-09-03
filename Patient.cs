@@ -27,18 +27,10 @@ namespace HospitalSystem
             Console.Clear();
 
             AppMenu patientMenu = new AppMenu();
-            patientMenu.Display("Patient Menu");
+            patientMenu.MenuSubtitle("Patient Menu");
 
             string patientFullName = $"{this.FirstName} {this.LastName}";
-            Console.WriteLine($"Welcome to DOTNET Hospital Management System {patientFullName}\n");
-
-            Console.WriteLine("Please choose an option:");
-            Console.WriteLine("1. List patient details");
-            Console.WriteLine("2. List my doctor details");
-            Console.WriteLine("3. List all appointments");
-            Console.WriteLine("4. Book appointment");
-            Console.WriteLine("5. Exit to login");
-            Console.WriteLine("6. Exit System");
+            patientMenu.DisplayMenuOptions(patientFullName);
 
             // read key to close program
             Console.ReadKey();
@@ -48,8 +40,8 @@ namespace HospitalSystem
         {
             Console.Clear();
 
-            AppMenu patientDetails = new AppMenu();
-            patientDetails.Display("My Details");
+            AppMenu patientMenu = new AppMenu();
+            patientMenu.MenuSubtitle("My Details");
 
             string patientFullName = $"{this.FirstName} {this.LastName}";
             Console.WriteLine($"{patientFullName}'s Details\n");
