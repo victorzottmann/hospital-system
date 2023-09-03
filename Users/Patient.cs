@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Net;
 using System.Numerics;
 
@@ -29,10 +30,13 @@ namespace HospitalSystem.Users
             Console.WriteLine("4. Book appointment");
             Console.WriteLine("5. Exit to login");
             Console.WriteLine("6. Exit system");
+
+            string input = Console.ReadLine()!;
+            ProcessSelectedOption(input);
         }
 
         // Maybe overload this later to display details in relation to user permissions (admin vs user)
-        public void ListDetails()
+        public void ListPatientDetails()
         {
             Console.Clear();
 
@@ -49,6 +53,16 @@ namespace HospitalSystem.Users
 
             // read key to close program
             Console.ReadKey();
+        }
+
+        public void ProcessSelectedOption(string input)
+        {
+            switch (input)
+            {
+                case "1":
+                    ListPatientDetails();
+                    break;
+            }
         }
     }
 }
