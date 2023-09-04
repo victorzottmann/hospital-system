@@ -24,11 +24,63 @@ namespace HospitalSystem
             string userId = Console.ReadLine()!;
 
             Console.Write("Password: ");
-            string password = Console.ReadLine()!;
+            string password = this.ReadPassword();
+
 
             ValidateCredentials(this.FilePath, userId, password);
 
             Console.ReadKey();
+        }
+
+        private string ReadPassword()
+        {
+            /* References
+             * Tutorial: https://www.c-sharpcorner.com/article/show-asterisks-instead-of-characters-for-password-input-in-console-application/
+             * ConsoleKeyInfo https://learn.microsoft.com/en-us/dotnet/api/system.consolekeyinfo?view=net-7.0
+             * ReadKey(Boolean) https://learn.microsoft.com/en-us/dotnet/api/system.console.readkey?view=net-7.0#system-console-readkey(system-boolean
+             * Console.Write("\b \b") https://stackoverflow.com/questions/5195692/is-there-a-way-to-delete-a-character-that-has-just-been-written-using-console-wr
+             */
+
+            string password = "";
+
+            // describes the console key that was pressed
+            // in this case, the pressed key will come from Console.ReadKey()
+            ConsoleKeyInfo keyInfo;
+
+            do
+            {
+                // the boolean intercept suppressed the display of the keys in the console
+                // if the value is false or empty, it will be shown in the console
+                keyInfo = Console.ReadKey(intercept: true);
+
+                // if the key is a Backspace and the password has at least one character
+                if (keyInfo.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    // remove the Backspace char from the password string if it's entered
+                    password = password.Remove(password.Length - 1);
+
+                    /* visually erases the Backspace char from the console
+                     * the first \b is "erased" from the console
+                     * the ' ' space in between replaces the Backspace with a white space
+                     * the second \b moves the cursor back to the position before the space char
+                     */
+                    Console.Write("\b \b");
+                } 
+                else if (keyInfo.Key != ConsoleKey.Enter)
+                {
+                    // adds the pressed console key to the password string while Enter is not pressed
+                    password += keyInfo.KeyChar;
+
+                    // essentially "replaces" the original char by a * when typing the password
+                    Console.Write("*");
+                }
+
+                // repeat the above while Enter is not pressed
+            } while (keyInfo.Key != ConsoleKey.Enter);
+
+            Console.WriteLine();
+
+            return password;
         }
 
         public bool ValidateCredentials(string filepath, string userId, string password)
