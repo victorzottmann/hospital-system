@@ -25,10 +25,5 @@ namespace HospitalSystem.Users
         public string GetEmail() => this.Email;
         public string GetPhone() => this.Phone;
         public string GetAddress() => this.Address;
-
-        public void Login()
-        {
-
-        }
     }
 }

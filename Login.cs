@@ -6,12 +6,9 @@ namespace HospitalSystem
 {
     public class Login
     {
-        private string FilePath;
+        private static string FilePath = "LoginCredentials.txt";
 
-        public Login(string filePath)
-        {
-            this.FilePath = filePath;
-        }
+        public Login() { }
 
         public void DisplayMenu()
         {
@@ -31,9 +28,43 @@ namespace HospitalSystem
             Console.SetCursorPosition(10, 5);
             string password = this.ReadPassword();
 
-            ValidateCredentials(this.FilePath, userId, password);
+            string role = ValidateCredentials(FilePath, userId, password);
+
+            if (role == "patient")
+            {
+                // since GetPatients is a static method, Login can retrieve all registered patients
+                // from the Patient class
+                List<Patient> patients = Patient.GetPatients();
+
+                // find the patient from the static list of patients whose ID matches the one
+                // entered in the console
+                Patient patient = FindPatientById(int.Parse(userId), patients);
+
+                if (patient != null)
+                {
+                    patient.DisplayMenu();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Patient not found");
+                Console.ReadKey();
+            }
 
             Console.ReadKey();
+        }
+
+        private Patient FindPatientById(int userId, List<Patient> patients)
+        {
+            foreach (Patient patient in patients)
+            {
+                if (patient.GetPatientId() == userId)
+                {
+                    return patient;
+                }
+            }
+
+            return null;
         }
 
         private string ReadPassword()
@@ -87,7 +118,9 @@ namespace HospitalSystem
             return password;
         }
 
-        public bool ValidateCredentials(string filepath, string userId, string password)
+        // validates whether the entered user ID and password match those found in a text file.
+        // it returns the user role, which is then used in DisplayMenu() to authenticate the user
+        public string ValidateCredentials(string filepath, string userId, string password)
         {
             try
             {
@@ -102,6 +135,7 @@ namespace HospitalSystem
                         // trim strings to ensure there are no white spaces
                         string targetUserId = arr[0].Trim();
                         string targetPassword = arr[1].Trim();
+                        string targetRole = arr[2].Trim();
 
                         bool validUserId = userId == targetUserId;
                         bool validPassword = password == targetPassword;
@@ -109,7 +143,7 @@ namespace HospitalSystem
                         if (validUserId && validPassword)
                         {
                             Console.WriteLine("Valid Credentials");
-                            return true;
+                            return targetRole;
                         }
                     }
                 }
@@ -127,7 +161,7 @@ namespace HospitalSystem
 
             this.ReEnterCredentials();
 
-            return false;
+            return null;
         }
 
         public void ReEnterCredentials()

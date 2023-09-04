@@ -12,12 +12,19 @@ namespace HospitalSystem.Users
 
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
+        // static list to allow other classes to find patients registered in the system
+        private static List<Patient> PatientList = new List<Patient>();
 
         public Patient(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
             PatientID++;
+            PatientList.Add(this);
         }
+
+        public int GetPatientId() => this.PatientID;
+
+        public static List<Patient> GetPatients() => PatientList;
 
         public void AssignDoctor(Doctor doctor)
         {
@@ -74,7 +81,7 @@ namespace HospitalSystem.Users
             Console.WriteLine($"Email: {this.Email}");
             Console.WriteLine($"Phone: {this.Phone}");
 
-            Console.WriteLine("\n\nPress any key to the Patient Menu:");
+            Console.Write("\n\nPress any key to the Patient Menu: ");
             Console.ReadKey();
 
             DisplayMenu();
@@ -96,7 +103,7 @@ namespace HospitalSystem.Users
                 Console.WriteLine($"{doctor}");
             }
 
-            Console.WriteLine("\n\nPress any key to the Patient Menu:");
+            Console.Write("\nPress any key to the Patient Menu: ");
             Console.ReadKey();
 
             DisplayMenu();
@@ -129,7 +136,7 @@ namespace HospitalSystem.Users
                 }
             }
 
-            Console.WriteLine("\n\nPress any key to return to the Patient Menu:");
+            Console.Write("\nPress any key to return to the Patient Menu: ");
             Console.ReadKey();
             DisplayMenu();
         }
@@ -141,15 +148,26 @@ namespace HospitalSystem.Users
             Menu bookAppointment = new Menu();
             bookAppointment.Subtitle("Book Appointment");
 
+            int totalDoctors = this.AssignedDoctors.Count;
+
+            if (totalDoctors == 0)
+            {
+                Console.WriteLine("There are no doctors available at the moment.\n");
+                Console.Write("Press any key to return to the Patient Menu: ");
+
+                Console.ReadKey();
+                this.DisplayMenu();
+            }
+
             Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with\n");
 
-            for (int i = 0; i < this.AssignedDoctors.Count; i++)
+            for (int i = 0; i < totalDoctors; i++)
             {
                 Doctor doctor = this.AssignedDoctors[i];
 
                 /* remember that doctor needs a Getter because the User fields are protected
-                 * and the doctor object is not derived from User within the Patient class
-                 */
+                    * and the doctor object is not derived from User within the Patient class
+                    */
                 Console.WriteLine($"{i+1}. {doctor.GetFirstName()} {doctor.GetLastName()}");
             }
 
@@ -194,7 +212,7 @@ namespace HospitalSystem.Users
             DoctorAppointments[selectedDoctor].Add(description);
 
             Console.WriteLine("The appointment was booked succesfully\n\n");
-            Console.WriteLine("Press any key to return to the Patient Menu:");
+            Console.Write("Press any key to return to the Patient Menu: ");
          
             Console.ReadKey();
             DisplayMenu();
@@ -202,7 +220,8 @@ namespace HospitalSystem.Users
 
         public void Logout()
         {
-            //Login();
+            Login login = new Login();
+            login.DisplayMenu();
         }
 
         public void Exit()
