@@ -17,6 +17,7 @@ namespace HospitalSystem
             Patient patient = new Patient(doctorJacob, "Victor", "Zottmann", "v@z.com", "123456789", patientAddress.ToString());
 
             doctorJacob.AddPatient(patient);
+            doctorSam.AddPatient(patient);
 
             patient.DisplayMenu();
         }

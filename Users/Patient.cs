@@ -58,13 +58,13 @@ namespace HospitalSystem.Users
             Menu patientDetails = new Menu();
             patientDetails.Subtitle("My Details");
 
-            Console.WriteLine($"{FirstName} {LastName}'s Details\n");
+            Console.WriteLine($"{this.FirstName} {this.LastName}'s Details\n");
 
-            Console.WriteLine($"Patient ID: {PatientID}");
-            Console.WriteLine($"Full name: {FirstName} {LastName}");
-            Console.WriteLine($"Address: {Address}");
-            Console.WriteLine($"Email: {Email}");
-            Console.WriteLine($"Phone: {Phone}");
+            Console.WriteLine($"Patient ID: {this.PatientID}");
+            Console.WriteLine($"Full name: {this.FirstName} {this.LastName}");
+            Console.WriteLine($"Address: {this.Address}");
+            Console.WriteLine($"Email: {this.Email}");
+            Console.WriteLine($"Phone: {this.Phone}");
 
             Console.WriteLine("\n\nPress any key to the Patient Menu:");
             Console.ReadKey();
@@ -100,24 +100,29 @@ namespace HospitalSystem.Users
             Menu patientAppointments = new Menu();
             patientAppointments.Subtitle("My Appointments");
 
-            Doctor doctor = AssignedDoctor;
-            int doctorStrLength = doctor.ToString().Length;
-
             Console.WriteLine($"Appointments for {this.FirstName} {this.LastName}\n");
 
             Console.WriteLine("Doctor | Patient | Description");
-            Console.WriteLine(new string('-', doctorStrLength));
+            
 
-            foreach (var appointment in this.Appointments)
+            foreach (var doctor in this.RegisteredDoctors)
             {
-                Console.WriteLine(
-                    $"{doctor.FirstName} {doctor.LastName} | " +
-                    $"{this.FirstName} {this.LastName} | " +
-                    $"{appointment}"
-                );
+                int docNameLength = (doctor.GetFirstName() + " " + doctor.GetLastName()).Length;
+                Console.WriteLine(new string('-', docNameLength));
+
+                foreach (var appointment in this.Appointments)
+                {
+                    Console.WriteLine(
+                        $"{doctor.GetFirstName()} {doctor.GetLastName()} | " +
+                        $"{this.FirstName} {this.LastName} | " +
+                        $"{appointment}"
+                    );
+                }
             }
 
+            Console.WriteLine("\n\nPress any key to return to the Patient Menu:");
             Console.ReadKey();
+            DisplayMenu();
         }
 
         public void BookAppointment()
@@ -132,7 +137,7 @@ namespace HospitalSystem.Users
             for (int i = 0; i < this.RegisteredDoctors.Count; i++)
             {
                 Doctor doctor = RegisteredDoctors[i];
-                Console.WriteLine($"{i+1}. {doctor.FirstName} {doctor.LastName}");
+                Console.WriteLine($"{i+1}. {doctor.GetFirstName()} {doctor.GetLastName()}");
             }
 
             Console.WriteLine("\nPlease choose a doctor:");
@@ -142,8 +147,8 @@ namespace HospitalSystem.Users
 
             if (optionSelected)
             {
-                Doctor doctor = RegisteredDoctors[selection - 1];
-                Console.WriteLine($"\nYou are booking an appointment with {doctor.FirstName} {doctor.LastName}");
+                Doctor doctor = RegisteredDoctors[selection - 1]; // -1 because the List starts at 0
+                Console.WriteLine($"\nYou are booking an appointment with {doctor.GetFirstName()} {doctor.GetLastName()}");
                 
                 Console.Write("Description of the appointment: ");
                 string description = Console.ReadLine()!;
@@ -159,7 +164,7 @@ namespace HospitalSystem.Users
                 }
                 */
 
-                Console.WriteLine("Press any key to return to the Patient Menu:");
+                Console.WriteLine("\n\nPress any key to return to the Patient Menu:");
             }
 
             Console.ReadKey();

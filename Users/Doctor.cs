@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Numerics;
 
 namespace HospitalSystem.Users
 {
@@ -24,7 +26,7 @@ namespace HospitalSystem.Users
             Menu doctorMenu = new Menu();
             doctorMenu.Subtitle("Doctor Menu");
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {FirstName} {LastName}\n");
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
 
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1. List doctor details");
@@ -45,7 +47,7 @@ namespace HospitalSystem.Users
 
         public override string ToString()
         {
-            return $"{FirstName} {LastName} | {Email} | {Phone} | {Address}";
+            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
         }
     }
 }
