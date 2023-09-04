@@ -200,6 +200,16 @@ namespace HospitalSystem.Users
             DisplayMenu();
         }
 
+        public void Logout()
+        {
+            //Login();
+        }
+
+        public void Exit()
+        {
+            Environment.Exit(0);
+        }
+
         public void ProcessSelectedOption(string input)
         {
             switch (input)
@@ -215,6 +225,15 @@ namespace HospitalSystem.Users
                     break;
                 case "4":
                     BookAppointment();
+                    break;
+                case "5":
+                    Logout();
+                    break;
+                case "6":
+                    Exit();
+                    break;
+                default:
+                    Console.WriteLine("Please select an option between 1 and 6");
                     break;
             }
         }
