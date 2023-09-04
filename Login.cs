@@ -20,12 +20,16 @@ namespace HospitalSystem
             Menu loginMenu = new Menu();
             loginMenu.Subtitle("Login");
 
-            Console.Write("ID: ");
+            Console.WriteLine("ID: ");
+            Console.WriteLine("Password: ");
+
+            // this will place the cursor right beside "ID: "
+            Console.SetCursorPosition(4, 4);
             string userId = Console.ReadLine()!;
 
-            Console.Write("Password: ");
+            // this will place the cursor right beside "Password: " after ID is read
+            Console.SetCursorPosition(10, 5);
             string password = this.ReadPassword();
-
 
             ValidateCredentials(this.FilePath, userId, password);
 
@@ -121,6 +125,13 @@ namespace HospitalSystem
 
             Console.WriteLine("Invalid Credentials\n");
 
+            this.ReEnterCredentials();
+
+            return false;
+        }
+
+        public void ReEnterCredentials()
+        {
             while (true)
             {
                 Console.Write("Press 1 to try again, or 0 to exit: ");
@@ -138,8 +149,6 @@ namespace HospitalSystem
                 }
 
             }
-
-            return false;
         }
     }
 }
