@@ -1,32 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace HospitalSystem.Users
 {
     public class Patient : User
     {
-        private Doctor AssignedDoctor { get; }
         private int PatientID = 10000;
 
-        private List<Doctor> RegisteredDoctors { get; } = new List<Doctor>();
+        private List<Doctor> AssignedDoctors { get; } = new List<Doctor>();
 
-        private List<string> Appointments { get; } = new List<string>()
-        {
-            "cold symptoms",
-            "regular checkup with doc"
-        };
+        private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
-        public Patient(Doctor doctor, string firstName, string lastName, string email, string phone, string address)
+
+        public Patient(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
-            AssignedDoctor = doctor;
-            RegisteredDoctors.Add(doctor);
             PatientID++;
         }
 
-        public void RegisterDoctor(Doctor doctor)
+        public void AssignDoctor(Doctor doctor)
         {
-            RegisteredDoctors.Add(doctor);
+            AssignedDoctors.Add(doctor);
+        }
+
+        public void AddAppointment(Doctor doctor, string appointment)
+        {
+            if (!DoctorAppointments.ContainsKey(doctor))
+            {
+                DoctorAppointments[doctor] = new List<string>();
+            }
+
+            DoctorAppointments[doctor].Add(appointment);
+            AssignedDoctors.Add(doctor);
+
+            doctor.AssignPatient(this);
         }
 
         public void DisplayMenu()
@@ -36,7 +44,7 @@ namespace HospitalSystem.Users
             Menu patientMenu = new Menu();
             patientMenu.Subtitle("Patient Menu");
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {FirstName} {LastName}\n");
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
 
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1. List patient details");
@@ -79,13 +87,14 @@ namespace HospitalSystem.Users
             Menu patientDoctorDetails = new Menu();
             patientDoctorDetails.Subtitle("My Doctor");
 
-            Doctor doctor = AssignedDoctor;
-            int doctorStrLength = doctor.ToString().Length;
+            Console.WriteLine("Your doctors:\n");
+            Console.WriteLine("Name | Email Address | Phone | Address");
+            Console.WriteLine("------------------------------------------------------------------------");
 
-            Console.WriteLine("Your doctor:\n");
-            Console.WriteLine("Name: | Email Address | Phone | Address");
-            Console.WriteLine(new string('-', doctorStrLength));
-            Console.WriteLine(doctor);
+            foreach (var doctor in this.AssignedDoctors)
+            {
+                Console.WriteLine($"{doctor}");
+            }
 
             Console.WriteLine("\n\nPress any key to the Patient Menu:");
             Console.ReadKey();
@@ -103,19 +112,19 @@ namespace HospitalSystem.Users
             Console.WriteLine($"Appointments for {this.FirstName} {this.LastName}\n");
 
             Console.WriteLine("Doctor | Patient | Description");
-            
+            Console.WriteLine("-------------------------------------------------------------");
 
-            foreach (var doctor in this.RegisteredDoctors)
+            foreach (var item in this.DoctorAppointments)
             {
-                int docNameLength = (doctor.GetFirstName() + " " + doctor.GetLastName()).Length;
-                Console.WriteLine(new string('-', docNameLength));
+                Doctor doctor = item.Key;
+                List<string> appointments = item.Value;
 
-                foreach (var appointment in this.Appointments)
+                foreach (var description in appointments)
                 {
                     Console.WriteLine(
                         $"{doctor.GetFirstName()} {doctor.GetLastName()} | " +
                         $"{this.FirstName} {this.LastName} | " +
-                        $"{appointment}"
+                        $"{description}"
                     );
                 }
             }
@@ -134,39 +143,59 @@ namespace HospitalSystem.Users
 
             Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with\n");
 
-            for (int i = 0; i < this.RegisteredDoctors.Count; i++)
+            for (int i = 0; i < this.AssignedDoctors.Count; i++)
             {
-                Doctor doctor = RegisteredDoctors[i];
+                Doctor doctor = this.AssignedDoctors[i];
+
+                /* remember that doctor needs a Getter because the User fields are protected
+                 * and the doctor object is not derived from User within the Patient class
+                 */
                 Console.WriteLine($"{i+1}. {doctor.GetFirstName()} {doctor.GetLastName()}");
             }
 
-            Console.WriteLine("\nPlease choose a doctor:");
-            string input = Console.ReadLine()!;
+            string input;
+            int selection;
 
-            bool optionSelected = int.TryParse(input, out int selection);
-
-            if (optionSelected)
+            /* this do while loop keeps prompting the user for a description
+             * while the input is null or empty
+             */
+            do
             {
-                Doctor doctor = RegisteredDoctors[selection - 1]; // -1 because the List starts at 0
-                Console.WriteLine($"\nYou are booking an appointment with {doctor.GetFirstName()} {doctor.GetLastName()}");
-                
+                Console.Write($"\nPlease choose a doctor (1 to {this.AssignedDoctors.Count}): ");
+
+                /* ? indicates that it can be null.
+                 * The null-coalescing operator ?? returns the value of its left-hand operand if it isn't null; 
+                 * otherwise, it evaluates the right-hand operand and returns its result.
+                 */
+                input = Console.ReadLine()?.Trim() ?? string.Empty;
+
+                // using int.TryParse as a way to validate the input and then convert it to an int if successful
+            } while (!int.TryParse(input, out selection) || selection < 1 || selection > this.AssignedDoctors.Count);
+
+            Doctor selectedDoctor = AssignedDoctors[selection - 1]; // -1 because the List starts at 0
+            Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.GetFirstName()} {selectedDoctor.GetLastName()}\n");
+
+            string description;
+
+            do
+            {
                 Console.Write("Description of the appointment: ");
-                string description = Console.ReadLine()!;
+                description = Console.ReadLine()?.Trim() ?? string.Empty;
 
-                if (description != null)
+                if (string.IsNullOrWhiteSpace(description))
                 {
-                    Console.WriteLine("The appointment was booked successfully");
+                    Console.WriteLine("The description cannot be blank\n");
                 }
-                /*
-                else
-                {
-                    prompt the user to input it again 
-                }
-                */
+                
+                // repeat the above while the string is null or is blank
+            } while (string.IsNullOrWhiteSpace(description));
 
-                Console.WriteLine("\n\nPress any key to return to the Patient Menu:");
-            }
+            // Not using AddAppointment() because it's a simple command
+            DoctorAppointments[selectedDoctor].Add(description);
 
+            Console.WriteLine("The appointment was booked succesfully\n\n");
+            Console.WriteLine("Press any key to return to the Patient Menu:");
+         
             Console.ReadKey();
             DisplayMenu();
         }

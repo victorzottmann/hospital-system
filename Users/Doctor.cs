@@ -40,7 +40,7 @@ namespace HospitalSystem.Users
             Console.Read();
         }
 
-        public void AddPatient(Patient patient)
+        public void AssignPatient(Patient patient)
         {
             AssignedPatients.Add(patient);
         }
