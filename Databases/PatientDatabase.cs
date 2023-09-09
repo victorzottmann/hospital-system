@@ -9,6 +9,7 @@ namespace HospitalSystem.Databases
         // static dictionary to allow other classes to find patients registered in the system
         private static Dictionary<int, Patient> patientDB = new Dictionary<int, Patient>();
 
+
         public static void AddPatient(int id, Patient patient)
         {
             // key: PatientID, value: Patient obj
@@ -51,24 +52,29 @@ namespace HospitalSystem.Databases
 
             Console.WriteLine("All patients registered to the DOTNET Hospital Management System\n");
 
-            // NEED TO COMPLETE FOR DOCTOR
-            Console.WriteLine("Patient | Email Address | Phone | Address");
-            Console.WriteLine("------------------------------------------------------------------------");
-
-            foreach (var kvp in patientDB)
+            if (patientDB.Count > 0)
             {
-                var patient = kvp.Value;
+                // NEED TO COMPLETE FOR DOCTOR
+                Console.WriteLine("Patient | Email Address | Phone | Address");
+                Console.WriteLine("------------------------------------------------------------------------");
 
-                Console.WriteLine(
-                    $"{patient.GetFirstName()} | " +
-                    $"{patient.GetLastName()} | " +
-                    $"{patient.GetEmail()} | " +
-                    $"{patient.GetAddress()}"
-                );
+                foreach (var kvp in patientDB)
+                {
+                    var patient = kvp.Value;
+
+                    Console.WriteLine(
+                        $"{patient.GetFirstName()} | " +
+                        $"{patient.GetLastName()} | " +
+                        $"{patient.GetEmail()} | " +
+                        $"{patient.GetAddress()}"
+                    );
+                }
             }
-
-            Console.Write($"\nPress any key to go back: ");
+            
+            Console.WriteLine("There are no patients registered in the system yet.\n");
+            Console.Write($"Press any key to return: ");
             Console.ReadKey();
+
             Administrator admin = new Administrator();
             admin.DisplayMenu();
         }
@@ -101,7 +107,7 @@ namespace HospitalSystem.Databases
             Console.WriteLine($"Email: {email}");
             Console.WriteLine($"Phone: {phone}");
 
-            Console.Write($"\nPress any key to go back: ");
+            Console.Write($"\nPress any key to return: ");
             Console.ReadKey();
             Administrator admin = new Administrator();
             admin.DisplayMenu();

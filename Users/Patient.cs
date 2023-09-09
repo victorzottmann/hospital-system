@@ -17,7 +17,6 @@ namespace HospitalSystem.Users
             : base(firstName, lastName, email, phone, address)
         {
             PatientID++;
-            PatientDatabase.AddPatient(this.PatientID, this);
         }
 
         public int GetPatientId() => this.PatientID;
