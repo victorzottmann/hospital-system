@@ -47,7 +47,7 @@ namespace HospitalSystem.Databases
             Console.Clear();
 
             Menu adminMenu = new Menu();
-            adminMenu.Subtitle("Administrator");
+            adminMenu.Subtitle("All Patients");
 
             Console.WriteLine("All patients registered to the DOTNET Hospital Management System\n");
 
@@ -77,14 +77,14 @@ namespace HospitalSystem.Databases
         {
             Console.Clear();
 
-            Menu adminMenu = new Menu();
-            adminMenu.Subtitle("Administrator");
+            Menu patientDetailsMenu = new Menu();
+            patientDetailsMenu.Subtitle("Patient Details");
 
             int id = Administrator.ReadUserID("patient");
 
             // clear the console after reading from input and reload the menu title followed by the details
             Console.Clear();
-            adminMenu.Subtitle("Administrator");
+            patientDetailsMenu.Subtitle("Patient Details");
 
             Patient patient = GetPatientById(id);
 
