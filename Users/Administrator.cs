@@ -53,12 +53,24 @@ namespace HospitalSystem.Users
             PatientDatabase.GetPatientDetails();
         }
 
-        public void AddPatient()
+        public void AddUser(string role)
         {
             Console.Clear();
 
-            Menu addPatientMenu = new Menu();
-            addPatientMenu.Subtitle("Add Patient");
+            Menu addUserMenu = new Menu();
+
+            if (role != null)
+            {
+                if (role == "patient")
+                {
+                    addUserMenu.Subtitle("Add Patient");
+                }
+
+                if (role == "doctor")
+                {
+                    addUserMenu.Subtitle("Add Doctor");
+                }
+            }
 
             Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
 
@@ -110,9 +122,17 @@ namespace HospitalSystem.Users
 
             Address address = new Address(streetNumber, street, city, state);
 
-            Patient patient = new Patient(firstName, lastName, email, phone, address.ToString());
-            int patientID = patient.GetPatientId();
-            PatientDatabase.AddPatient(patientID, patient);
+            if (role == "patient")
+            {
+                Patient patient = new Patient(firstName, lastName, email, phone, address.ToString());
+                int patientID = patient.GetPatientId();
+                PatientDatabase.AddPatient(patientID, patient);
+            }
+
+            if (role == "doctor")
+            {
+                Console.WriteLine("DOCTOR NOT ADDED: REMEMBER TO COMPLETE");
+            }
 
             Console.WriteLine($"{firstName} {lastName} added to the system!\n");
 
@@ -149,10 +169,10 @@ namespace HospitalSystem.Users
                     CheckPatientDetails();
                     break;
                 case "5":
-                    //AddDoctor();
+                    AddUser("doctor");
                     break;
                 case "6":
-                    AddPatient();
+                    AddUser("patient");
                     break;
                 case "7":
                     Logout();
