@@ -1,4 +1,5 @@
-﻿using HospitalSystem.Users;
+﻿using HospitalSystem.Databases;
+using HospitalSystem.Users;
 using System;
 using System.IO;
 
@@ -32,13 +33,11 @@ namespace HospitalSystem
 
             if (role == "patient")
             {
-                // since GetPatients is a static method, Login can retrieve all registered patients
-                // from the Patient class
-                List<Patient> patients = Patient.GetPatients();
+                int id = int.Parse(userId);
+                var patientDB = PatientDatabase.GetPatientDatabase();
 
-                // find the patient from the static list of patients whose ID matches the one
-                // entered in the console
-                Patient patient = FindPatientById(int.Parse(userId), patients);
+                // find the patient from the static list of patients whose ID matches the one entered in the console
+                Patient patient = FindPatientById(id, patientDB);
 
                 if (patient != null)
                 {
@@ -54,13 +53,15 @@ namespace HospitalSystem
             Console.ReadKey();
         }
 
-        private Patient FindPatientById(int userId, List<Patient> patients)
+        private Patient FindPatientById(int userId, Dictionary<int, Patient> patients)
         {
-            foreach (Patient patient in patients)
+            foreach (var kvp in patients)
             {
-                if (patient.GetPatientId() == userId)
+                int id = kvp.Key;
+
+                if (PatientDatabase.GetPatientId(id) == userId)
                 {
-                    return patient;
+                    return patients[id];
                 }
             }
 

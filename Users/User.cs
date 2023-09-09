@@ -11,7 +11,11 @@ namespace HospitalSystem.Users
         protected string Phone { get; set; }
         protected string Address { get; set; }
 
-        public User() { }
+        public User(string firstName, string lastName) 
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+        }
 
         public User(string firstName, string lastName, string email, string phone, string address)
         {

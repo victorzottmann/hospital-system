@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HospitalSystem.Databases;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,11 @@ namespace HospitalSystem.Users
     {
         private int AdministratorID = 30000;
 
-        public Administrator()
+        public Administrator(string firstName, string lastName) : base(firstName, lastName)
         {
-            AdministratorID++;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.AdministratorID++;
         }
 
         public void DisplayMenu()
@@ -22,7 +25,7 @@ namespace HospitalSystem.Users
             Menu adminMenu = new Menu();
             adminMenu.Subtitle("Administrator Menu");
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {FirstName} {LastName}");
+            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
 
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1. List all doctors");
@@ -34,7 +37,24 @@ namespace HospitalSystem.Users
             Console.WriteLine("7. Logout");
             Console.WriteLine("8. Exit");
 
-            Console.ReadKey();
+            string input = Console.ReadLine()!;
+            ProcessSelectedOption(input);
+        }
+
+        public void ListAllPatients()
+        {
+            PatientDatabase.PrintPatients();
+        }
+
+        public void Logout()
+        {
+            Login login = new Login();
+            login.DisplayMenu();
+        }
+
+        public void Exit()
+        {
+            Environment.Exit(0);
         }
 
         public void ProcessSelectedOption(string input)
@@ -48,7 +68,7 @@ namespace HospitalSystem.Users
                     //CheckDoctorDetails();
                     break;
                 case "3":
-                    //ListAllPatients();
+                    ListAllPatients();
                     break;
                 case "4":
                     //CheckPatientDetails();
@@ -57,13 +77,13 @@ namespace HospitalSystem.Users
                     //AddDoctor();
                     break;
                 case "6":
-                    //Add Patient();
+                    //AddPatient();
                     break;
                 case "7":
-                    //Logout();
+                    Logout();
                     break;
                 case "8":
-                    //Exit();
+                    Exit();
                     break;
                 default:
                     Console.WriteLine("Please select an option between 1 and 8");

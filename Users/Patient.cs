@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HospitalSystem.Databases;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -12,19 +13,14 @@ namespace HospitalSystem.Users
 
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
-        // static list to allow other classes to find patients registered in the system
-        private static List<Patient> PatientList = new List<Patient>();
-
         public Patient(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
             PatientID++;
-            PatientList.Add(this);
+            PatientDatabase.AddPatient(this.PatientID, this);
         }
 
         public int GetPatientId() => this.PatientID;
-
-        public static List<Patient> GetPatients() => PatientList;
 
         public void AssignDoctor(Doctor doctor)
         {
