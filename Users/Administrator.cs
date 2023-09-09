@@ -10,8 +10,7 @@ namespace HospitalSystem.Users
     {
         private int AdministratorID = 30000;
 
-        public Administrator(string firstName, string lastName, string email, string phone, string address)
-            : base(firstName, lastName, email, phone, address)
+        public Administrator()
         {
             AdministratorID++;
         }
@@ -36,6 +35,40 @@ namespace HospitalSystem.Users
             Console.WriteLine("8. Exit");
 
             Console.ReadKey();
+        }
+
+        public void ProcessSelectedOption(string input)
+        {
+            switch (input)
+            {
+                case "1":
+                    //ListAllDoctors();
+                    break;
+                case "2":
+                    //CheckDoctorDetails();
+                    break;
+                case "3":
+                    //ListAllPatients();
+                    break;
+                case "4":
+                    //CheckPatientDetails();
+                    break;
+                case "5":
+                    //AddDoctor();
+                    break;
+                case "6":
+                    //Add Patient();
+                    break;
+                case "7":
+                    //Logout();
+                    break;
+                case "8":
+                    //Exit();
+                    break;
+                default:
+                    Console.WriteLine("Please select an option between 1 and 8");
+                    break;
+            }
         }
     }
 }

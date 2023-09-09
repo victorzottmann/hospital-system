@@ -21,8 +21,10 @@ namespace HospitalSystem
 
             //patient.DisplayMenu();
 
-            Login login = new Login();
-            login.DisplayMenu();
+            //Login login = new Login();
+            //login.DisplayMenu();
+
+            Administrator admin = new Administrator();
         }
     }
 }

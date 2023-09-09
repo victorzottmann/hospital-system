@@ -11,6 +11,8 @@ namespace HospitalSystem.Users
         protected string Phone { get; set; }
         protected string Address { get; set; }
 
+        public User() { }
+
         public User(string firstName, string lastName, string email, string phone, string address)
         {
             FirstName = firstName;
