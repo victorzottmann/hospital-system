@@ -43,22 +43,14 @@ namespace HospitalSystem.Users
             ProcessSelectedOption(input);
         }
 
-        public static int ReadUserID(string role)
-        {
-            Console.Write($"Please enter the {role} ID: ");
-            int id = Convert.ToInt32(Console.ReadLine());
-
-            return id;
-        }
-
         public void ListAllPatients()
         {
-            PatientDatabase.PrintPatients();
+            PatientDatabase.GetPatients();
         }
 
         public void CheckPatientDetails()
         {
-            PatientDatabase.PrintPatientDetails();
+            PatientDatabase.GetPatientDetails();
         }
 
         public void AddPatient()

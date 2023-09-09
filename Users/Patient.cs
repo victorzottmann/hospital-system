@@ -60,6 +60,11 @@ namespace HospitalSystem.Users
             ProcessSelectedOption(input);
         }
 
+        public override string ToString()
+        {
+            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
+        }
+
         // Maybe overload this later to display details in relation to user permissions (admin vs user)
         public void ListPatientDetails()
         {

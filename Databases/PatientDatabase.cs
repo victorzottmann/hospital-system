@@ -43,8 +43,9 @@ namespace HospitalSystem.Databases
             return null;
         }
 
-        public static void PrintPatients()
+        public static void GetPatients()
         {
+            // NEED TO COMPLETE FOR INFO DOCTOR
             Console.Clear();
 
             Menu adminMenu = new Menu();
@@ -53,8 +54,7 @@ namespace HospitalSystem.Databases
             Console.WriteLine("All patients registered to the DOTNET Hospital Management System\n");
 
             if (patientDB.Count > 0)
-            {
-                // NEED TO COMPLETE FOR DOCTOR
+            {             
                 Console.WriteLine("Patient | Email Address | Phone | Address");
                 Console.WriteLine("------------------------------------------------------------------------");
 
@@ -70,42 +70,35 @@ namespace HospitalSystem.Databases
                     );
                 }
             }
+            else
+            {
+                Console.WriteLine("There are no patients registered in the system yet.");
+            }
             
-            Console.WriteLine("There are no patients registered in the system yet.\n");
-            Console.Write($"Press any key to return: ");
+            Console.Write($"\nPress any key to return: ");
             Console.ReadKey();
 
             Administrator admin = new Administrator();
             admin.DisplayMenu();
         }
 
-        public static void PrintPatientDetails()
+        public static void GetPatientDetails()
         {
+            // NEED TO COMPLETE FOR DOCTOR INFO
             Console.Clear();
 
             Menu patientDetailsMenu = new Menu();
             patientDetailsMenu.Subtitle("Patient Details");
 
-            int id = Administrator.ReadUserID("patient");
-
-            // clear the console after reading from input and reload the menu title followed by the details
-            Console.Clear();
-            patientDetailsMenu.Subtitle("Patient Details");
-
+            Console.WriteLine("Please enter the ID of the patient whose details you are checking, or press n to return to menu: ");
+            
+            int id = Convert.ToInt32(Console.ReadLine()!);
             Patient patient = GetPatientById(id);
 
-            string fullName = $"{patient.GetFirstName()} {patient.GetLastName()}";
-            string address = patient.GetAddress();
-            string email = patient.GetEmail();
-            string phone = patient.GetPhone();
-
-            Console.WriteLine($"{fullName}'s Details\n");
-
-            Console.WriteLine($"Patient ID: {id}");
-            Console.WriteLine($"Full Name: {fullName}");
-            Console.WriteLine($"Address: {address}");
-            Console.WriteLine($"Email: {email}");
-            Console.WriteLine($"Phone: {phone}");
+            Console.WriteLine($"\nDetails for {patient.GetFirstName()} {patient.GetLastName()}\n");
+            Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
+            Console.WriteLine("----------------------------------------------------------------------");
+            Console.WriteLine(patient.ToString());
 
             Console.Write($"\nPress any key to return: ");
             Console.ReadKey();
