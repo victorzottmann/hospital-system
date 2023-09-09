@@ -11,6 +11,8 @@ namespace HospitalSystem.Users
     {
         private int AdministratorID = 30000;
 
+        public Administrator() { }
+
         public Administrator(string firstName, string lastName) : base(firstName, lastName)
         {
             this.FirstName = firstName;
@@ -41,9 +43,22 @@ namespace HospitalSystem.Users
             ProcessSelectedOption(input);
         }
 
+        public static int ReadUserID(string role)
+        {
+            Console.Write($"Please enter the {role} ID: ");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            return id;
+        }
+
         public void ListAllPatients()
         {
             PatientDatabase.PrintPatients();
+        }
+
+        public void CheckPatientDetails()
+        {
+            PatientDatabase.PrintPatientDetails();
         }
 
         public void Logout()
@@ -71,7 +86,7 @@ namespace HospitalSystem.Users
                     ListAllPatients();
                     break;
                 case "4":
-                    //CheckPatientDetails();
+                    CheckPatientDetails();
                     break;
                 case "5":
                     //AddDoctor();

@@ -63,11 +63,48 @@ namespace HospitalSystem.Databases
                     $"{patient.GetFirstName()} | " +
                     $"{patient.GetLastName()} | " +
                     $"{patient.GetEmail()} | " +
-                    $"{patient.GetAddress()} | "
+                    $"{patient.GetAddress()}"
                 );
             }
 
+            Console.Write($"\nPress any key to go back: ");
             Console.ReadKey();
+            Administrator admin = new Administrator();
+            admin.DisplayMenu();
+        }
+
+        public static void PrintPatientDetails()
+        {
+            Console.Clear();
+
+            Menu adminMenu = new Menu();
+            adminMenu.Subtitle("Administrator");
+
+            int id = Administrator.ReadUserID("patient");
+
+            // clear the console after reading from input and reload the menu title followed by the details
+            Console.Clear();
+            adminMenu.Subtitle("Administrator");
+
+            Patient patient = GetPatientById(id);
+
+            string fullName = $"{patient.GetFirstName()} {patient.GetLastName()}";
+            string address = patient.GetAddress();
+            string email = patient.GetEmail();
+            string phone = patient.GetPhone();
+
+            Console.WriteLine($"{fullName}'s Details\n");
+
+            Console.WriteLine($"Patient ID: {id}");
+            Console.WriteLine($"Full Name: {fullName}");
+            Console.WriteLine($"Address: {address}");
+            Console.WriteLine($"Email: {email}");
+            Console.WriteLine($"Phone: {phone}");
+
+            Console.Write($"\nPress any key to go back: ");
+            Console.ReadKey();
+            Administrator admin = new Administrator();
+            admin.DisplayMenu();
         }
     }
 }
