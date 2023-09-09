@@ -9,7 +9,6 @@ namespace HospitalSystem.Databases
         // static dictionary to allow other classes to find patients registered in the system
         private static Dictionary<int, Patient> patientDB = new Dictionary<int, Patient>();
 
-
         public static void AddPatient(int id, Patient patient)
         {
             // key: PatientID, value: Patient obj

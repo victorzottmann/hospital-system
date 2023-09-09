@@ -43,6 +43,11 @@ namespace HospitalSystem.Users
             ProcessSelectedOption(input);
         }
 
+        public void ListAllDoctors()
+        {
+            DoctorDatabase.GetDoctors();
+        }
+
         public void ListAllPatients()
         {
             PatientDatabase.GetPatients();
@@ -131,7 +136,9 @@ namespace HospitalSystem.Users
 
             if (role == "doctor")
             {
-                Console.WriteLine("DOCTOR NOT ADDED: REMEMBER TO COMPLETE");
+                Doctor doctor = new Doctor(firstName, lastName, email, phone, address.ToString());
+                int doctorID = doctor.GetDoctorId();
+                DoctorDatabase.AddDoctor(doctorID, doctor);
             }
 
             Console.WriteLine($"{firstName} {lastName} added to the system!\n");
@@ -157,7 +164,7 @@ namespace HospitalSystem.Users
             switch (input)
             {
                 case "1":
-                    //ListAllDoctors();
+                    ListAllDoctors();
                     break;
                 case "2":
                     //CheckDoctorDetails();

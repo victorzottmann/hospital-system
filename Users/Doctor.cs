@@ -7,17 +7,22 @@ namespace HospitalSystem.Users
 {
     public class Doctor : User
     {
+        private Patient AssignedPatient { get; set; }
         private int DoctorID = 20000;
-
-        private List<Patient> AssignedPatients { get; } = new List<Patient>();
 
         public Doctor(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
+            this.AssignedPatient = null;
             DoctorID++;
         }
 
-        public List<Patient> GetAssignedPatients() => AssignedPatients;
+        public int GetDoctorId() => this.DoctorID;
+
+        public void AssignPatient(Patient patient)
+        {
+            this.AssignedPatient = patient;
+        }
 
         public void DisplayMenu()
         {
@@ -38,11 +43,6 @@ namespace HospitalSystem.Users
             Console.WriteLine("7. Exit");
 
             Console.Read();
-        }
-
-        public void AssignPatient(Patient patient)
-        {
-            AssignedPatients.Add(patient);
         }
 
         public override string ToString()
