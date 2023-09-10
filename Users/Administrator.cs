@@ -48,6 +48,11 @@ namespace HospitalSystem.Users
             DoctorDatabase.GetDoctors();
         }
 
+        public void CheckDoctorDetails()
+        {
+            DoctorDatabase.GetDoctorDetails();
+        }
+
         public void ListAllPatients()
         {
             PatientDatabase.GetPatients();
@@ -167,7 +172,7 @@ namespace HospitalSystem.Users
                     ListAllDoctors();
                     break;
                 case "2":
-                    //CheckDoctorDetails();
+                    CheckDoctorDetails();
                     break;
                 case "3":
                     ListAllPatients();

@@ -7,7 +7,9 @@ namespace HospitalSystem.Users
 {
     public class Doctor : User
     {
-        private Patient AssignedPatient { get; set; }
+        // the ? removes the CS8625 error from the constructor
+        // but isn't there a better alternative than saying AssignedPatient can be nullable?
+        private Patient? AssignedPatient { get; set; }
         private int DoctorID = 20000;
 
         public Doctor(string firstName, string lastName, string email, string phone, string address)

@@ -22,15 +22,19 @@ namespace HospitalSystem.Databases
 
         public static int GetPatientId(int doctorId)
         {
-            if (doctorDB.ContainsKey(doctorId))
+            try
             {
-                return doctorId;
+                if (doctorDB.ContainsKey(doctorId))
+                {
+                    return doctorId;
+                }
             }
-            else
+            catch (Exception e)
             {
-                Console.WriteLine("Doctor not found. Please check that the ID is valid.");
-                return -1;
+                Console.WriteLine($"An error occurred: {e.Message}");
+                Console.WriteLine($"Doctor with ID {doctorId} not found. Please check that the ID is valid.\n");
             }
+            return -1;
         }
 
         public static Doctor GetDoctorById(int doctorId)
@@ -64,7 +68,8 @@ namespace HospitalSystem.Databases
                         $"{doctor.GetFirstName()} {doctor.GetLastName()} | " +
                         $"{doctor.GetEmail()} | " +
                         $"{doctor.GetPhone()} | " +
-                        $"{doctor.GetAddress()}"                    );
+                        $"{doctor.GetAddress()}"                  
+                    );
                 }
             }
             else
@@ -73,6 +78,44 @@ namespace HospitalSystem.Databases
             }
 
             Console.Write($"\nPress any key to return: ");
+            Console.ReadKey();
+
+            Administrator admin = new Administrator();
+            admin.DisplayMenu();
+        }
+
+        public static void GetDoctorDetails()
+        {
+            Console.Clear();
+
+            Menu doctorDetailsMenu = new Menu();
+            doctorDetailsMenu.Subtitle("Patient Details");
+
+            Console.WriteLine("Please enter the ID of the doctor whose details you are checking, or press n to return to menu: ");
+            int id = Convert.ToInt32(Console.ReadLine()!);
+
+            try
+            {
+                Doctor doctor = GetDoctorById(id);
+                
+                if (doctor != null)
+                {
+                    Console.WriteLine($"\nDetails for {doctor.GetFirstName()} {doctor.GetLastName()}\n");
+                    Console.WriteLine("Doctor | Email Address | Phone | Address");
+                    Console.WriteLine("----------------------------------------------------------------------");
+                    Console.WriteLine(doctor.ToString());
+                }
+                else
+                {
+                    Console.WriteLine("\nThere are no doctors registered in the system yet.");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"An error occured: {e.Message}");
+            }
+
+            Console.Write($"\nPress any key to return to the Admin Menu: ");
             Console.ReadKey();
 
             Administrator admin = new Administrator();
