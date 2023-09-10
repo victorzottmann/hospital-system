@@ -1,0 +1,12 @@
+Gregory,House
+Lisa,Cuddy
+James,Wilson
+Eric,Foreman
+Robert,Chase
+Allison,Cameron
+Remy,Hadley
+Chris,Taub
+Lawrence,Kutner
+Jessica,Adams
+Chi,Park
+Dominika,Petrova
