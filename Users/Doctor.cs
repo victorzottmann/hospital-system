@@ -12,11 +12,17 @@ namespace HospitalSystem.Users
         private Patient? AssignedPatient { get; set; }
         private int DoctorID = 20000;
 
+        public Doctor()
+        {
+            this.AssignedPatient = null;
+            this.DoctorID++;
+        }
+
         public Doctor(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
             this.AssignedPatient = null;
-            DoctorID++;
+            this.DoctorID++;
         }
 
         public int GetDoctorId() => this.DoctorID;

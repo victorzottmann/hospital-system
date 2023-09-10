@@ -6,15 +6,16 @@ namespace HospitalSystem.Users
 {
     public class Administrator : User
     {
-        private int AdministratorID = 30000;
-
-        public Administrator() { }
+        public Administrator() 
+        {
+            this.FirstName = "Victor";
+            this.LastName = "Zottmann";
+        }
 
         public Administrator(string firstName, string lastName) : base(firstName, lastName)
         {
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.AdministratorID++;
         }
 
         public void DisplayMenu()

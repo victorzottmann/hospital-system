@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using HospitalSystem.Users;
 
@@ -15,12 +16,47 @@ namespace HospitalSystem.Databases
             doctorDB.Add(id, doctor);
         }
 
+        public static void LoadDoctorDB(string filepath)
+        {
+            try
+            {
+                if (File.Exists(filepath))
+                {
+                    string[] lines = File.ReadAllLines(filepath);
+
+                    foreach (var line in lines)
+                    {
+                        string[] arr = line.Split(',');
+
+                        string firstName = arr[0];
+                        string lastName = arr[1];
+                        string email = arr[2];
+                        string phone = arr[3];
+                        string address = arr[4];
+
+                        Doctor doctor = new Doctor(firstName, lastName, email, phone, address);
+                        int doctorId = doctor.GetDoctorId();
+
+                        doctorDB.Add(doctorId, doctor);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"File not found: {filepath}");
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
         public static Dictionary<int, Doctor> GetDoctorDatabase()
         {
             return doctorDB;
         }
 
-        public static int GetPatientId(int doctorId)
+        public static int GetDoctorId(int doctorId)
         {
             try
             {
