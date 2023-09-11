@@ -136,20 +136,41 @@ namespace HospitalSystem.Databases
             Menu patientDetailsMenu = new Menu();
             patientDetailsMenu.Subtitle("Patient Details");
 
-            Console.WriteLine("Please enter the ID of the patient whose details you are checking, or press n to return to menu: ");
+            Console.WriteLine("Please enter the ID of the patient whose details you are checking, or press 'N' to return to menu: ");
             
-            int id = Convert.ToInt32(Console.ReadLine()!);
-            Patient patient = GetPatientById(id);
+            string id = Console.ReadLine()!;
 
-            Console.WriteLine($"\nDetails for {patient.GetFirstName()} {patient.GetLastName()}\n");
-            Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
-            Console.WriteLine("----------------------------------------------------------------------");
-            Console.WriteLine(patient.ToString());
+            try
+            {
+                if (id != null && patientDB.ContainsKey(int.Parse(id)))
+                {
+                    Patient patient = GetPatientById(int.Parse(id));
 
-            Console.Write($"\nPress any key to return: ");
-            Console.ReadKey();
-            Administrator admin = new Administrator();
-            admin.DisplayMenu();
+                    Console.WriteLine($"\nDetails for {patient.GetFirstName()} {patient.GetLastName()}\n");
+                    Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
+                    Console.WriteLine("----------------------------------------------------------------------");
+                    Console.WriteLine(patient.ToString());
+                }
+                else
+                {
+                    Console.WriteLine($"\nA patient with ID {id} does not exist.");
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                // FIX THIS TO PROMPT THE USER AGAIN UNTIL INPUT IS CORRECT
+                Console.WriteLine($"An error occured: {e.Message}");
+                Console.WriteLine($"Please make sure that it is not blank.\n");
+                Console.Write("Press 1 to try again or 'n' to return to the menu: ");
+            }
+
+            string key = Console.ReadLine()!;
+
+            if (key == "n")
+            {
+                Administrator admin = new Administrator();
+                admin.DisplayMenu();
+            }
         }
     }
 }
