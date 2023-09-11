@@ -15,6 +15,53 @@ namespace HospitalSystem.Databases
             patientDB.Add(id, patient);
         }
 
+        public static void LoadPatientDB(string filepath)
+        {
+            try
+            {
+                if (File.Exists(filepath))
+                {
+                    string[] lines = File.ReadAllLines(filepath);
+
+                    foreach (var line in lines)
+                    {
+                        string[] arr = line.Split(',');
+
+                        int patientId = int.Parse(arr[0]);
+                        string firstName = arr[1];
+                        string lastName = arr[2];
+                        string email = arr[3];
+                        string phone = arr[4];
+                        string address = arr[5];
+
+                        try
+                        {
+                            Patient patient = new Patient(firstName, lastName, email, phone, address);
+
+                            if (!patientDB.ContainsKey(patientId))
+                            {
+                                patientDB.Add(patientId, patient);
+                            }
+                        }
+                        catch (ArgumentException e)
+                        {
+                            Console.WriteLine($"An error occured: {e.Message}");
+                            Console.Write("Press any key to continue: ");
+                            Console.ReadKey();
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"File not found: {filepath}");
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
         public static Dictionary<int, Patient> GetPatientDatabase()
         {
             return patientDB;

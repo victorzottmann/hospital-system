@@ -9,10 +9,12 @@ namespace HospitalSystem
     {
         private static string _loginFilePath = "login-credentials.txt";
         private static string _doctorsFilePath = "doctors.txt";
+        private static string _patientsFilePath = "patients.txt";
 
         public Login() 
         {
             DoctorDatabase.LoadDoctorDB(_doctorsFilePath);
+            PatientDatabase.LoadPatientDB(_patientsFilePath);
         }
 
         public void DisplayMenu()
