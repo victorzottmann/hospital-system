@@ -33,7 +33,7 @@ namespace HospitalSystem
             Console.SetCursorPosition(10, 5);
             string password = this.ReadPassword();
 
-            string role = ValidateCredentials(_loginFilePath, userId, password);
+            string role = ValidateCredentials(_loginFilePath, userId, password);           
             int id = int.Parse(userId);
 
             bool isAdmin = role == "admin";
@@ -45,14 +45,9 @@ namespace HospitalSystem
                 Administrator admin = new Administrator();
                 admin.DisplayMenu();
             }
-            else
+            else if (isDoctor)
             {
-                Console.WriteLine("Administrator not found");
-                Console.ReadKey();
-            }
-
-            if (isDoctor)
-            {
+                // find the doctor from the static list of patients whose ID matches the one entered in the console
                 var doctorDB = DoctorDatabase.GetDoctorDatabase();
                 Doctor doctor = FindDoctorById(id, doctorDB);
 
@@ -61,17 +56,10 @@ namespace HospitalSystem
                     doctor.DisplayMenu();
                 }
             }
-            else
+            else if (isPatient)
             {
-                Console.WriteLine("Doctor not found");
-                Console.ReadKey();
-            }
-
-            if (isPatient)
-            {
-                var patientDB = PatientDatabase.GetPatientDatabase();
-
                 // find the patient from the static list of patients whose ID matches the one entered in the console
+                var patientDB = PatientDatabase.GetPatientDatabase();
                 Patient patient = FindPatientById(id, patientDB);
 
                 if (patient != null)
@@ -79,28 +67,8 @@ namespace HospitalSystem
                     patient.DisplayMenu();
                 }
             }
-            else
-            {
-                Console.WriteLine("Patient not found");
-                Console.ReadKey();
-            }
           
             Console.ReadKey(); 
-        }
-
-        private Patient FindPatientById(int userId, Dictionary<int, Patient> patients)
-        {
-            foreach (var kvp in patients)
-            {
-                int id = kvp.Key;
-
-                if (PatientDatabase.GetPatientId(id) == userId)
-                {
-                    return patients[id];
-                }
-            }
-
-            return null;
         }
 
         private Doctor FindDoctorById(int userId, Dictionary<int, Doctor> doctors)
@@ -112,6 +80,21 @@ namespace HospitalSystem
                 if (DoctorDatabase.GetDoctorId(id) == userId)
                 {
                     return doctors[id];
+                }
+            }
+
+            return null;
+        }
+
+        private Patient FindPatientById(int userId, Dictionary<int, Patient> patients)
+        {
+            foreach (var kvp in patients)
+            {
+                int id = kvp.Key;
+
+                if (PatientDatabase.GetPatientId(id) == userId)
+                {
+                    return patients[id];
                 }
             }
 
@@ -187,10 +170,7 @@ namespace HospitalSystem
                         string targetPassword = arr[1].Trim();
                         string targetRole = arr[2].Trim();
 
-                        bool validUserId = userId == targetUserId;
-                        bool validPassword = password == targetPassword;
-
-                        if (validUserId && validPassword)
+                        if (userId == targetUserId && password == targetPassword)
                         {
                             Console.WriteLine("Valid Credentials");
                             return targetRole;
