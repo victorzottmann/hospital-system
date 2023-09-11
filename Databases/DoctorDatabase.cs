@@ -28,16 +28,28 @@ namespace HospitalSystem.Databases
                     {
                         string[] arr = line.Split(',');
 
-                        string firstName = arr[0];
-                        string lastName = arr[1];
-                        string email = arr[2];
-                        string phone = arr[3];
-                        string address = arr[4];
+                        int doctorId = int.Parse(arr[0]);
+                        string firstName = arr[1];
+                        string lastName = arr[2];
+                        string email = arr[3];
+                        string phone = arr[4];
+                        string address = arr[5];
 
-                        Doctor doctor = new Doctor(firstName, lastName, email, phone, address);
-                        int doctorId = doctor.GetDoctorId();
+                        try
+                        {
+                            Doctor doctor = new Doctor(firstName, lastName, email, phone, address);
 
-                        doctorDB.Add(doctorId, doctor);
+                            if (!doctorDB.ContainsKey(doctorId))
+                            {
+                                doctorDB.Add(doctorId, doctor);
+                            }                        
+                        }
+                        catch (ArgumentException e)
+                        {
+                            Console.WriteLine($"An error occured: {e.Message}");
+                            Console.Write("Press any key to continue: ");
+                            Console.ReadKey();
+                        }
                     }
                 }
                 else

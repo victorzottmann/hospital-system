@@ -10,7 +10,10 @@ namespace HospitalSystem
         private static string _loginFilePath = "login-credentials.txt";
         private static string _doctorsFilePath = "doctors.txt";
 
-        public Login() { }
+        public Login() 
+        {
+            DoctorDatabase.LoadDoctorDB(_doctorsFilePath);
+        }
 
         public void DisplayMenu()
         {
@@ -33,9 +36,36 @@ namespace HospitalSystem
             string role = ValidateCredentials(_loginFilePath, userId, password);
             int id = int.Parse(userId);
 
-            bool isPatient = role == "patient";
-            bool isDoctor = role == "doctor";
             bool isAdmin = role == "admin";
+            bool isDoctor = role == "doctor";
+            bool isPatient = role == "patient";
+
+            if (isAdmin)
+            {
+                Administrator admin = new Administrator();
+                admin.DisplayMenu();
+            }
+            else
+            {
+                Console.WriteLine("Administrator not found");
+                Console.ReadKey();
+            }
+
+            if (isDoctor)
+            {
+                var doctorDB = DoctorDatabase.GetDoctorDatabase();
+                Doctor doctor = FindDoctorById(id, doctorDB);
+
+                if (doctor != null)
+                {
+                    doctor.DisplayMenu();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Doctor not found");
+                Console.ReadKey();
+            }
 
             if (isPatient)
             {
@@ -54,37 +84,8 @@ namespace HospitalSystem
                 Console.WriteLine("Patient not found");
                 Console.ReadKey();
             }
-
-            if (isDoctor)
-            {
-                DoctorDatabase.LoadDoctorDB(_doctorsFilePath);
-                var doctorDB = DoctorDatabase.GetDoctorDatabase();
-                Doctor doctor = FindDoctorById(id, doctorDB);
-
-                if (doctor != null)
-                {
-                    doctor.DisplayMenu();
-                }
-            }
-            else
-            {
-                Console.WriteLine("Doctor not found");
-                Console.ReadKey();
-            }
-
-            Console.ReadKey();
-
-            if (isAdmin)
-            {
-                DoctorDatabase.LoadDoctorDB(_doctorsFilePath);
-                Administrator admin = new Administrator();
-                admin.DisplayMenu();
-            }
-            else
-            {
-                Console.WriteLine("Administrator not found");
-                Console.ReadKey();
-            }
+          
+            Console.ReadKey(); 
         }
 
         private Patient FindPatientById(int userId, Dictionary<int, Patient> patients)
@@ -182,9 +183,9 @@ namespace HospitalSystem
                     {
                         string[] arr = line.Split(',');
 
-                        string targetUserId = arr[0];
-                        string targetPassword = arr[1];
-                        string targetRole = arr[2];
+                        string targetUserId = arr[0].Trim();
+                        string targetPassword = arr[1].Trim();
+                        string targetRole = arr[2].Trim();
 
                         bool validUserId = userId == targetUserId;
                         bool validPassword = password == targetPassword;

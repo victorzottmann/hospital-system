@@ -22,7 +22,7 @@ namespace HospitalSystem.Users
             : base(firstName, lastName, email, phone, address)
         {
             this.AssignedPatient = null;
-            this.DoctorID++;
+            this.DoctorID++; // need to check if an ID exists before incrementing
         }
 
         public int GetDoctorId() => this.DoctorID;

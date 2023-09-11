@@ -1,12 +1,12 @@
-Gregory,House
-Lisa,Cuddy
-James,Wilson
-Eric,Foreman
-Robert,Chase
-Allison,Cameron
-Remy,Hadley
-Chris,Taub
-Lawrence,Kutner
-Jessica,Adams
-Chi,Park
-Dominika,Petrova
+20001,Gregory,House,g.house@hospital.com,04320001,15 Pitt Street,Sydney,NSW
+20002,Lisa,Cuddy,l.cuddy@hospital.com,04320002,20 Oxford Street,Sydney,NSW
+20003,James,Wilson,l.wilson@hospital.com,04320003,25 Kent Street,Sydney,NSW
+20004,Eric,Foreman,e.foreman@hospital.com,04320004,30 Market Street,Sydney,NSW
+20005,Robert,Chase,r.chase@hospital.com,04320005,35 King Street,Sydney,NSW
+20006,Allison,Cameron,a.cameron@hospital.com,04320006,40 Elizabeth Street,Sydney,NSW
+20007,Remy,Hadley,r.hadley@hospital.com,04320007,45 Castlereagh Street,Sydney,NSW
+20008,Chris,Taub,c.taub@hospital.com,04320008,50 York Street,Sydney,NSW
+20009,Lawrence,Kutner,l.kutner@hospital.com,04320009,55 Sussex Street,Sydney,NSW
+20010,Jessica,Adams,j.adams@hospital.com,04320010,60 Macquarie Street,Sydney,NSW
+20011,Chi,Park,c.park@hospital.com,04320011,65 Liverpool Street,Sydney,NSW
+20012,Dominika,Petrova,d.petrova@hospital.com,04320012,70 Albert Street,Sydney,NSW
