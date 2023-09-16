@@ -12,26 +12,32 @@ namespace HospitalSystem.Users
         private int DoctorID = 20000;
         private static string _appointmentsFilePath = "appointments.txt";
 
-        private List<Patient> AssociatedPatients { get; }
+        //private List<Patient> AssociatedPatients { get; }
+        private Dictionary<Doctor, List<Patient>> AssociatedPatients { get; }
 
         public Doctor()
         {
             this.DoctorID++;
-            this.AssociatedPatients = new List<Patient>();
+            this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
         }
 
         public Doctor(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
             this.DoctorID++; // need to check if an ID exists before incrementing
-            this.AssociatedPatients = new List<Patient>();
+            this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
         }
 
         public int GetDoctorId() => this.DoctorID;
 
-        public void AssignPatient(Patient patient)
+        public void AssignPatient(Doctor doctor, Patient patient)
         {
-            this.AssociatedPatients.Add(patient);
+            if (!AssociatedPatients.ContainsKey(doctor))
+            {
+                AssociatedPatients[doctor] = new List<Patient>();
+            }
+
+            AssociatedPatients[doctor].Add(patient);
         }
 
         public void DisplayMenu()
@@ -87,9 +93,22 @@ namespace HospitalSystem.Users
             Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
             Console.WriteLine("------------------------------------------------------------------------");
 
-            foreach (var patient in this.AssociatedPatients)
+            foreach (var kvp in AssociatedPatients)
             {
-                Console.WriteLine(patient.ToString());
+                Doctor doctor = kvp.Key;
+                List<Patient> patients = kvp.Value;
+
+                string doctorFullName = $"{doctor.FirstName} {doctor.LastName}";
+
+                foreach (var patient in patients)
+                {
+                    string patientFullName = $"{patient.GetFirstName()} {patient.GetLastName()}";
+                    string patientEmail = patient.GetEmail();
+                    string patientPhone = patient.GetPhone();
+                    string patientAddress = patient.GetAddress();
+
+                    Console.WriteLine($"{patientFullName} | {doctorFullName} | {patientEmail} | {patientPhone} | {patientAddress}");
+                }
             }
 
             Console.Write("\nPress any key to return to the doctor menu: ");

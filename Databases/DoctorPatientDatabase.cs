@@ -34,7 +34,7 @@ namespace HospitalSystem.Databases
 
                         if (doctor != null && patient != null)
                         {
-                            doctor.AssignPatient(patient);
+                            doctor.AssignPatient(doctor, patient);
                         }
                     }
                 }

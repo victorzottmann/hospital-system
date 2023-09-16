@@ -48,7 +48,7 @@ namespace HospitalSystem.Users
 
         public void AssignDoctor(Doctor doctor)
         {
-            doctor.AssignPatient(this);
+            doctor.AssignPatient(doctor, this);
         }
 
         public void AddAppointment(Doctor doctor, string description, string textToFile)
@@ -60,7 +60,7 @@ namespace HospitalSystem.Users
 
             DoctorAppointments[doctor].Add(description);
 
-            doctor.AssignPatient(this);
+            doctor.AssignPatient(doctor, this);
 
             File.AppendAllText("appointments.txt", textToFile + Environment.NewLine);
         }
