@@ -10,6 +10,7 @@ namespace HospitalSystem.Users
         // the ? removes the CS8625 error from the constructor
         // but isn't there a better alternative than saying AssignedPatient can be nullable?
         private int DoctorID = 20000;
+        private static string _appointmentsFilePath = "appointments.txt";
 
         private List<Patient> AssociatedPatients { get; } = new List<Patient>();
 
@@ -104,9 +105,9 @@ namespace HospitalSystem.Users
 
             try
             {
-                if (File.Exists("appointments.txt"))
+                if (File.Exists(_appointmentsFilePath))
                 {
-                    string[] lines = File.ReadAllLines("appointments.txt");
+                    string[] lines = File.ReadAllLines(_appointmentsFilePath);
 
                     Console.WriteLine("Doctor | Patient | Description");
                     Console.WriteLine("---------------------------------------------------");

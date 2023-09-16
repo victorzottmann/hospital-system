@@ -8,6 +8,7 @@ namespace HospitalSystem.Users
     public class Patient : User
     {
         private int PatientID = 10000;
+        private static string _appointmentsFilePath = "appointments.txt";
 
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
@@ -109,32 +110,59 @@ namespace HospitalSystem.Users
         {
             Console.Clear();
 
-            Menu patientAppointments = new Menu();
-            patientAppointments.Subtitle("My Appointments");
+            Menu menu = new Menu();
+            menu.Subtitle("My Appointments");
 
             Console.WriteLine($"Appointments for {this.FirstName} {this.LastName}\n");
 
-            Console.WriteLine("Doctor | Patient | Description");
-            Console.WriteLine("-------------------------------------------------------------");
-
-            foreach (var item in this.DoctorAppointments)
+            try
             {
-                Doctor doctor = item.Key;
-                List<string> appointments = item.Value;
-
-                foreach (var description in appointments)
+                if (File.Exists(_appointmentsFilePath))
                 {
-                    Console.WriteLine(
-                        $"{doctor.GetFirstName()} {doctor.GetLastName()} | " +
-                        $"{this.FirstName} {this.LastName} | " +
-                        $"{description}"
-                    );
+                    string[] lines = File.ReadAllLines(_appointmentsFilePath);
+
+                    Console.WriteLine("Doctor | Patient | Description");
+                    Console.WriteLine("---------------------------------------------------");
+
+                    bool appointmentsFound = false;
+
+                    foreach (string line in lines)
+                    {
+                        string[] arr = line.Split(',');
+
+                        if (arr.Length == 5)
+                        {
+                            string doctorFirstName = arr[0];
+                            string doctorLastName = arr[1];
+                            string patientFirstName = arr[2];
+                            string patientLastName = arr[3];
+                            string description = arr[4];
+
+                            string doctorFullName = $"{doctorFirstName} {doctorLastName}";
+                            string patientFullName = $"{patientFirstName} {patientLastName}";
+
+                            if (this.FullName == patientFullName)
+                            {
+                                Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
+                                appointmentsFound = true;
+                            }
+                        }
+                    }
+
+                    if (!appointmentsFound)
+                    {
+                        Console.WriteLine("You do not have any appointments");
+                    }
+
+                    Console.Write("\nPress any key to return to the menu: ");
+                    Console.ReadKey();
+                    DisplayMenu();
                 }
             }
-
-            Console.Write("\nPress any key to return to the Patient Menu: ");
-            Console.ReadKey();
-            DisplayMenu();
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"File not found: {e.Message}");
+            }
         }
 
         public void BookAppointment()
