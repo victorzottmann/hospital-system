@@ -135,8 +135,10 @@ namespace HospitalSystem.Databases
         {
             Console.Clear();
 
+            Administrator admin = new Administrator();
+
             Menu doctorDetailsMenu = new Menu();
-            doctorDetailsMenu.Subtitle("Patient Details");
+            doctorDetailsMenu.Subtitle("Doctor's Details");
 
             Console.WriteLine("Please enter the ID of the doctor whose details you are checking, or press 'N' to return to menu: ");
             
@@ -152,10 +154,41 @@ namespace HospitalSystem.Databases
                     Console.WriteLine("Doctor | Email Address | Phone | Address");
                     Console.WriteLine("----------------------------------------------------------------------");
                     Console.WriteLine(doctor.ToString());
+
+                    string key;
+
+                    while (true)
+                    {
+                        Console.Write($"\nPress 'N' to return to the menu: ");
+                        key = Console.ReadLine()!;
+
+                        if (key == "n")
+                        {
+                            break;
+                        }
+                    }
+
+                    admin.DisplayMenu();
                 }
                 else
                 {
                     Console.WriteLine($"\nA doctor with ID {id} does not exist.");
+                    Console.Write("\nPress 1 to try again: ");
+                    while (true)
+                    {
+                        string key = Console.ReadLine()!;
+
+                        if (key == "1")
+                        {
+                            GetDoctorDetails();
+                        }
+                        else if (key == "n")
+                        {
+                            break;
+                        }
+                    }
+
+                    admin.DisplayMenu();
                 }
             }
             catch (Exception e)
@@ -164,14 +197,6 @@ namespace HospitalSystem.Databases
                 Console.WriteLine($"An error occured: {e.Message}");
                 Console.WriteLine($"Please make sure that the value is not blank.\n");
                 Console.Write("Press 1 to try again or 'n' to return to the menu: ");
-            }
-
-            string key = Console.ReadLine()!;
-
-            if (key == "n")
-            {
-                Administrator admin = new Administrator();
-                admin.DisplayMenu();      
             }
         }
     }

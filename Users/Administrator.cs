@@ -122,14 +122,14 @@ namespace HospitalSystem.Users
             }
 
             // then if all goes well, store each input in their respective variable
-            string firstName = inputs[0];
-            string lastName = inputs[1];
-            string email = inputs[2];
-            string phone = inputs[3];
-            string streetNumber = inputs[4];
-            string street = inputs[5];
-            string city = inputs[6];
-            string state = inputs[7];
+            string firstName = inputs[0].Trim();
+            string lastName = inputs[1].Trim();
+            string email = inputs[2].Trim();
+            string phone = inputs[3].Trim();
+            string streetNumber = inputs[4].Trim();
+            string street = inputs[5].Trim();
+            string city = inputs[6].Trim();
+            string state = inputs[7].Trim();
 
             Address address = new Address(streetNumber, street, city, state);
 
@@ -141,8 +141,8 @@ namespace HospitalSystem.Users
                 Patient newPatient = new Patient(firstName, lastName, email, phone, address.ToString());
                 PatientDatabase.AddPatient(newPatientId, newPatient);
 
-                // NOTE: make sure that there are no whitespaces after each input
-                string patientInfo = $"{newPatientId},{firstName},{lastName},{email},{phone},{address}" + Environment.NewLine;
+                // need to fix the address part (streetNumber)
+                string patientInfo = $"{newPatientId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
                 File.AppendAllText(_patientsFilePath, patientInfo);
             }   
 
@@ -154,7 +154,8 @@ namespace HospitalSystem.Users
                 Doctor newDoctor = new Doctor(firstName, lastName, email, phone, address.ToString());
                 DoctorDatabase.AddDoctor(newDoctorId, newDoctor);
 
-                string doctorInfo = $"{newDoctorId},{firstName},{lastName},{email},{phone},{address}" + Environment.NewLine;
+                // need to fix the address part (streetNumber)
+                string doctorInfo = $"{newDoctorId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
                 File.AppendAllText(_doctorsFilePath, doctorInfo);
             }
 

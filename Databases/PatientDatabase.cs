@@ -132,6 +132,8 @@ namespace HospitalSystem.Databases
             // NEED TO COMPLETE FOR DOCTOR INFO
             Console.Clear();
 
+            Administrator admin = new Administrator();
+
             Menu patientDetailsMenu = new Menu();
             patientDetailsMenu.Subtitle("Patient Details");
 
@@ -149,10 +151,41 @@ namespace HospitalSystem.Databases
                     Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
                     Console.WriteLine("----------------------------------------------------------------------");
                     Console.WriteLine(patient.ToString());
+
+                    string key;
+
+                    while (true)
+                    {
+                        Console.Write($"\nPress 'N' to return to the menu: ");
+                        key = Console.ReadLine()!;
+
+                        if (key == "n")
+                        {
+                            break;
+                        }
+                    }
+                    admin.DisplayMenu();            
                 }
                 else
                 {
                     Console.WriteLine($"\nA patient with ID {id} does not exist.");
+                    Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
+
+                    while (true)
+                    {
+                        string key = Console.ReadLine()!;
+
+                        if (key == "1")
+                        {
+                            GetPatientDetails();
+                        }
+                        else if (key == "n")
+                        {
+                            break;
+                        }
+                    }
+
+                    admin.DisplayMenu();
                 }
             }
             catch (NullReferenceException e)
@@ -161,14 +194,6 @@ namespace HospitalSystem.Databases
                 Console.WriteLine($"An error occured: {e.Message}");
                 Console.WriteLine($"Please make sure that it is not blank.\n");
                 Console.Write("Press 1 to try again or 'n' to return to the menu: ");
-            }
-
-            string key = Console.ReadLine()!;
-
-            if (key == "n")
-            {
-                Administrator admin = new Administrator();
-                admin.DisplayMenu();
             }
         }
     }
