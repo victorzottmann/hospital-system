@@ -33,11 +33,16 @@ namespace HospitalSystem.Databases
                         string lastName = arr[2];
                         string email = arr[3];
                         string phone = arr[4];
-                        string address = arr[5];
+                        string streetNumber = arr[5];
+                        string street = arr[6];
+                        string city = arr[7];
+                        string state = arr[8];
+
+                        Address address = new Address(streetNumber, street, city, state);
 
                         try
                         {
-                            Doctor doctor = new Doctor(firstName, lastName, email, phone, address);
+                            Doctor doctor = new Doctor(firstName, lastName, email, phone, address.ToString());
 
                             if (!doctorDB.ContainsKey(doctorId))
                             {
