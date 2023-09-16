@@ -10,4 +10,3 @@
 20010,Jessica,Adams,j.adams@hospital.com,04320010,60 Macquarie Street,Sydney,NSW
 20011,Chi,Park,c.park@hospital.com,04320011,65 Liverpool Street,Sydney,NSW
 20012,Dominika,Petrova,d.petrova@hospital.com,04320012,70 Albert Street,Sydney,NSW
-20013,Mike,Ross,m.ross@patient.com,123456789,20 Albert Street, Sydney, NSW
