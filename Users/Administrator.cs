@@ -6,6 +6,8 @@ namespace HospitalSystem.Users
 {
     public class Administrator : User
     {
+        private static string _patientsFilePath = "patients.txt";
+
         public Administrator() 
         {
             this.FirstName = "Victor";
@@ -132,10 +134,16 @@ namespace HospitalSystem.Users
 
             if (role == "patient")
             {
-                Patient patient = new Patient(firstName, lastName, email, phone, address.ToString());
-                int patientID = patient.GetPatientId();
-                PatientDatabase.AddPatient(patientID, patient);
-            }
+                int id = FindLargestUserID(_patientsFilePath);
+                int newPatientId = ++id;
+
+                Patient newPatient = new Patient(firstName, lastName, email, phone, address.ToString());
+                PatientDatabase.AddPatient(newPatientId, newPatient);
+
+                // NOTE: make sure that there are no whitespaces after each input
+                string patientInfo = $"{newPatientId},{firstName},{lastName},{email},{phone},{address}" + Environment.NewLine;
+                File.AppendAllText(_patientsFilePath, patientInfo);
+            }   
 
             if (role == "doctor")
             {
@@ -160,6 +168,31 @@ namespace HospitalSystem.Users
         public void Exit()
         {
             Environment.Exit(0);
+        }
+
+        public static int FindLargestUserID(string filepath)
+        {
+            int largestId = 0;
+            string[] lines = File.ReadAllLines(filepath);
+
+            foreach (string line in lines)
+            {
+                string[] data = line.Split(',');
+
+                if (data.Length > 0)
+                {
+                    int id;
+
+                    if (int.TryParse(data[0], out id))
+                    {
+                        if (id > largestId)
+                        {
+                            largestId = id;
+                        }
+                    }
+                }
+            }
+            return largestId;
         }
 
         public void ProcessSelectedOption(string input)

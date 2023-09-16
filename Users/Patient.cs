@@ -7,7 +7,8 @@ namespace HospitalSystem.Users
 {
     public class Patient : User
     {
-        private int PatientID = 10000;
+        private static int LastPatientID = 10000;
+        private int PatientID;
 
         private List<Doctor> AssignedDoctors { get; } = new List<Doctor>();
 
@@ -16,10 +17,16 @@ namespace HospitalSystem.Users
         public Patient(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
-            PatientID++;
+            PatientID = ++LastPatientID;
         }
 
         public int GetPatientId() => this.PatientID;
+
+        public static int GetStaticPatientId() => LastPatientID;
+        public static void SetStaticPatientId(int value)
+        {
+            LastPatientID += value;
+        }
 
         public void AssignDoctor(Doctor doctor)
         {
