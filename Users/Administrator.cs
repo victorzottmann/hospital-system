@@ -7,6 +7,7 @@ namespace HospitalSystem.Users
     public class Administrator : User
     {
         private static string _patientsFilePath = "patients.txt";
+        private static string _doctorsFilePath = "doctors.txt";
 
         public Administrator() 
         {
@@ -147,9 +148,14 @@ namespace HospitalSystem.Users
 
             if (role == "doctor")
             {
-                Doctor doctor = new Doctor(firstName, lastName, email, phone, address.ToString());
-                int doctorID = doctor.GetDoctorId();
-                DoctorDatabase.AddDoctor(doctorID, doctor);
+                int id = FindLargestUserID(_doctorsFilePath);
+                int newDoctorId = ++id;
+
+                Doctor newDoctor = new Doctor(firstName, lastName, email, phone, address.ToString());
+                DoctorDatabase.AddDoctor(newDoctorId, newDoctor);
+
+                string doctorInfo = $"{newDoctorId},{firstName},{lastName},{email},{phone},{address}" + Environment.NewLine;
+                File.AppendAllText(_doctorsFilePath, doctorInfo);
             }
 
             Console.WriteLine($"{firstName} {lastName} added to the system!\n");
