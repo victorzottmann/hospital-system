@@ -10,6 +10,8 @@ namespace HospitalSystem.Users
         protected string Email { get; set; }
         protected string Phone { get; set; }
         protected string Address { get; set; }
+        protected string FullName { get; set; }
+
 
         public User() { }
 
@@ -17,15 +19,17 @@ namespace HospitalSystem.Users
         {
             this.FirstName = firstName;
             this.LastName = lastName;
+            this.FullName = $"{this.FirstName} {this.LastName}";
         }
 
         public User(string firstName, string lastName, string email, string phone, string address)
         {
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Phone = phone;
-            Address = address;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Email = email;
+            this.Phone = phone;
+            this.Address = address;
+            this.FullName = $"{this.FirstName} {this.LastName}";
         }
 
         public string GetFirstName() => this.FirstName;

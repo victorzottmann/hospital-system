@@ -95,6 +95,63 @@ namespace HospitalSystem.Users
             DisplayMenu();
         }
 
+        public void ListAppointments()
+        {
+            Console.Clear();
+
+            Menu menu = new Menu();
+            menu.Subtitle("All Appointments");
+
+            try
+            {
+                if (File.Exists("appointments.txt"))
+                {
+                    string[] lines = File.ReadAllLines("appointments.txt");
+
+                    Console.WriteLine("Doctor | Patient | Description");
+                    Console.WriteLine("---------------------------------------------------");
+
+                    bool appointmentsFound = false;
+
+                    foreach (string line in lines)
+                    {
+                        string[] arr = line.Split(',');
+
+                        if (arr.Length == 5)
+                        {
+                            string doctorFirstName = arr[0];
+                            string doctorLastName = arr[1];
+                            string patientFirstName = arr[2];
+                            string patientLastName = arr[3];
+                            string description = arr[4];
+
+                            string doctorFullName = $"{doctorFirstName} {doctorLastName}";
+                            string patientFullName = $"{patientFirstName} {patientLastName}";
+
+                            if (this.FullName == doctorFullName)
+                            {
+                                Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
+                                appointmentsFound = true;
+                            }  
+                        }
+                    }
+
+                    if (!appointmentsFound)
+                    {
+                        Console.WriteLine("You do not have any appointments");
+                    }
+
+                    Console.Write("\nPress any key to return to the menu: ");
+                    Console.ReadKey();
+                    DisplayMenu();
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"File not found: {e.Message}");
+            }
+        }
+
         public void Logout()
         {
             Login login = new Login();
@@ -117,7 +174,7 @@ namespace HospitalSystem.Users
                     //ListPatients();
                     break;
                 case "3":
-                    //ListAppointments();
+                    ListAppointments();
                     break;
                 case "4":
                     //CheckPatient();

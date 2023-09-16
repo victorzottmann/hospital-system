@@ -50,16 +50,18 @@ namespace HospitalSystem.Users
             doctor.AssignPatient(this);
         }
 
-        public void AddAppointment(Doctor doctor, string appointment)
+        public void AddAppointment(Doctor doctor, string description, string textToFile)
         {
             if (!DoctorAppointments.ContainsKey(doctor))
             {
                 DoctorAppointments[doctor] = new List<string>();
             }
 
-            DoctorAppointments[doctor].Add(appointment);
+            DoctorAppointments[doctor].Add(description);
 
             doctor.AssignPatient(this);
+
+            File.AppendAllText("appointments.txt", textToFile);
         }
 
         // Maybe overload this later to display details in relation to user permissions (admin vs user)
@@ -206,7 +208,9 @@ namespace HospitalSystem.Users
 
             } while (string.IsNullOrWhiteSpace(description));
 
-            AddAppointment(selectedDoctor, description);
+            string textToFile = $"{selectedDoctor.GetFirstName()},{selectedDoctor.GetLastName()},{this.FirstName},{this.LastName},{description}";
+
+            AddAppointment(selectedDoctor, description, textToFile);
 
             Console.WriteLine("The appointment was booked successfully\n\n");
             Console.Write("Press any key to return to the Patient Menu: ");
