@@ -50,12 +50,72 @@ namespace HospitalSystem.Users
             Console.WriteLine("6. Logout");
             Console.WriteLine("7. Exit");
 
-            Console.Read();
+            string input = Console.ReadLine()!;
+            ProcessSelectedOption(input);
         }
 
         public override string ToString()
         {
             return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
+        }
+
+        public void ListDoctorDetails()
+        {
+            Console.Clear();
+
+            Menu doctorDetails = new Menu();
+            doctorDetails.Subtitle("My Details");
+
+            Console.WriteLine($"Name | Email Address | Phone | Address");
+            Console.WriteLine(this.ToString());
+
+            Console.Write("\n\nPress any key to the Doctor Menu: ");
+            Console.ReadKey();
+
+            DisplayMenu();
+        }
+
+        public void Logout()
+        {
+            Login login = new Login();
+            login.DisplayMenu();
+        }
+
+        public void Exit()
+        {
+            Environment.Exit(0);
+        }
+
+        public void ProcessSelectedOption(string input)
+        {
+            switch (input)
+            {
+                case "1":
+                    ListDoctorDetails();
+                    break;
+                case "2":
+                    //ListPatients();
+                    break;
+                case "3":
+                    //ListAppointments();
+                    break;
+                case "4":
+                    //CheckPatient();
+                    break;
+                case "5":
+                    //AppointmentsWithPatient();
+                    break;
+                case "6":
+                    Logout();
+                    break;
+                case "7":
+                    Exit();
+                    break;
+                default:
+                    Console.Write("\nPlease select an option between 1 and 7: ");
+                    ProcessSelectedOption(Console.ReadLine()!);
+                    break;
+            }
         }
     }
 }
