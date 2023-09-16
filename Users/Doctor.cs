@@ -12,17 +12,19 @@ namespace HospitalSystem.Users
         private int DoctorID = 20000;
         private static string _appointmentsFilePath = "appointments.txt";
 
-        private List<Patient> AssociatedPatients { get; } = new List<Patient>();
+        private List<Patient> AssociatedPatients { get; }
 
         public Doctor()
         {
             this.DoctorID++;
+            this.AssociatedPatients = new List<Patient>();
         }
 
         public Doctor(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
             this.DoctorID++; // need to check if an ID exists before incrementing
+            this.AssociatedPatients = new List<Patient>();
         }
 
         public int GetDoctorId() => this.DoctorID;
@@ -48,7 +50,7 @@ namespace HospitalSystem.Users
             Console.WriteLine("4. Check particular patient");
             Console.WriteLine("5. List appointments with patient");
             Console.WriteLine("6. Logout");
-            Console.WriteLine("7. Exit");
+            Console.WriteLine("7. Exit\n");
 
             string input = Console.ReadLine()!;
             ProcessSelectedOption(input);
@@ -69,7 +71,7 @@ namespace HospitalSystem.Users
             Console.WriteLine($"Name | Email Address | Phone | Address");
             Console.WriteLine(this.ToString());
 
-            Console.Write("\n\nPress any key to the Doctor Menu: ");
+            Console.Write("\nPress any key to the Doctor Menu: ");
             Console.ReadKey();
 
             DisplayMenu();
@@ -87,10 +89,10 @@ namespace HospitalSystem.Users
 
             foreach (var patient in this.AssociatedPatients)
             {
-                Console.WriteLine($"{patient}");
+                Console.WriteLine(patient.ToString());
             }
 
-            Console.Write("Press any key to return to the doctor menu");
+            Console.Write("\nPress any key to return to the doctor menu: ");
             Console.ReadKey();
 
             DisplayMenu();
@@ -172,7 +174,7 @@ namespace HospitalSystem.Users
                     ListDoctorDetails();
                     break;
                 case "2":
-                    //ListPatients();
+                    ListPatients();
                     break;
                 case "3":
                     ListAppointments();

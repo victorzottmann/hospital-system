@@ -15,7 +15,7 @@ namespace HospitalSystem.Databases
             patientDB.Add(id, patient);
         }
 
-        public static void LoadPatientDB(string filepath)
+        public static void LoadDB(string filepath)
         {
             try
             {

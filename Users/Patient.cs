@@ -98,8 +98,6 @@ namespace HospitalSystem.Users
             Console.WriteLine("Name | Email Address | Phone | Address");
             Console.WriteLine("------------------------------------------------------------------------");
 
-           
-
             Console.Write("\nPress any key to the Patient Menu: ");
             Console.ReadKey();
 
@@ -172,7 +170,7 @@ namespace HospitalSystem.Users
             Menu bookAppointment = new Menu();
             bookAppointment.Subtitle("Book Appointment");
 
-            DoctorDatabase.LoadDoctorDB("doctors.txt");
+            DoctorDatabase.LoadDB("doctors.txt");
 
             List<Doctor> allDoctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
 
