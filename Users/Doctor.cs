@@ -9,19 +9,18 @@ namespace HospitalSystem.Users
     {
         // the ? removes the CS8625 error from the constructor
         // but isn't there a better alternative than saying AssignedPatient can be nullable?
-        private Patient? AssignedPatient { get; set; }
         private int DoctorID = 20000;
+
+        private List<Patient> AssociatedPatients { get; } = new List<Patient>();
 
         public Doctor()
         {
-            this.AssignedPatient = null;
             this.DoctorID++;
         }
 
         public Doctor(string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
-            this.AssignedPatient = null;
             this.DoctorID++; // need to check if an ID exists before incrementing
         }
 
@@ -29,7 +28,7 @@ namespace HospitalSystem.Users
 
         public void AssignPatient(Patient patient)
         {
-            this.AssignedPatient = patient;
+            this.AssociatedPatients.Add(patient);
         }
 
         public void DisplayMenu()
@@ -70,6 +69,27 @@ namespace HospitalSystem.Users
             Console.WriteLine(this.ToString());
 
             Console.Write("\n\nPress any key to the Doctor Menu: ");
+            Console.ReadKey();
+
+            DisplayMenu();
+        }
+
+        public void ListPatients()
+        {
+            Console.Clear();
+
+            Menu myPatients = new Menu();
+            myPatients.Subtitle("My Patients");
+
+            Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
+            Console.WriteLine("------------------------------------------------------------------------");
+
+            foreach (var patient in this.AssociatedPatients)
+            {
+                Console.WriteLine($"{patient}");
+            }
+
+            Console.Write("Press any key to return to the doctor menu");
             Console.ReadKey();
 
             DisplayMenu();

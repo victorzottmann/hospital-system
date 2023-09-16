@@ -9,8 +9,6 @@ namespace HospitalSystem.Users
     {
         private int PatientID = 10000;
 
-        private List<Doctor> AssignedDoctors { get; } = new List<Doctor>();
-
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
         public Patient(string firstName, string lastName, string email, string phone, string address)
@@ -20,24 +18,6 @@ namespace HospitalSystem.Users
         }
 
         public int GetPatientId() => this.PatientID;
-
-        public void AssignDoctor(Doctor doctor)
-        {
-            AssignedDoctors.Add(doctor);
-        }
-
-        public void AddAppointment(Doctor doctor, string appointment)
-        {
-            if (!DoctorAppointments.ContainsKey(doctor))
-            {
-                DoctorAppointments[doctor] = new List<string>();
-            }
-
-            DoctorAppointments[doctor].Add(appointment);
-            AssignedDoctors.Add(doctor);
-
-            doctor.AssignPatient(this);
-        }
 
         public void DisplayMenu()
         {
@@ -63,6 +43,23 @@ namespace HospitalSystem.Users
         public override string ToString()
         {
             return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
+        }
+
+        public void AssignDoctor(Doctor doctor)
+        {
+            doctor.AssignPatient(this);
+        }
+
+        public void AddAppointment(Doctor doctor, string appointment)
+        {
+            if (!DoctorAppointments.ContainsKey(doctor))
+            {
+                DoctorAppointments[doctor] = new List<string>();
+            }
+
+            DoctorAppointments[doctor].Add(appointment);
+
+            doctor.AssignPatient(this);
         }
 
         // Maybe overload this later to display details in relation to user permissions (admin vs user)
@@ -98,10 +95,7 @@ namespace HospitalSystem.Users
             Console.WriteLine("Name | Email Address | Phone | Address");
             Console.WriteLine("------------------------------------------------------------------------");
 
-            foreach (var doctor in this.AssignedDoctors)
-            {
-                Console.WriteLine($"{doctor}");
-            }
+           
 
             Console.Write("\nPress any key to the Patient Menu: ");
             Console.ReadKey();
@@ -148,13 +142,16 @@ namespace HospitalSystem.Users
             Menu bookAppointment = new Menu();
             bookAppointment.Subtitle("Book Appointment");
 
-            int totalDoctors = this.AssignedDoctors.Count;
+            DoctorDatabase.LoadDoctorDB("doctors.txt");
+
+            List<Doctor> allDoctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
+
+            int totalDoctors = allDoctors.Count;
 
             if (totalDoctors == 0)
             {
                 Console.WriteLine("There are no doctors available at the moment.\n");
                 Console.Write("Press any key to return to the Patient Menu: ");
-
                 Console.ReadKey();
                 this.DisplayMenu();
             }
@@ -163,34 +160,36 @@ namespace HospitalSystem.Users
 
             for (int i = 0; i < totalDoctors; i++)
             {
-                Doctor doctor = this.AssignedDoctors[i];
+                Doctor doctor = allDoctors[i];
 
-                /* remember that doctor needs a Getter because the User fields are protected
-                    * and the doctor object is not derived from User within the Patient class
-                    */
-                Console.WriteLine($"{i+1}. {doctor.GetFirstName()} {doctor.GetLastName()}");
+                /* 
+                 * remember that doctor needs a Getter because the User fields are protected
+                 * and the doctor object is not derived from User within the Patient class
+                 */
+                Console.WriteLine($"{i + 1}. {doctor.ToString()}");
             }
 
             string input;
             int selection;
 
-            /* this do while loop keeps prompting the user for a description
+            /* 
+             * this do while loop keeps prompting the user for a description
              * while the input is null or empty
              */
             do
             {
-                Console.Write($"\nPlease choose a doctor (1 to {this.AssignedDoctors.Count}): ");
+                Console.Write($"\nPlease choose a doctor (1 to {totalDoctors}): ");
 
-                /* ? indicates that it can be null.
+                /* 
+                 * ? indicates that it can be null.
                  * The null-coalescing operator ?? returns the value of its left-hand operand if it isn't null; 
                  * otherwise, it evaluates the right-hand operand and returns its result.
                  */
                 input = Console.ReadLine()?.Trim() ?? string.Empty;
 
-                // using int.TryParse as a way to validate the input and then convert it to an int if successful
-            } while (!int.TryParse(input, out selection) || selection < 1 || selection > this.AssignedDoctors.Count);
+            } while (!int.TryParse(input, out selection) || selection < 1 || selection > totalDoctors);
 
-            Doctor selectedDoctor = AssignedDoctors[selection - 1]; // -1 because the List starts at 0
+            Doctor selectedDoctor = allDoctors[selection - 1]; // -1 because the List starts at 0
             Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.GetFirstName()} {selectedDoctor.GetLastName()}\n");
 
             string description;
@@ -204,16 +203,14 @@ namespace HospitalSystem.Users
                 {
                     Console.WriteLine("The description cannot be blank\n");
                 }
-                
-                // repeat the above while the string is null or is blank
+
             } while (string.IsNullOrWhiteSpace(description));
 
-            // Not using AddAppointment() because it's a simple command
-            DoctorAppointments[selectedDoctor].Add(description);
+            AddAppointment(selectedDoctor, description);
 
-            Console.WriteLine("The appointment was booked succesfully\n\n");
+            Console.WriteLine("The appointment was booked successfully\n\n");
             Console.Write("Press any key to return to the Patient Menu: ");
-         
+
             Console.ReadKey();
             DisplayMenu();
         }
