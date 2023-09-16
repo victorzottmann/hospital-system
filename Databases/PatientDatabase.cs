@@ -107,13 +107,7 @@ namespace HospitalSystem.Databases
                 foreach (var kvp in patientDB)
                 {
                     var patient = kvp.Value;
-
-                    Console.WriteLine(
-                        $"{patient.GetFirstName()} | " +
-                        $"{patient.GetLastName()} | " +
-                        $"{patient.GetEmail()} | " +
-                        $"{patient.GetAddress()}"
-                    );
+                    Console.WriteLine(patient.ToString());
                 }
             }
             else
