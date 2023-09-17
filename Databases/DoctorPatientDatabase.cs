@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Channels;
 using HospitalSystem.Users;
 
 
@@ -7,7 +8,7 @@ namespace HospitalSystem.Databases
 {
     public class DoctorPatientDatabase
     {
-        public static Dictionary<int, Doctor> DoctorPatients { get; set; } = new Dictionary<int, Doctor>();
+        public static Dictionary<int, List<int>> DoctorPatients { get; set; } = new Dictionary<int, List<int>>();
 
         public static void LoadDB(string filePath)
         {
@@ -35,6 +36,7 @@ namespace HospitalSystem.Databases
                         if (doctor != null && patient != null)
                         {
                             doctor.AssignPatient(doctor, patient);
+                            patient.AssignDoctor(doctor);
                         }
                     }
                 }
@@ -42,7 +44,7 @@ namespace HospitalSystem.Databases
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"File not found: {e.Message}");
-            }
+            }  
         }
     }
 }

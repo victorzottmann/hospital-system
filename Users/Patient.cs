@@ -9,9 +9,9 @@ namespace HospitalSystem.Users
     {
         private static string _appointmentsFilePath = "appointments.txt";
         private static string _doctorPatientsFilePath = "doctor-patients.txt";
-        private static string _patientsFilePath = "patients.txt";
 
         private int PatientID { get; set; }
+        private Doctor PatientDoctor { get; set; }
 
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
@@ -23,8 +23,20 @@ namespace HospitalSystem.Users
 
         public int GetPatientId() => this.PatientID;
 
+        public Doctor GetPatientDoctor() => this.PatientDoctor;
+
+        public void AssignDoctor(Doctor doctor)
+        {
+            PatientDoctor = doctor;
+        }
+
         public Dictionary<Doctor, List<string>> GetDoctorAppointments() => this.DoctorAppointments;
- 
+
+        public override string ToString()
+        {
+            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
+        }
+
         public void DisplayMenu()
         {
             Console.Clear();
@@ -44,17 +56,6 @@ namespace HospitalSystem.Users
 
             string input = Console.ReadLine()!;
             ProcessSelectedOption(input);
-        }
-
-        public override string ToString()
-        {
-            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
-        }
-
-        public void AssignDoctor(Doctor doctor)
-        {
-            doctor.AssignPatient(doctor, this);
-            doctor.WriteToFile(_doctorPatientsFilePath, doctor, this);
         }
 
         public void AddAppointment(Doctor doctor, string description, string textToFile)
@@ -98,12 +99,23 @@ namespace HospitalSystem.Users
         {
             Console.Clear();
 
-            Menu patientDoctorDetails = new Menu();
-            patientDoctorDetails.Subtitle("My Doctor");
+            Menu menu = new Menu();
+            menu.Subtitle("My Doctor");
 
             Console.WriteLine("Your doctors:\n");
             Console.WriteLine("Name | Email Address | Phone | Address");
             Console.WriteLine("------------------------------------------------------------------------");
+
+            Doctor doctor = this.GetPatientDoctor();
+
+            if (doctor != null)
+            {
+                Console.WriteLine(doctor.ToString());
+            }
+            else
+            {
+                Console.WriteLine("\nDoctor not found!!!!!");
+            }
 
             Console.Write("\nPress any key to the Patient Menu: ");
             Console.ReadKey();
@@ -282,7 +294,7 @@ namespace HospitalSystem.Users
                     ListPatientDetails();
                     break;
                 case "2":
-                    //ListMyDoctorDetails();
+                    ListMyDoctorDetails();
                     break;
                 case "3":
                     ListAllAppointments();

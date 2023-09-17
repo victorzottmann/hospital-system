@@ -15,7 +15,6 @@ namespace HospitalSystem.Users
         private static string _appointmentsFilePath = "appointments.txt";
         private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
-        //private List<Patient> AssociatedPatients { get; }
         private Dictionary<Doctor, List<Patient>> AssociatedPatients { get; }
 
         public Doctor()
@@ -30,7 +29,7 @@ namespace HospitalSystem.Users
             this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
         }
 
-        public int GetDoctorId() => this.DoctorID;
+        public int GetDoctorId() => this.DoctorID; 
 
         public void AssignPatient(Doctor doctor, Patient patient)
         {
