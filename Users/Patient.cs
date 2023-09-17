@@ -139,14 +139,17 @@ namespace HospitalSystem.Users
                         {
                             string doctorFirstName = arr[1];
                             string doctorLastName = arr[2];
+
+                            string patientId = arr[3];
                             string patientFirstName = arr[4];
                             string patientLastName = arr[5];
+
                             string description = arr[6];
 
                             string doctorFullName = $"{doctorFirstName} {doctorLastName}";
                             string patientFullName = $"{patientFirstName} {patientLastName}";
 
-                            if (this.FullName == patientFullName)
+                            if (this.PatientID == int.Parse(patientId))
                             {
                                 Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
                                 appointmentsFound = true;
