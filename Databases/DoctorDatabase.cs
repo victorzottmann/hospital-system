@@ -12,7 +12,7 @@ namespace HospitalSystem.Databases
 
         public static void AddDoctor(int id, Doctor doctor)
         {
-            // key: PatientID, value: Patient obj
+            // key: DoctorID, value: Doctor obj
             doctorDB.Add(id, doctor);
         }
 
@@ -103,8 +103,8 @@ namespace HospitalSystem.Databases
         {
             Console.Clear();
 
-            Menu allDoctors = new Menu();
-            allDoctors.Subtitle("All doctors");
+            Menu menu = new Menu();
+            menu.Subtitle("All doctors");
 
             Console.WriteLine("All doctors registered to the DOTNET Hospital Management System\n");
 
@@ -135,10 +135,8 @@ namespace HospitalSystem.Databases
         {
             Console.Clear();
 
-            Administrator admin = new Administrator();
-
-            Menu doctorDetailsMenu = new Menu();
-            doctorDetailsMenu.Subtitle("Doctor's Details");
+            Menu menu = new Menu();
+            menu.Subtitle("Doctor's Details");
 
             Console.WriteLine("Please enter the ID of the doctor whose details you are checking, or press 'N' to return to menu: ");
             
@@ -155,68 +153,69 @@ namespace HospitalSystem.Databases
                     Console.WriteLine("----------------------------------------------------------------------");
                     Console.WriteLine(doctor.ToString());
 
-                    string key;
+                    Console.Write($"\nPress 'N' to return to the menu: ");
 
-                    while (true)
-                    {
-                        Console.Write($"\nPress 'N' to return to the menu: ");
-                        key = Console.ReadLine()!;
-
-                        if (key == "n")
-                        {
-                            break;
-                        }
-                    }
-
-                    admin.DisplayMenu();
+                    PromptToReturnToMenu();
                 }
                 else
                 {
                     Console.WriteLine($"\nA doctor with ID {id} does not exist.");
                     Console.Write("\nPress 1 to try again: ");
-                    while (true)
-                    {
-                        string key = Console.ReadLine()!;
 
-                        if (key == "1")
-                        {
-                            GetDoctorDetails();
-                            break;
-                        }
-                        else if (key == "n")
-                        {
-                            break;
-                        }
-                    }
-
-                    admin.DisplayMenu();
+                    PromptForDoctorDetails();
                 }
             }
-            catch (Exception e)
+            catch (NullReferenceException e)
             {
-                // FIX THIS TO PROMPT THE USER AGAIN UNTIL INPUT IS CORRECT
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Console.WriteLine($"Please make sure that the value is not blank.\n");
-
                 Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
 
-                while (true)
-                {
-                    string key = Console.ReadLine()!;
-
-                    if (key == "1")
-                    {
-                        GetDoctorDetails();
-                        break;
-                    }
-                    else if (key == "n")
-                    {
-                        break;
-                    }
-                }
-
-                admin.DisplayMenu();
+                PromptForDoctorDetails();
             }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"\nAn error occured: {e.Message}");
+                Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
+
+                PromptForDoctorDetails();
+            }
+        }
+
+        public static void PromptToReturnToMenu()
+        {
+            while (true)
+            {
+                Console.Write($"\nPress 'N' to return to the menu: ");
+                string key = Console.ReadLine()!;
+
+                if (key == "n")
+                {
+                    break;
+                }
+            }
+
+            Administrator admin = new Administrator();
+            admin.DisplayMenu();
+        }
+
+        public static void PromptForDoctorDetails()
+        {
+            while (true)
+            {
+                string key = Console.ReadLine()!;
+
+                if (key == "1")
+                {
+                    GetDoctorDetails();
+                }
+                else if (key == "n")
+                {
+                    break;
+                }
+            }
+
+            Administrator admin = new Administrator();
+            admin.DisplayMenu();
         }
     }
 }
