@@ -306,38 +306,25 @@ namespace HospitalSystem.Users
                             Console.WriteLine($"\nPatient with ID {id} does not seem to be associated with you");
                         }
 
-                        Console.Write("\nPress 'N' to return to the Doctor Menu: ");
-                        Console.ReadKey();
-
-                        DisplayMenu();
-
+                        // prompt to try again or return to menu
+                        PromptToCheckPatient();
                     }
+                    else
+                    {
+                        // not null by format doesn't match 1xxxx
+                        Console.WriteLine($"\nPatient with ID {id} does not exist.");
 
-                    Console.Write("\nPress 'N' to return to the Doctor Menu: ");
-                    Console.ReadKey();
-                    DisplayMenu();
+                        // prompt to try again or return to menu
+                        PromptToCheckPatient();
+                    }
                 }
                 else
                 {
+                    // if not an integer
                     Console.WriteLine("\nInvalid ID. Only numeric values are accepted.");
-                    Console.Write("\nPress 1 to try again or 'N' to return to the Doctor Menu: ");
-                    string key;
 
-                    while (true)
-                    {
-                        key = Console.ReadLine()!;
-
-                        if (key == "1")
-                        {
-                            CheckPatient();
-                        }
-                        else if (key == "n")
-                        {
-                            break;
-                        }
-                    }
-
-                    DisplayMenu();
+                    // prompt to try again or return to menu
+                    PromptToCheckPatient();
                 }
             }
             catch (Exception e)
@@ -417,6 +404,26 @@ namespace HospitalSystem.Users
         public void Exit()
         {
             Environment.Exit(0);
+        }
+
+        public void PromptToCheckPatient()
+        {
+            while (true)
+            {
+                Console.Write($"\nPress 1 to try again or 'N' to return to the Doctor Menu: ");
+                string key = Console.ReadLine()!;
+
+                if (key == "1")
+                {
+                    CheckPatient();
+                }
+                else if (key == "n")
+                {
+                    break;
+                }
+            }
+
+            DisplayMenu();
         }
 
         public void ProcessSelectedOption(string input)
