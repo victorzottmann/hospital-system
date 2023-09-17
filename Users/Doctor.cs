@@ -307,7 +307,7 @@ namespace HospitalSystem.Users
                         }
 
                         // prompt to try again or return to menu
-                        PromptToCheckPatient();
+                        PromptToTryAgain(CheckPatient);
                     }
                     else
                     {
@@ -315,7 +315,7 @@ namespace HospitalSystem.Users
                         Console.WriteLine($"\nPatient with ID {id} does not exist.");
 
                         // prompt to try again or return to menu
-                        PromptToCheckPatient();
+                        PromptToTryAgain(CheckPatient);
                     }
                 }
                 else
@@ -324,7 +324,7 @@ namespace HospitalSystem.Users
                     Console.WriteLine("\nInvalid ID. Only numeric values are accepted.");
 
                     // prompt to try again or return to menu
-                    PromptToCheckPatient();
+                    PromptToTryAgain(CheckPatient);
                 }
             }
             catch (Exception e)
@@ -340,7 +340,7 @@ namespace HospitalSystem.Users
             Menu menu = new Menu();
             menu.Subtitle("Appointments with Patient");
 
-            Console.Write("Input the patient ID: ");
+            Console.Write("Enter the ID of the patient you would like to view appointments for: ");
             string id = Console.ReadLine()!.Trim();
 
             try
@@ -355,7 +355,7 @@ namespace HospitalSystem.Users
 
                         string[] lines = File.ReadAllLines(_appointmentsFilePath);
 
-                        Console.WriteLine("Doctor | Patient | Description");
+                        Console.WriteLine("\nDoctor | Patient | Description");
                         Console.WriteLine("-----------------------------------------------");
 
                         foreach (var line in lines)
@@ -376,22 +376,33 @@ namespace HospitalSystem.Users
 
                         if (!found)
                         {
+                            // if there are no appointments
                             Console.WriteLine("\nNo appointments found for this patient");
+                            PromptToTryAgain(ListAppointmentsWithPatient);
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Patient not found. Please enter a valid ID.");
+                        // if id is wrong
+                        Console.WriteLine($"\nPatient with ID {id} does not exist.");
+                        PromptToTryAgain(ListAppointmentsWithPatient);
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a numeric ID.");
+                    // if the ID is not an integer
+                    Console.WriteLine("\nInvalid input. Please enter a numeric ID.");
+                    PromptToTryAgain(ListAppointmentsWithPatient);
                 }
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"File not found: {e.Message}");
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"\n{e.Message}");
+                PromptToTryAgain(ListAppointmentsWithPatient);
             }
         }
 
@@ -406,7 +417,9 @@ namespace HospitalSystem.Users
             Environment.Exit(0);
         }
 
-        public void PromptToCheckPatient()
+        public delegate void ActionDelegate();
+
+        public void PromptToTryAgain(ActionDelegate methodToExecute)
         {
             while (true)
             {
@@ -415,7 +428,7 @@ namespace HospitalSystem.Users
 
                 if (key == "1")
                 {
-                    CheckPatient();
+                    methodToExecute();
                 }
                 else if (key == "n")
                 {
