@@ -261,6 +261,68 @@ namespace HospitalSystem.Users
             }
         }
 
+        public void ListAppointmentsWithPatient()
+        {
+            Console.Clear();
+
+            Menu menu = new Menu();
+            menu.Subtitle("Appointments with Patient");
+
+            Console.Write("Input the patient ID: ");
+            string id = Console.ReadLine()!.Trim();
+
+            try
+            {
+                if (File.Exists(_appointmentsFilePath))
+                {
+                    Patient patient = PatientDatabase.GetPatientById(int.Parse(id));
+
+                    if (patient != null)
+                    {
+                        bool found = false;
+
+                        string[] lines = File.ReadAllLines(_appointmentsFilePath);
+
+                        Console.WriteLine("Doctor | Patient | Description");
+                        Console.WriteLine("-----------------------------------------------");
+
+                        foreach (var line in lines)
+                        {
+                            string[] arr = line.Split(',');
+
+                            string doctorFullName = $"{arr[1]} {arr[2]}";
+                            string patientId = arr[3];
+                            string patientFullName = $"{arr[4]} {arr[5]}";
+                            string description = arr[6];
+
+                            if (patientId == id)
+                            {
+                                found = true;
+                                Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
+                            }                        
+                        }
+
+                        if (!found)
+                        {
+                            Console.WriteLine("\nNo appointments found for this patient");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Patient not found. Please enter a valid ID.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a numeric ID.");
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"File not found: {e.Message}");
+            }
+        }
+
         public void Logout()
         {
             Login login = new Login();
@@ -289,7 +351,7 @@ namespace HospitalSystem.Users
                     CheckPatient();
                     break;
                 case "5":
-                    //AppointmentsWithPatient();
+                    ListAppointmentsWithPatient();
                     break;
                 case "6":
                     Logout();

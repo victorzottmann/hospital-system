@@ -20,6 +20,8 @@ namespace HospitalSystem.Users
 
         public int GetPatientId() => this.PatientID;
 
+        public Dictionary<Doctor, List<string>> GetDoctorAppointments() => this.DoctorAppointments;
+ 
         public void DisplayMenu()
         {
             Console.Clear();
@@ -234,7 +236,15 @@ namespace HospitalSystem.Users
 
             } while (string.IsNullOrWhiteSpace(description));
 
-            string textToFile = $"{selectedDoctor.GetFirstName()},{selectedDoctor.GetLastName()},{this.FirstName},{this.LastName},{description}";
+            string textToFile =
+                $"{selectedDoctor.GetDoctorId()}," +
+                $"{selectedDoctor.GetFirstName()}," +
+                $"{selectedDoctor.GetLastName()}," +
+                $"{this.PatientID}," +
+                $"{this.FirstName}," +
+                $"{this.LastName}," +
+                $"{description}"
+            ;
 
             AddAppointment(selectedDoctor, description, textToFile);
 
@@ -264,7 +274,7 @@ namespace HospitalSystem.Users
                     ListPatientDetails();
                     break;
                 case "2":
-                    ListMyDoctorDetails();
+                    //ListMyDoctorDetails();
                     break;
                 case "3":
                     ListAllAppointments();
