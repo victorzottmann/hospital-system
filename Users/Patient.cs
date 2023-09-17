@@ -135,13 +135,13 @@ namespace HospitalSystem.Users
                     {
                         string[] arr = line.Split(',');
 
-                        if (arr.Length == 5)
+                        if (arr.Length > 0)
                         {
-                            string doctorFirstName = arr[0];
-                            string doctorLastName = arr[1];
-                            string patientFirstName = arr[2];
-                            string patientLastName = arr[3];
-                            string description = arr[4];
+                            string doctorFirstName = arr[1];
+                            string doctorLastName = arr[2];
+                            string patientFirstName = arr[4];
+                            string patientLastName = arr[5];
+                            string description = arr[6];
 
                             string doctorFullName = $"{doctorFirstName} {doctorLastName}";
                             string patientFullName = $"{patientFirstName} {patientLastName}";
