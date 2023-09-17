@@ -75,18 +75,14 @@ namespace HospitalSystem
             Console.ReadKey(); 
         }
 
+        // simplified because the Dictionry passed is already the PatientDatabase
         private Doctor FindDoctorById(int userId, Dictionary<int, Doctor> doctors)
         {
-            foreach (var kvp in doctors)
+            if (doctors.ContainsKey(userId))
             {
-                int id = kvp.Key;
-
-                if (DoctorDatabase.GetDoctorId(id) == userId)
-                {
-                    return doctors[id];
-                }
+                return doctors[userId];
             }
-
+            
             return null;
         }
 

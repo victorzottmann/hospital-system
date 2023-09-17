@@ -1,3 +1,4 @@
 20001,Gregory,House,10001,Rebecca,Adler,flu symptoms
 20001,Gregory,House,10001,Rebecca,Adler,sore throat
 20001,Gregory,House,10001,Rebecca,Adler,I feel dizzy
+20012,Dominika,Petrova,10015,Mara,Keaton,crazy man

@@ -11,7 +11,7 @@ namespace HospitalSystem.Users
     {
         // the ? removes the CS8625 error from the constructor
         // but isn't there a better alternative than saying AssignedPatient can be nullable?
-        private int DoctorID = 20000;
+        private int DoctorID { get; set; }
         private static string _appointmentsFilePath = "appointments.txt";
         private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
@@ -20,14 +20,13 @@ namespace HospitalSystem.Users
 
         public Doctor()
         {
-            this.DoctorID++;
             this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
         }
 
-        public Doctor(string firstName, string lastName, string email, string phone, string address)
+        public Doctor(int id, string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
-            this.DoctorID++; // need to check if an ID exists before incrementing
+            this.DoctorID = id;
             this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
         }
 

@@ -42,7 +42,7 @@ namespace HospitalSystem.Databases
 
                         try
                         {
-                            Doctor doctor = new Doctor(firstName, lastName, email, phone, address.ToString());
+                            Doctor doctor = new Doctor(doctorId, firstName, lastName, email, phone, address.ToString());
 
                             if (!doctorDB.ContainsKey(doctorId))
                             {
