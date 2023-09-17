@@ -340,13 +340,15 @@ namespace HospitalSystem.Users
             menu.Subtitle("Appointments with Patient");
 
             Console.Write("Enter the ID of the patient you would like to view appointments for: ");
-            string id = Console.ReadLine()!.Trim();
 
             try
             {
+                int inputId = int.Parse(Console.ReadLine()!.Trim());
+
                 if (File.Exists(_appointmentsFilePath))
                 {
-                    Patient patient = PatientDatabase.GetPatientById(int.Parse(id));
+                    Doctor loggedInDoctor = this;
+                    Patient patient = PatientDatabase.GetPatientById(inputId);
 
                     if (patient != null)
                     {
@@ -361,42 +363,44 @@ namespace HospitalSystem.Users
                         {
                             string[] arr = line.Split(',');
 
+                            int doctorId = int.Parse(arr[0]);
                             string doctorFullName = $"{arr[1]} {arr[2]}";
-                            string patientId = arr[3];
+
+                            int patientId = int.Parse(arr[3]);
                             string patientFullName = $"{arr[4]} {arr[5]}";
+
                             string description = arr[6];
 
-                            if (patientId == id)
+                            // check if the ID of the doctor logged into the system matches that of the file
+                            bool isLoggedDoctor = loggedInDoctor.DoctorID == doctorId;
+
+                            // check if the patient IDs from the file and 
+                            bool isPatientMatch = patientId == inputId;
+
+                            if (isLoggedDoctor && isPatientMatch)
                             {
                                 found = true;
                                 Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
-                            }                        
+                            }
                         }
 
                         if (!found)
                         {
-                            // if there are no appointments
                             Console.WriteLine("\nNo appointments found for this patient");
                             PromptToTryAgain(ListAppointmentsWithPatient);
                         }
                     }
                     else
                     {
-                        // if id is wrong
-                        Console.WriteLine($"\nPatient with ID {id} does not exist.");
+                        Console.WriteLine($"\nPatient with ID {inputId} does not exist.");
                         PromptToTryAgain(ListAppointmentsWithPatient);
                     }
-                }
-                else
-                {
-                    // if the ID is not an integer
-                    Console.WriteLine("\nInvalid input. Please enter a numeric ID.");
-                    PromptToTryAgain(ListAppointmentsWithPatient);
                 }
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"File not found: {e.Message}");
+                PromptToTryAgain(ListAppointmentsWithPatient);
             }
             catch (FormatException e)
             {
@@ -404,6 +408,8 @@ namespace HospitalSystem.Users
                 PromptToTryAgain(ListAppointmentsWithPatient);
             }
         }
+
+
 
         public void Logout()
         {

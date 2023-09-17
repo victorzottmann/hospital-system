@@ -8,7 +8,6 @@ namespace HospitalSystem.Users
     public class Patient : User
     {
         private static string _appointmentsFilePath = "appointments.txt";
-        private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
         private int PatientID { get; set; }
         private Doctor PatientDoctor { get; set; }
@@ -68,7 +67,6 @@ namespace HospitalSystem.Users
             DoctorAppointments[doctor].Add(description);
 
             doctor.AssignPatient(doctor, this);
-            doctor.WriteToFile(_doctorPatientsFilePath, doctor, this);
 
             File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
         }
@@ -114,7 +112,7 @@ namespace HospitalSystem.Users
             }
             else
             {
-                Console.WriteLine("\nDoctor not found!!!!!");
+                Console.WriteLine("\nDoctor not found");
             }
 
             Console.Write("\nPress any key to the Patient Menu: ");
