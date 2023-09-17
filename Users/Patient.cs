@@ -67,7 +67,7 @@ namespace HospitalSystem.Users
             doctor.AssignPatient(doctor, this);
             doctor.WriteToFile(_doctorPatientsFilePath, doctor, this);
 
-            File.AppendAllText("appointments.txt", textToFile + Environment.NewLine);
+            File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
         }
 
         // Maybe overload this later to display details in relation to user permissions (admin vs user)
