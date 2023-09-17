@@ -9,6 +9,7 @@ namespace HospitalSystem.Users
     {
         private int PatientID = 10000;
         private static string _appointmentsFilePath = "appointments.txt";
+        private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
@@ -51,6 +52,7 @@ namespace HospitalSystem.Users
         public void AssignDoctor(Doctor doctor)
         {
             doctor.AssignPatient(doctor, this);
+            doctor.WriteToFile(_doctorPatientsFilePath, doctor, this);
         }
 
         public void AddAppointment(Doctor doctor, string description, string textToFile)
@@ -63,6 +65,7 @@ namespace HospitalSystem.Users
             DoctorAppointments[doctor].Add(description);
 
             doctor.AssignPatient(doctor, this);
+            doctor.WriteToFile(_doctorPatientsFilePath, doctor, this);
 
             File.AppendAllText("appointments.txt", textToFile + Environment.NewLine);
         }

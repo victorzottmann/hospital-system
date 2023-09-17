@@ -13,6 +13,7 @@ namespace HospitalSystem.Users
         // but isn't there a better alternative than saying AssignedPatient can be nullable?
         private int DoctorID = 20000;
         private static string _appointmentsFilePath = "appointments.txt";
+        private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
         //private List<Patient> AssociatedPatients { get; }
         private Dictionary<Doctor, List<Patient>> AssociatedPatients { get; }
@@ -40,6 +41,52 @@ namespace HospitalSystem.Users
             }
 
             AssociatedPatients[doctor].Add(patient);
+        }
+
+        public void WriteToFile(string filepath, Doctor doctor, Patient patient)
+        {
+            try
+            {
+                if (File.Exists(filepath))
+                {
+                    string[] lines = File.ReadAllLines(filepath);
+
+                    string doctorId = doctor.GetDoctorId().ToString();
+                    string doctorFirstName = doctor.FirstName;
+                    string doctorLastName = doctor.LastName;
+                    string patientId = patient.GetPatientId().ToString();
+                    string patientFirstName = patient.GetFirstName();
+                    string patientLastName = patient.GetLastName();
+
+                    int insertionIndex = Array.FindIndex(lines, line => line.StartsWith(doctorId));
+
+                    if (insertionIndex != -1)
+                    {
+                        string textToFile =
+                            $"{doctorId}," +
+                            $"{doctorFirstName}," +
+                            $"{doctorLastName}," +
+                            $"{patientId}," +
+                            $"{patientFirstName}," +
+                            $"{patientLastName}"
+                        ;
+
+                        List<string> updatedLines = new List<string>(lines);
+                        updatedLines.Insert(insertionIndex + 1, textToFile);
+
+                        File.WriteAllLines(_doctorPatientsFilePath, updatedLines);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Doctor with ID {doctorId} not found");
+                    }
+                }
+
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"File not found: {e.Message}");
+            }
         }
 
         public void DisplayMenu()
