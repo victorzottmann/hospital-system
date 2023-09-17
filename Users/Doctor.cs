@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HospitalSystem.Databases;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Numerics;
 
@@ -174,6 +176,91 @@ namespace HospitalSystem.Users
             }
         }
 
+        public void CheckPatient()
+        {
+            Console.Clear();
+
+            Menu menu = new Menu();
+            menu.Subtitle("Check Patient Details");
+
+            Console.Write("Enter the ID of the patient to check: ");
+            string id = Console.ReadLine()!.Trim();
+
+            try
+            {
+                if (int.TryParse(id, out int patientId))
+                {
+                    Patient patient = PatientDatabase.GetPatientById(patientId);
+
+                    if (patient != null)
+                    {
+                        bool patientFound = false;
+
+                        Console.WriteLine("\nPatient | Doctor | Email Address | Phone | Address");
+                        Console.WriteLine("-------------------------------------------------------------------------");
+
+                        foreach (var kvp in AssociatedPatients)
+                        {
+                            if (kvp.Value.Contains(patient))
+                            {
+                                patientFound = true;
+
+                                string docFullName = this.FullName;
+                                string patFullName = patient.GetFullName();
+                                string patEmail = patient.GetEmail();
+                                string patPhone = patient.GetPhone();
+                                string patAddress = patient.GetAddress();
+
+                                Console.WriteLine($"{patFullName} | {docFullName} | {patEmail} | {patPhone} | {patAddress}");
+                                break;
+                            }
+                        }
+
+                        if (!patientFound)
+                        {
+                            Console.WriteLine($"\nPatient with ID {id} does not seem to be associated with you");
+                        }
+
+                        Console.Write("\nPress 'N' to return to the Doctor Menu: ");
+                        Console.ReadKey();
+
+                        DisplayMenu();
+
+                    }
+
+                    Console.Write("\nPress 'N' to return to the Doctor Menu: ");
+                    Console.ReadKey();
+                    DisplayMenu();
+                }
+                else
+                {
+                    Console.WriteLine("\nInvalid ID. Only numeric values are accepted.");
+                    Console.Write("\nPress 1 to try again or 'N' to return to the Doctor Menu: ");
+                    string key;
+
+                    while (true)
+                    {
+                        key = Console.ReadLine()!;
+
+                        if (key == "1")
+                        {
+                            CheckPatient();
+                        }
+                        else if (key == "n")
+                        {
+                            break;
+                        }
+                    }
+
+                    DisplayMenu();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"An error occurred: {e.Message}");
+            }
+        }
+
         public void Logout()
         {
             Login login = new Login();
@@ -199,7 +286,7 @@ namespace HospitalSystem.Users
                     ListAppointments();
                     break;
                 case "4":
-                    //CheckPatient();
+                    CheckPatient();
                     break;
                 case "5":
                     //AppointmentsWithPatient();
