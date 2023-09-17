@@ -50,6 +50,8 @@ namespace HospitalSystem.Users
                 {
                     string[] lines = File.ReadAllLines(filepath);
 
+                    Console.WriteLine(lines.Length);
+
                     string doctorId = doctor.GetDoctorId().ToString();
                     string doctorFirstName = doctor.FirstName;
                     string doctorLastName = doctor.LastName;
@@ -57,7 +59,33 @@ namespace HospitalSystem.Users
                     string patientFirstName = patient.GetFirstName();
                     string patientLastName = patient.GetLastName();
 
-                    int insertionIndex = Array.FindIndex(lines, line => line.StartsWith(doctorId));
+                    int insertionIndex = -1;
+
+                    /*
+                     * For loop:
+                     *      Starting from the last index (last line in the file),
+                     *      it iterates through each line from the last line to the first line
+                     *      until it reaches the first line (i >= 0)
+                     * If Statement:
+                     *      If a line starts with the target doctorId,
+                     *      set the insertionIndex of the new line to i
+                     *      Then break out of the loop once it assigns i to insertionIndex
+                     *      of the doctorId
+                     *      
+                     *      NOTE: it will be appended to the bottom portion of the same doctorId because 
+                     *      it's iterating in reverse order
+                     * 
+                     * NOTE: it must be lines.Length - 1 because line 1 is actually line 0 in terms of Arrays
+                     * So, if a file has 27 lines, it's not that it goes from 1-27, but from 0-26
+                     */
+                    for (int i = lines.Length - 1; i >= 0; i--)
+                    {
+                        if (lines[i].StartsWith(doctorId))
+                        {
+                            insertionIndex = i;
+                            break;
+                        }
+                    }
 
                     if (insertionIndex != -1)
                     {
@@ -70,7 +98,17 @@ namespace HospitalSystem.Users
                             $"{patientLastName}"
                         ;
 
+                        // initialising the list with the elements of the lines array
                         List<string> updatedLines = new List<string>(lines);
+
+                        /*
+                         * Here it's necessary to add 1 to insertionIndex because, unlike an array,
+                         * a file starts at line 1, not 0.
+                         * 
+                         * So, if you consider that the indexes of an array go from 0-26,
+                         * and a text file actually goes from 1-27, you need to add 1 to the insertion index
+                         * in order to correctly append the new line relative to the target doctorId.
+                         */
                         updatedLines.Insert(insertionIndex + 1, textToFile);
 
                         File.WriteAllLines(_doctorPatientsFilePath, updatedLines);
