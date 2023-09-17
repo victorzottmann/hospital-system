@@ -41,7 +41,7 @@ namespace HospitalSystem.Databases
 
                         try
                         {
-                            Patient patient = new Patient(firstName, lastName, email, phone, address.ToString());
+                            Patient patient = new Patient(patientId, firstName, lastName, email, phone, address.ToString());
 
                             if (!patientDB.ContainsKey(patientId))
                             {

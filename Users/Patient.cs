@@ -7,16 +7,18 @@ namespace HospitalSystem.Users
 {
     public class Patient : User
     {
-        private int PatientID = 10000;
         private static string _appointmentsFilePath = "appointments.txt";
         private static string _doctorPatientsFilePath = "doctor-patients.txt";
+        private static string _patientsFilePath = "patients.txt";
+
+        private int PatientID { get; set; }
 
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
-        public Patient(string firstName, string lastName, string email, string phone, string address)
+        public Patient(int id, string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
-            PatientID++;
+            PatientID = id;
         }
 
         public int GetPatientId() => this.PatientID;
@@ -243,9 +245,9 @@ namespace HospitalSystem.Users
                 $"{selectedDoctor.GetDoctorId()}," +
                 $"{selectedDoctor.GetFirstName()}," +
                 $"{selectedDoctor.GetLastName()}," +
-                $"{this.PatientID}," +
-                $"{this.FirstName}," +
-                $"{this.LastName}," +
+                $"{this.GetPatientId()}," +
+                $"{this.GetFirstName()}," +
+                $"{this.GetLastName()}," +
                 $"{description}"
             ;
 

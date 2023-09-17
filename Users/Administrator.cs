@@ -138,7 +138,7 @@ namespace HospitalSystem.Users
                 int id = FindLargestUserID(_patientsFilePath);
                 int newPatientId = ++id;
 
-                Patient newPatient = new Patient(firstName, lastName, email, phone, address.ToString());
+                Patient newPatient = new Patient(newPatientId, firstName, lastName, email, phone, address.ToString());
                 PatientDatabase.AddPatient(newPatientId, newPatient);
 
                 // need to fix the address part (streetNumber)
