@@ -181,6 +181,7 @@ namespace HospitalSystem.Databases
                         if (key == "1")
                         {
                             GetDoctorDetails();
+                            break;
                         }
                         else if (key == "n")
                         {
@@ -194,9 +195,27 @@ namespace HospitalSystem.Databases
             catch (Exception e)
             {
                 // FIX THIS TO PROMPT THE USER AGAIN UNTIL INPUT IS CORRECT
-                Console.WriteLine($"An error occured: {e.Message}");
+                Console.WriteLine($"\nAn error occured: {e.Message}");
                 Console.WriteLine($"Please make sure that the value is not blank.\n");
-                Console.Write("Press 1 to try again or 'n' to return to the menu: ");
+
+                Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
+
+                while (true)
+                {
+                    string key = Console.ReadLine()!;
+
+                    if (key == "1")
+                    {
+                        GetDoctorDetails();
+                        break;
+                    }
+                    else if (key == "n")
+                    {
+                        break;
+                    }
+                }
+
+                admin.DisplayMenu();
             }
         }
     }
