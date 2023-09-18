@@ -1,19 +1,18 @@
-﻿using HospitalSystem.Databases;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Numerics;
+using HospitalSystem.Databases;
 
 namespace HospitalSystem.Users
 {
     public class Doctor : User
     {
-        // the ? removes the CS8625 error from the constructor
-        // but isn't there a better alternative than saying AssignedPatient can be nullable?
-        private int DoctorID { get; set; }
         private static string _appointmentsFilePath = "appointments.txt";
         private static string _doctorPatientsFilePath = "doctor-patients.txt";
+
+        private int DoctorID { get; set; }
 
         private Dictionary<Doctor, List<Patient>> AssociatedPatients { get; }
 
@@ -29,7 +28,12 @@ namespace HospitalSystem.Users
             this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
         }
 
-        public int GetDoctorId() => this.DoctorID; 
+        public int GetDoctorId() => this.DoctorID;
+
+        public override string ToString()
+        {
+            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
+        }
 
         public void AssignPatient(Doctor doctor, Patient patient)
         {
@@ -143,11 +147,6 @@ namespace HospitalSystem.Users
 
             string input = Console.ReadLine()!;
             ProcessSelectedOption(input);
-        }
-
-        public override string ToString()
-        {
-            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
         }
 
         public void ListDoctorDetails()
@@ -276,16 +275,9 @@ namespace HospitalSystem.Users
 
                     if (patient != null)
                     {
-                        bool patientFound = false;
-
                         Console.WriteLine("\nPatient | Doctor | Email Address | Phone | Address");
                         Console.WriteLine("-------------------------------------------------------------------------");
                         Console.WriteLine(patient.ToString());
-
-                        if (!patientFound)
-                        {
-                            Console.WriteLine($"\nPatient with ID {id} does not seem to be associated with you");
-                        }
 
                         // prompt to try again or return to menu
                         PromptToTryAgain(CheckPatient);
@@ -390,8 +382,6 @@ namespace HospitalSystem.Users
                 PromptToTryAgain(ListAppointmentsWithPatient);
             }
         }
-
-
 
         public void Logout()
         {
