@@ -282,23 +282,7 @@ namespace HospitalSystem.Users
 
                         Console.WriteLine("\nPatient | Doctor | Email Address | Phone | Address");
                         Console.WriteLine("-------------------------------------------------------------------------");
-
-                        foreach (var kvp in AssociatedPatients)
-                        {
-                            if (kvp.Value.Contains(patient))
-                            {
-                                patientFound = true;
-
-                                string docFullName = this.FullName;
-                                string patFullName = patient.GetFullName();
-                                string patEmail = patient.GetEmail();
-                                string patPhone = patient.GetPhone();
-                                string patAddress = patient.GetAddress();
-
-                                Console.WriteLine($"{patFullName} | {docFullName} | {patEmail} | {patPhone} | {patAddress}");
-                                break;
-                            }
-                        }
+                        Console.WriteLine(patient.ToString());
 
                         if (!patientFound)
                         {
