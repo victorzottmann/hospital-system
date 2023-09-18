@@ -49,8 +49,6 @@ namespace HospitalSystem.Users
                 {
                     string[] lines = File.ReadAllLines(filepath);
 
-                    Console.WriteLine(lines.Length);
-
                     string doctorId = doctor.GetDoctorId().ToString();
                     string doctorFirstName = doctor.FirstName;
                     string doctorLastName = doctor.LastName;

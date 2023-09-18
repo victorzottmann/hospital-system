@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
 using HospitalSystem.Databases;
 
 namespace HospitalSystem.Users
@@ -8,6 +10,7 @@ namespace HospitalSystem.Users
     {
         private static string _patientsFilePath = "patients.txt";
         private static string _doctorsFilePath = "doctors.txt";
+        private static string _loginFilePath = "login-credentials.txt";
 
         public Administrator() 
         {
@@ -141,9 +144,14 @@ namespace HospitalSystem.Users
                 Patient newPatient = new Patient(newPatientId, firstName, lastName, email, phone, address.ToString());
                 PatientDatabase.AddPatient(newPatientId, newPatient);
 
-                // need to fix the address part (streetNumber)
                 string patientInfo = $"{newPatientId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
+                
+                string password = GeneratePassword(role);
+                string patientCredentials = $"{newPatientId},{password},{role}";
+
                 File.AppendAllText(_patientsFilePath, patientInfo);
+
+                AddLoginCredential(role, _loginFilePath, patientCredentials);
             }   
 
             if (role == "doctor")
@@ -154,9 +162,16 @@ namespace HospitalSystem.Users
                 Doctor newDoctor = new Doctor(newDoctorId, firstName, lastName, email, phone, address.ToString());
                 DoctorDatabase.AddDoctor(newDoctorId, newDoctor);
 
-                // need to fix the address part (streetNumber)
                 string doctorInfo = $"{newDoctorId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
+                
+                string password = GeneratePassword(role);
+                string doctorCredentials = $"{newDoctorId},{password},{role}";
+
+                // append the new doctor with a new ID at the end of doctors.txt
                 File.AppendAllText(_doctorsFilePath, doctorInfo);
+
+                // insert the new doctor below the last doctor in login-credentials.txt
+                AddLoginCredential(role, _loginFilePath, doctorCredentials);
             }
 
             Console.WriteLine($"{firstName} {lastName} added to the system!\n");
@@ -175,6 +190,64 @@ namespace HospitalSystem.Users
         public void Exit()
         {
             Environment.Exit(0);
+        }
+
+        public string GeneratePassword(string role)
+        {
+            string password = (role == "patient") ? "pat" : "doc";
+            return password;
+        }
+
+        public void AddLoginCredential(string role, string filepath, string credentials)
+        {
+            try
+            {
+                if (File.Exists(filepath))
+                {
+                    string[] lines = File.ReadAllLines(filepath);
+
+                    int insertionIndex = -1;
+
+                    switch (role)
+                    {
+                        case "patient":
+                            insertionIndex = FindLoginIdIndex(lines, "1");
+                            break;
+                        case "doctor":
+                            insertionIndex = FindLoginIdIndex(lines, "2");
+                            break;
+                        default:
+                            Console.WriteLine("Invalid user");
+                            break;
+                    }
+
+                    List<string> updatedLines = new List<string>(lines);
+                    updatedLines.Insert(insertionIndex + 1, credentials);
+
+                    // No + Environment.Newline because the credentials will be inserted
+                    File.WriteAllLines(filepath, updatedLines);
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"File not found: {e.Message}");
+            }
+        }
+
+        public int FindLoginIdIndex(string[] arr, string num)
+        {
+            int index = -1;
+
+            for (int i = arr.Length - 1; i >= 0; i--)
+            {
+                if (arr[i].StartsWith(num))
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
         }
 
         public static int FindLargestUserID(string filepath)
