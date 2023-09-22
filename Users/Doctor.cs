@@ -28,7 +28,7 @@ namespace HospitalSystem
 
         public override string ToString()
         {
-            return $"{this.FirstName} {this.LastName},{this.Email},{this.Phone},{this.Address}";
+            return $"{this.FirstName} {this.LastName}, {this.Email}, {this.Phone}, {this.Address}";
         }
 
         public string[] ToStringArray()
@@ -303,7 +303,7 @@ namespace HospitalSystem
                         Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
                         // prompt to try again or return to menu
-                        Utilities.TryAgainAndReturn(this, CheckPatient);
+                        Utilities.TryAgainOrReturn(this, CheckPatient);
                     }
                     else
                     {
@@ -311,7 +311,7 @@ namespace HospitalSystem
                         Console.WriteLine($"\nPatient with ID {id} does not exist.");
 
                         // prompt to try again or return to menu
-                        Utilities.TryAgainAndReturn(this, CheckPatient);
+                        Utilities.TryAgainOrReturn(this, CheckPatient);
                     }
                 }
                 else
@@ -320,7 +320,7 @@ namespace HospitalSystem
                     Console.WriteLine("\nInvalid ID. Only numeric values are accepted.");
 
                     // prompt to try again or return to menu
-                    Utilities.TryAgainAndReturn(this, CheckPatient);
+                    Utilities.TryAgainOrReturn(this, CheckPatient);
                 }
             }
             catch (Exception e)
@@ -390,7 +390,7 @@ namespace HospitalSystem
                         if (!found)
                         {
                             Console.WriteLine("\nNo appointments found for this patient");
-                            Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
+                            Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
                         }
                         else
                         {
@@ -400,19 +400,19 @@ namespace HospitalSystem
                     else
                     {
                         Console.WriteLine($"\nPatient with ID {inputId} does not exist.");
-                        Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
+                        Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
                     }
                 }
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"File not found: {e.Message}");
-                Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
+                Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
             }
             catch (FormatException e)
             {
                 Console.WriteLine($"\n{e.Message}");
-                Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
+                Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
             }
         }
 

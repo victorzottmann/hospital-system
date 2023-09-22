@@ -32,7 +32,12 @@ namespace HospitalSystem
 
         public override string ToString()
         {
-            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
+            return $"{this.FirstName} {this.LastName}, {this.Email}, {this.Phone}, {this.Address}";
+        }
+
+        public string[] ToStringArray()
+        {
+            return new string[] { this.FullName, this.Email, this.Phone, this.Address };
         }
 
         public void AddAppointment(Doctor doctor, string description, string textToFile)
@@ -81,17 +86,18 @@ namespace HospitalSystem
             Console.WriteLine("Your doctors:\n");
 
             Doctor doctor = this.GetPatientDoctor();
-            
-            string[] headers = { "Name", "Email Address", "Phone", "Address" };
+
+            List<string> tableHeaders = new List<string>()
+            {
+                "Name", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
 
             if (doctor != null)
             {
-                List<string[]> doctorDetails = new List<string[]>()
-                {
-                    doctor.ToStringArray()
-                };
-
-                Utilities.FormatTable(headers, doctorDetails);
+                tableRows.Add(doctor.ToStringArray());
+                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
             }
             else
             {
@@ -120,8 +126,12 @@ namespace HospitalSystem
                 {
                     string[] lines = File.ReadAllLines(_appointmentsFilePath);
 
+                    List<string> headers = new List<string>
+                    { 
+                        "Doctor", "Patient", "Description"
+                    };
+
                     List<string[]> tableRows = new List<string[]>();
-                    List<string> headers = new List<string> { "Doctor", "Patient", "Description" };
 
                     bool appointmentsFound = false;
 
@@ -145,8 +155,8 @@ namespace HospitalSystem
 
                             if (this.PatientID == int.Parse(patientId))
                             {
-                                tableRows.Add(new string[] { doctorFullName, patientFullName, description });
                                 appointmentsFound = true;
+                                tableRows.Add(new string[] { doctorFullName, patientFullName, description });
                             }
                         }
                     }
@@ -180,9 +190,13 @@ namespace HospitalSystem
             Menu bookAppointment = new Menu();
             bookAppointment.Subtitle("Book Appointment");
 
-            DoctorDatabase.LoadDB("doctors.txt");
-
             List<Doctor> allDoctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
+            List<string> tableHeaders = new List<string>()
+            {
+                "No.", "Name", "Email", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
 
             int totalDoctors = allDoctors.Count;
 
@@ -190,22 +204,37 @@ namespace HospitalSystem
             {
                 Console.WriteLine("There are no doctors available at the moment.\n");
                 Console.Write("Press any key to return to the Patient Menu: ");
+
                 Console.ReadKey();
                 Utilities.ShowUserMenu(this);
             }
 
-            Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with\n");
+            Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with.\n");
 
             for (int i = 0; i < totalDoctors; i++)
             {
                 Doctor doctor = allDoctors[i];
+                string[] doctorDetails = doctor.ToStringArray();
 
-                /* 
-                 * remember that doctor needs a Getter because the User fields are protected
-                 * and the doctor object is not derived from User within the Patient class
-                 */
-                Console.WriteLine($"{i + 1}. {doctor.ToString()}");
+                try
+                {
+                    string[] row = new string[]
+                    {
+                        $"{i + 1}.", doctorDetails[0], doctorDetails[1], doctorDetails[2], doctorDetails[3]
+                    };
+
+                    tableRows.Add(row);
+                }
+                catch (IndexOutOfRangeException e)
+                {
+                    Console.WriteLine($"An error occurred: {e.Message}\n");
+                    Console.WriteLine("Please check if the number of headers match their corresponding data.\n");
+
+                    Utilities.TryAgainOrReturn(this, BookAppointment);
+                }
             }
+
+            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
             string input;
             int selection;

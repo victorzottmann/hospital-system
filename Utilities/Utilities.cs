@@ -62,7 +62,7 @@ namespace HospitalSystem
 
         public delegate void Action();
 
-        public static void TryAgainAndReturn(User user, Action methodToExecute)
+        public static void TryAgainOrReturn(User user, Action methodToExecute)
         {
             while (true)
             {
@@ -91,9 +91,16 @@ namespace HospitalSystem
             {
                 for (int i = 0; i < row.Length; i++)
                 {
-                    if (row[i].Length > maxHeaderWidths[i])
+                    try
                     {
-                        maxHeaderWidths[i] = row[i].Length;
+                        if (row[i].Length > maxHeaderWidths[i])
+                        {
+                            maxHeaderWidths[i] = row[i].Length;
+                        }
+                    }
+                    catch (IndexOutOfRangeException e)
+                    {
+                        Console.WriteLine($"An error occurred: {e.Message}");
                     }
                 }
             }
