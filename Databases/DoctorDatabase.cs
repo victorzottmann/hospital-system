@@ -126,12 +126,12 @@ namespace HospitalSystem
                 }
 
                 Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-                Utilities.ReturnToMenu(admin);
+                Utilities.ReturnToMenu(admin, true);
             }
             else
             {
                 Console.WriteLine("There are no doctors registered in the system yet.");
-                Utilities.ReturnToMenu(admin);
+                Utilities.ReturnToMenu(admin, true);
             }
         }
 

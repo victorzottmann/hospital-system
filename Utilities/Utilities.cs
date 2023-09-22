@@ -83,15 +83,18 @@ namespace HospitalSystem
             ShowUserMenu(user);
         }
 
-        public static void ReturnToMenu(User user, bool? defaultMessage = true)
+        public static void ReturnToMenu(User user, bool? defaultMessage)
         {
             string userType = user.GetType().Name;
 
-            if (!defaultMessage.HasValue)
+            if (defaultMessage.HasValue)
             {
                 Console.Write($"\nPress any key to return to the {userType} Menu: ");
+                Console.ReadKey();
+                ShowUserMenu(user);
             }
 
+            Console.ReadKey();
             ShowUserMenu(user);
         }
 

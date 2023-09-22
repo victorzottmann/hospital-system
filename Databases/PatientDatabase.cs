@@ -120,12 +120,12 @@ namespace HospitalSystem
                 }
 
                 Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-                Utilities.ReturnToMenu(admin);
+                Utilities.ReturnToMenu(admin, true);
             }
             else
             {
                 Console.WriteLine("There are no patients registered in the system yet.");
-                Utilities.ReturnToMenu(admin);
+                Utilities.ReturnToMenu(admin, true);
             }
         }
 
@@ -160,7 +160,18 @@ namespace HospitalSystem
                     Patient patient = GetPatientById(int.Parse(id));
                     Console.WriteLine($"\nDetails for {patient.FullName}");
 
-                    tableRows.Add(patient.ToStringArray());
+                    bool noPatientDoctor = patient.GetPatientDoctor() == null;
+                    string doctorName = noPatientDoctor ? "Not Assigned" : patient.GetPatientDoctor().FullName;
+                    
+                    tableRows.Add(new string[]
+                    {
+                            patient.FullName,
+                            doctorName,
+                            patient.Email,
+                            patient.Phone,
+                            patient.Address
+                    });
+
                     Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
                     Utilities.TryAgainOrReturn(admin, GetPatientDetails);

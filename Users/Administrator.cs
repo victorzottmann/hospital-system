@@ -58,7 +58,7 @@ namespace HospitalSystem
                 }
             }
 
-            Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
+            Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System\n");
 
             // organising the prompts in an array to loop through them
             string[] prompts =
@@ -146,11 +146,9 @@ namespace HospitalSystem
                 AddLoginCredential(role, _loginFilePath, doctorCredentials);
             }
 
-            Console.WriteLine($"{firstName} {lastName} added to the system!\n");
+            Console.WriteLine($"{firstName} {lastName} added to the system!");
 
-            Console.Write("Press any key to go back: ");
-            Console.ReadKey();
-            Utilities.ShowUserMenu(this);
+            Utilities.ReturnToMenu(this, true);
         }
 
         public string GeneratePassword(string role)
