@@ -14,14 +14,14 @@ namespace HospitalSystem
 
         public Doctor()
         {
-            this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
+            this.AssociatedPatients = new Dictionary<Doctor, List<Patient>>();
         }
 
         public Doctor(int id, string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
             this.DoctorID = id;
-            this.AssociatedPatients = new Dictionary<Doctor,List<Patient>>();
+            this.AssociatedPatients = new Dictionary<Doctor, List<Patient>>();
         }
 
         public int GetDoctorId() => this.DoctorID;
@@ -63,6 +63,7 @@ namespace HospitalSystem
                     string doctorId = doctor.GetDoctorId().ToString();
                     string doctorFirstName = doctor.FirstName;
                     string doctorLastName = doctor.LastName;
+
                     string patientId = patient.GetPatientId().ToString();
                     string patientFirstName = patient.FirstName;
                     string patientLastName = patient.LastName;
@@ -141,19 +142,21 @@ namespace HospitalSystem
             Menu doctorDetails = new Menu();
             doctorDetails.Subtitle("My Details");
 
-            List<string[]> rows = new List<string[]>
+            List<string> tableHeaders = new List<string>()
+            {
+                "Name", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>
             {
                 new string[] { this.FullName, this.Email, this.Phone, this.Address }
             };
 
-            Console.WriteLine($"Name | Email Address | Phone | Address");
-            Console.WriteLine("------------------------------------------------------------------------");
-            Console.WriteLine(this.ToString());
+            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
-            Console.Write("\nPress any key to the Doctor Menu: ");
+            Console.Write("\n\nPress any key to the Doctor Menu: ");
             Console.ReadKey();
 
-            //DisplayMenu();
             Utilities.ShowUserMenu(this);
         }
 
@@ -164,28 +167,34 @@ namespace HospitalSystem
             Menu myPatients = new Menu();
             myPatients.Subtitle("My Patients");
 
-            Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
-            Console.WriteLine("------------------------------------------------------------------------");
+            List<string> tableHeaders = new List<string>()
+            {
+                "Patient", "Doctor", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
 
             foreach (var kvp in AssociatedPatients)
             {
                 Doctor doctor = kvp.Key;
                 List<Patient> patients = kvp.Value;
 
-                string doctorFullName = $"{doctor.FirstName} {doctor.LastName}";
-
                 foreach (var patient in patients)
                 {
-                    string patientFullName = $"{patient.FirstName} {patient.LastName}";
-                    string patientEmail = patient.Email;
-                    string patientPhone = patient.Phone;
-                    string patientAddress = patient.Address;
-
-                    Console.WriteLine($"{patientFullName} | {doctorFullName} | {patientEmail} | {patientPhone} | {patientAddress}");
+                    tableRows.Add(new string[]
+                    {
+                        patient.FullName,
+                        doctor.FullName,
+                        patient.Email,
+                        patient.Phone,
+                        patient.Address
+                    });
                 }
             }
 
-            Console.Write("\nPress any key to return to the doctor menu: ");
+            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+
+            Console.Write("\n\nPress any key to return to the Doctor Menu: ");
             Console.ReadKey();
 
             Utilities.ShowUserMenu(this);
@@ -204,8 +213,12 @@ namespace HospitalSystem
                 {
                     string[] lines = File.ReadAllLines(_appointmentsFilePath);
 
-                    Console.WriteLine("Doctor | Patient | Description");
-                    Console.WriteLine("---------------------------------------------------");
+                    List<string> tableHeaders = new List<string>()
+                    {
+                        "Doctor", "Patient", "Description"
+                    };
+
+                    List<string[]> tableRows = new List<string[]>();
 
                     bool appointmentsFound = false;
 
@@ -226,9 +239,9 @@ namespace HospitalSystem
 
                             if (this.FullName == doctorFullName)
                             {
-                                Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
                                 appointmentsFound = true;
-                            }  
+                                tableRows.Add(new string[] { doctorFullName, patientFullName, description });
+                            }
                         }
                     }
 
@@ -239,7 +252,7 @@ namespace HospitalSystem
 
                     Console.Write("\nPress any key to return to the menu: ");
                     Console.ReadKey();
-                    
+
                     Utilities.ShowUserMenu(this);
                 }
             }
@@ -265,11 +278,29 @@ namespace HospitalSystem
                 {
                     Patient patient = PatientDatabase.GetPatientById(patientId);
 
+                    List<string[]> tableRows = new List<string[]>();
+                    List<string> tableHeaders = new List<string>()
+                    {
+                        "Patient",
+                        "Doctor",
+                        "Email Address",
+                        "Phone",
+                        "Address"
+                    };
+
                     if (patient != null)
                     {
-                        Console.WriteLine("\nPatient | Doctor | Email Address | Phone | Address");
-                        Console.WriteLine("-------------------------------------------------------------------------");
-                        Console.WriteLine(patient.ToString());
+                        tableRows.Add(new string[]
+                            {
+                                patient.FullName,
+                                patient.GetPatientDoctor().FullName,
+                                patient.Email,
+                                patient.Phone,
+                                patient.Address
+                            }
+                        );
+
+                        Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
                         // prompt to try again or return to menu
                         Utilities.TryAgainAndReturn(this, CheckPatient);
@@ -322,8 +353,14 @@ namespace HospitalSystem
 
                         string[] lines = File.ReadAllLines(_appointmentsFilePath);
 
-                        Console.WriteLine("\nDoctor | Patient | Description");
-                        Console.WriteLine("-----------------------------------------------");
+                        List<string> tableHeaders = new List<string>()
+                        {
+                            "Doctor",
+                            "Patient",
+                            "Description"
+                        };
+
+                        List<string[]> tableRows = new List<string[]>();
 
                         foreach (var line in lines)
                         {
@@ -346,7 +383,7 @@ namespace HospitalSystem
                             if (isLoggedDoctor && isPatientMatch)
                             {
                                 found = true;
-                                Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
+                                tableRows.Add(new string[] { doctorFullName, patientFullName, description });
                             }
                         }
 
@@ -354,6 +391,10 @@ namespace HospitalSystem
                         {
                             Console.WriteLine("\nNo appointments found for this patient");
                             Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
+                        }
+                        else
+                        {
+                            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
                         }
                     }
                     else

@@ -84,36 +84,39 @@ namespace HospitalSystem
 
         public static void FormatTable(string[] headers, List<string[]> rows)
         {
-            // Calculate max width for each column
-            int[] maxWidths = new int[headers.Length];
+            int[] maxHeaderWidths = new int[headers.Length];
+
+            // Calculate max width for each column based on the rows
             foreach (var row in rows)
             {
                 for (int i = 0; i < row.Length; i++)
                 {
-                    if (row[i].Length > maxWidths[i])
+                    if (row[i].Length > maxHeaderWidths[i])
                     {
-                        maxWidths[i] = row[i].Length;
+                        maxHeaderWidths[i] = row[i].Length;
                     }
                 }
             }
 
+            Console.WriteLine();
+
             // Print the table headers
             for (int i = 0; i < headers.Length; i++)
             {
-                Console.Write(string.Format("{0,-" + (maxWidths[i] + 4) + "}", headers[i]));
+                Console.Write(String.Format("{0,-" + (maxHeaderWidths[i] + 4) + "}", headers[i]));
             }
 
             Console.WriteLine();
 
             // Print the table horizontal bar
-            Console.WriteLine(new string('-', maxWidths.Sum() + 4 * headers.Length));
+            Console.WriteLine(new string('-', maxHeaderWidths.Sum() + 4 * headers.Length));
 
             // Print the table rows
             foreach (var row in rows)
             {
                 for (int i = 0; i < row.Length; i++)
                 {
-                    Console.Write(string.Format("{0,-" + (maxWidths[i] + 4) + "}", row[i]));
+                    Console.Write(String.Format("{0,-" + (maxHeaderWidths[i] + 4) + "}", row[i]));
                 }
                 Console.WriteLine();
             }
