@@ -148,7 +148,7 @@ namespace HospitalSystem.Databases
                 {                 
                     Doctor doctor = GetDoctorById(int.Parse(id));
 
-                    Console.WriteLine($"\nDetails for {doctor.GetFirstName()} {doctor.GetLastName()}\n");
+                    Console.WriteLine($"\nDetails for {doctor.FirstName} {doctor.LastName}\n");
                     Console.WriteLine("Doctor | Email Address | Phone | Address");
                     Console.WriteLine("----------------------------------------------------------------------");
                     Console.WriteLine(doctor.ToString());

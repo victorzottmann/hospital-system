@@ -4,14 +4,14 @@ using HospitalSystem.Interfaces;
 
 namespace HospitalSystem.Users
 {
-    public class User : IUserActions
+    public abstract class User : IUserActions
     {
-        protected string FirstName { get; set; }
-        protected string LastName { get; set; }
-        protected string Email { get; set; }
-        protected string Phone { get; set; }
-        protected string Address { get; set; }
-        protected string FullName { get; set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Email { get; private set; }
+        public string Phone { get; private set; }
+        public string Address { get; private set; }
+        public string FullName { get; private set; }
 
         public User() { }
 
@@ -32,12 +32,15 @@ namespace HospitalSystem.Users
             this.FullName = $"{this.FirstName} {this.LastName}";
         }
 
-        public string GetFirstName() => this.FirstName;
-        public string GetLastName() => this.LastName;
-        public string GetEmail() => this.Email;
-        public string GetPhone() => this.Phone;
-        public string GetAddress() => this.Address;
-        public string GetFullName() => this.FullName;
+        public void SetFirstName(string firstName)
+        {
+            this.FirstName = firstName;
+        }
+
+        public void SetLastName(string lastName)
+        {
+            this.LastName = lastName;
+        }
 
         public void Logout()
         {
@@ -49,5 +52,8 @@ namespace HospitalSystem.Users
         {
             Environment.Exit(0);
         }
+
+        public abstract void DisplayMenu();
+        public abstract void ProcessSelectedOption(string input);
     }
 }

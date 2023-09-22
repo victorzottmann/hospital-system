@@ -145,7 +145,7 @@ namespace HospitalSystem.Databases
                 {
                     Patient patient = GetPatientById(int.Parse(id));
 
-                    Console.WriteLine($"\nDetails for {patient.GetFirstName()} {patient.GetLastName()}\n");
+                    Console.WriteLine($"\nDetails for {patient.FirstName} {patient.LastName}\n");
                     Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
                     Console.WriteLine("----------------------------------------------------------------------");
                     Console.WriteLine(patient.ToString());

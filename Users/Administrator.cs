@@ -14,17 +14,11 @@ namespace HospitalSystem.Users
 
         public Administrator() 
         {
-            this.FirstName = "Victor";
-            this.LastName = "Zottmann";
+            this.SetFirstName("Victor");
+            this.SetLastName("Zottmann");
         }
 
-        public Administrator(string firstName, string lastName) : base(firstName, lastName)
-        {
-            this.FirstName = firstName;
-            this.LastName = lastName;
-        }
-
-        public void DisplayMenu()
+        public override void DisplayMenu()
         {
             Console.Clear();
 
@@ -264,7 +258,7 @@ namespace HospitalSystem.Users
             return largestId;
         }
 
-        public void ProcessSelectedOption(string input)
+        public override void ProcessSelectedOption(string input)
         {
             switch (input)
             {

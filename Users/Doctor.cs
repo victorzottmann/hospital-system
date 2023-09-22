@@ -57,8 +57,8 @@ namespace HospitalSystem.Users
                     string doctorFirstName = doctor.FirstName;
                     string doctorLastName = doctor.LastName;
                     string patientId = patient.GetPatientId().ToString();
-                    string patientFirstName = patient.GetFirstName();
-                    string patientLastName = patient.GetLastName();
+                    string patientFirstName = patient.FirstName;
+                    string patientLastName = patient.LastName;
 
                     int insertionIndex = -1;
 
@@ -127,7 +127,7 @@ namespace HospitalSystem.Users
             }
         }
 
-        public void DisplayMenu()
+        public override void DisplayMenu()
         {
             Console.Clear();
 
@@ -185,10 +185,10 @@ namespace HospitalSystem.Users
 
                 foreach (var patient in patients)
                 {
-                    string patientFullName = $"{patient.GetFirstName()} {patient.GetLastName()}";
-                    string patientEmail = patient.GetEmail();
-                    string patientPhone = patient.GetPhone();
-                    string patientAddress = patient.GetAddress();
+                    string patientFullName = $"{patient.FirstName} {patient.LastName}";
+                    string patientEmail = patient.Email;
+                    string patientPhone = patient.Phone;
+                    string patientAddress = patient.Address;
 
                     Console.WriteLine($"{patientFullName} | {doctorFullName} | {patientEmail} | {patientPhone} | {patientAddress}");
                 }
@@ -405,7 +405,7 @@ namespace HospitalSystem.Users
             DisplayMenu();
         }
 
-        public void ProcessSelectedOption(string input)
+        public override void ProcessSelectedOption(string input)
         {
             switch (input)
             {

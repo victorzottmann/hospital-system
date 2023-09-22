@@ -36,7 +36,7 @@ namespace HospitalSystem.Users
             return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
         }
 
-        public void DisplayMenu()
+        public override void DisplayMenu()
         {
             Console.Clear();
 
@@ -238,7 +238,7 @@ namespace HospitalSystem.Users
             } while (!int.TryParse(input, out selection) || selection < 1 || selection > totalDoctors);
 
             Doctor selectedDoctor = allDoctors[selection - 1]; // -1 because the List starts at 0
-            Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.GetFirstName()} {selectedDoctor.GetLastName()}\n");
+            Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.FirstName} {selectedDoctor.LastName}\n");
 
             string description;
 
@@ -256,11 +256,11 @@ namespace HospitalSystem.Users
 
             string textToFile =
                 $"{selectedDoctor.GetDoctorId()}," +
-                $"{selectedDoctor.GetFirstName()}," +
-                $"{selectedDoctor.GetLastName()}," +
+                $"{selectedDoctor.FirstName}," +
+                $"{selectedDoctor.LastName}," +
                 $"{this.GetPatientId()}," +
-                $"{this.GetFirstName()}," +
-                $"{this.GetLastName()}," +
+                $"{this.FirstName}," +
+                $"{this.LastName}," +
                 $"{description}"
             ;
 
@@ -273,7 +273,7 @@ namespace HospitalSystem.Users
             DisplayMenu();
         }
 
-        public void ProcessSelectedOption(string input)
+        public override void ProcessSelectedOption(string input)
         {
             switch (input)
             {
