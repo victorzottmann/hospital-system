@@ -118,7 +118,7 @@ namespace HospitalSystem
              */
             do
             {
-                Console.Write($"\nPlease select a doctor (1 to {totalDoctors}), or press 'N' to exit: ");
+                Console.Write($"\nEnter a number from 1 to {totalDoctors} to select, or press 'N' to exit: ");
 
                 /* 
                  * The null-coalescing operator ?? returns the value of its left-hand operand if it isn't null; 
@@ -179,7 +179,8 @@ namespace HospitalSystem
                 bool confirmed = false;
                 Doctor selectedDoctor;
 
-                Console.WriteLine("\nIt appears that you do not have a doctor yet.");
+                Console.WriteLine("It appears that you do not have a doctor yet.\n");
+                Console.WriteLine("Please select one from the list below:");
 
                 do
                 {
@@ -222,7 +223,7 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("My Appointments");
 
-            Console.WriteLine($"Appointments for {this.FirstName} {this.LastName}\n");
+            Console.WriteLine($"Appointments for {this.FirstName} {this.LastName}");
 
             try
             {
