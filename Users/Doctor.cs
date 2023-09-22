@@ -209,38 +209,25 @@ namespace HospitalSystem
                 {
                     Patient patient = PatientDatabase.GetPatientById(patientId);
 
+                    bool noPatientDoctor = patient.GetPatientDoctor() == null;
+
                     if (patient != null)
                     {
-                        try
-                        {
-                            if (patient.GetPatientDoctor() != null)
-                            {
-                                // Patient and assigned doctor both exist
-                                tableRows.Add(new string[]
-                                    {
-                                        patient.FullName,
-                                        patient.GetPatientDoctor().FullName,
-                                        patient.Email,
-                                        patient.Phone,
-                                        patient.Address
-                                    }
-                                );
+                        string doctorName = noPatientDoctor ? "Not Assigned" : patient.GetPatientDoctor().FullName;
 
-                                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-
-                                // prompt to try again or return to menu
-                                Utilities.TryAgainOrReturn(this, CheckPatient);
-                            }
-                            else
-                            {
-                                Console.WriteLine($"\nPatient {patient.FullName} does not have a doctor yet.");
-                                Utilities.TryAgainOrReturn(this, CheckPatient);
-                            }
-                        }
-                        catch (Exception e)
+                        tableRows.Add(new string[]
                         {
-                            Console.WriteLine($"An error occurred: {e.Message}");
-                        }
+                            patient.FullName,
+                            doctorName,
+                            patient.Email,
+                            patient.Phone,
+                            patient.Address
+                        });
+
+                        Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+
+                        // prompt to try again or return to menu
+                        Utilities.TryAgainOrReturn(this, CheckPatient);
                     }
                     else
                     {
@@ -259,13 +246,13 @@ namespace HospitalSystem
                     // prompt to try again or return to menu
                     Utilities.TryAgainOrReturn(this, CheckPatient);
                 }
-
             }
             catch (Exception e)
             {
                 Console.WriteLine($"An error occurred: {e.Message}");
             }
         }
+
 
         public void ListAppointmentsWithPatient()
         {
