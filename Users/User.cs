@@ -38,5 +38,16 @@ namespace HospitalSystem.Users
         public string GetPhone() => this.Phone;
         public string GetAddress() => this.Address;
         public string GetFullName() => this.FullName;
+
+        public void Logout()
+        {
+            Login login = new Login();
+            login.DisplayMenu();
+        }
+
+        public void Exit()
+        {
+            Environment.Exit(0);
+        }
     }
 }

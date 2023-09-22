@@ -273,17 +273,6 @@ namespace HospitalSystem.Users
             DisplayMenu();
         }
 
-        public void Logout()
-        {
-            Login login = new Login();
-            login.DisplayMenu();
-        }
-
-        public void Exit()
-        {
-            Environment.Exit(0);
-        }
-
         public void ProcessSelectedOption(string input)
         {
             switch (input)

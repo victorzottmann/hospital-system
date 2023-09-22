@@ -383,17 +383,6 @@ namespace HospitalSystem.Users
             }
         }
 
-        public void Logout()
-        {
-            Login login = new Login();
-            login.DisplayMenu();
-        }
-
-        public void Exit()
-        {
-            Environment.Exit(0);
-        }
-
         public delegate void ActionDelegate();
 
         public void PromptToTryAgain(ActionDelegate methodToExecute)

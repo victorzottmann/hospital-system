@@ -181,17 +181,6 @@ namespace HospitalSystem.Users
             DisplayMenu();
         }
 
-        public void Logout()
-        {
-            Login login = new Login();
-            login.DisplayMenu();
-        }
-
-        public void Exit()
-        {
-            Environment.Exit(0);
-        }
-
         public string GeneratePassword(string role)
         {
             string password = (role == "patient") ? "pat" : "doc";
