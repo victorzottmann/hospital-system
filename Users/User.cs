@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using HospitalSystem.Interfaces;
 
 namespace HospitalSystem.Users
 {
-    public class User
+    public class User : IUserActions
     {
         protected string FirstName { get; set; }
         protected string LastName { get; set; }
@@ -11,7 +12,6 @@ namespace HospitalSystem.Users
         protected string Phone { get; set; }
         protected string Address { get; set; }
         protected string FullName { get; set; }
-
 
         public User() { }
 
