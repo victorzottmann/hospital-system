@@ -7,6 +7,7 @@ namespace HospitalSystem
     public class Patient : User
     {
         private static string _appointmentsFilePath = "appointments.txt";
+        private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
         private int PatientID { get; set; }
         private Doctor PatientDoctor { get; set; }
@@ -172,7 +173,7 @@ namespace HospitalSystem
             else
             {
                 bool confirmed = false;
-                Doctor selectedDoctor; ;
+                Doctor selectedDoctor;
 
                 Console.WriteLine("\nIt appears that you do not have a doctor yet.");
 
@@ -201,6 +202,7 @@ namespace HospitalSystem
         private void ConfirmDoctor(Doctor selectedDoctor)
         {
             AssignDoctor(selectedDoctor);
+            Utilities.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
 
             Console.WriteLine("Confirmed!\n");
             Console.Write("Press any key to return to the Patient Menu: ");
