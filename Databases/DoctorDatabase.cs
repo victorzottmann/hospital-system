@@ -105,25 +105,32 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("All doctors");
 
-            Console.WriteLine("All doctors registered to the DOTNET Hospital Management System\n");
+            Console.WriteLine("All doctors registered to the DOTNET Hospital Management System");
+
+            List<string> tableHeaders = new List<string>()
+            {
+                "Name", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
 
             if (doctorDB.Count > 0)
             {
-                Console.WriteLine("Name | Email Address | Phone | Address");
-                Console.WriteLine("------------------------------------------------------------------------");
-
                 foreach (var kvp in doctorDB)
                 {
                     var doctor = kvp.Value;
-                    Console.WriteLine(doctor.ToString());
+
+                    tableRows.Add(doctor.ToStringArray());
                 }
+
+                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
             }
             else
             {
                 Console.WriteLine("There are no doctors registered in the system yet.");
             }
 
-            Console.Write($"\nPress any key to return: ");
+            Console.Write($"\nPress any key to return to the Admin Menu: ");
             Console.ReadKey();
 
             Administrator admin = new Administrator();
@@ -134,87 +141,49 @@ namespace HospitalSystem
         {
             Console.Clear();
 
+            Administrator admin = new Administrator();
+
             Menu menu = new Menu();
             menu.Subtitle("Doctor's Details");
 
-            Console.WriteLine("Please enter the ID of the doctor whose details you are checking, or press 'N' to return to menu: ");
-            
+            Console.Write("Please enter the ID of the doctor whose details you are checking, or press 'N' to return to menu: ");
             string id = Console.ReadLine()!;
+
+            List<string> tableHeaders = new List<string>()
+            {
+                "Doctor", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
 
             try
             {
                 if (id != null && doctorDB.ContainsKey(int.Parse(id)))
                 {                 
                     Doctor doctor = GetDoctorById(int.Parse(id));
+                    Console.WriteLine($"\nDetails for {doctor.FullName}");
 
-                    Console.WriteLine($"\nDetails for {doctor.FirstName} {doctor.LastName}\n");
-                    Console.WriteLine("Doctor | Email Address | Phone | Address");
-                    Console.WriteLine("----------------------------------------------------------------------");
-                    Console.WriteLine(doctor.ToString());
-
-                    Console.Write($"\nPress 'N' to return to the menu: ");
-
-                    PromptToReturnToMenu();
+                    tableRows.Add(doctor.ToStringArray());
+                    Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                    
+                    Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
                 }
                 else
                 {
                     Console.WriteLine($"\nA doctor with ID {id} does not exist.");
-                    Console.Write("\nPress 1 to try again: ");
-
-                    PromptForDoctorDetails();
+                    Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
                 }
             }
             catch (NullReferenceException e)
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
-
-                PromptForDoctorDetails();
+                Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
             }
             catch (FormatException e)
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
-
-                PromptForDoctorDetails();
+                Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
             }
-        }
-
-        public static void PromptToReturnToMenu()
-        {
-            while (true)
-            {
-                Console.Write($"\nPress 'N' to return to the menu: ");
-                string key = Console.ReadLine()!;
-
-                if (key == "n")
-                {
-                    break;
-                }
-            }
-
-            Administrator admin = new Administrator();
-            Utilities.ShowUserMenu(admin);
-        }
-
-        public static void PromptForDoctorDetails()
-        {
-            while (true)
-            {
-                string key = Console.ReadLine()!;
-
-                if (key == "1")
-                {
-                    GetDoctorDetails();
-                }
-                else if (key == "n")
-                {
-                    break;
-                }
-            }
-
-            Administrator admin = new Administrator();
-            Utilities.ShowUserMenu(admin);
         }
     }
 }
