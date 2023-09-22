@@ -95,162 +95,92 @@ namespace HospitalSystem
 
         public static void GetPatients()
         {
-            // NEED TO COMPLETE FOR INFO DOCTOR
             Console.Clear();
+
+            Administrator admin = new Administrator();
 
             Menu menu = new Menu();
             menu.Subtitle("All Patients");
 
-            Console.WriteLine("All patients registered to the DOTNET Hospital Management System\n");
+            Console.WriteLine("All patients registered to the DOTNET Hospital Management System");
+
+            List<string> tableHeaders = new List<string>()
+            {
+                "Patient", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
 
             if (patientDB.Count > 0)
             {
-                List<string[]> rows = new List<string[]>();
-
                 foreach (var kvp in patientDB)
                 {
                     var patient = kvp.Value;
-
-                    string fullName = patient.FullName;
-                    string email = patient.Email;
-                    string phone = patient.Phone;
-                    string address = patient.Address;
-
-                    string[] row = new string[] { fullName, email, phone, address };
-                    rows.Add(row);
+                    tableRows.Add(patient.ToStringArray());
                 }
 
-                // find the max width of each column
-                int[] maxWidths = new int[4];
-
-                foreach (var row in rows)
-                {
-                    for (int i = 0; i < row.Length; i++)
-                    {
-                        if (row[i].Length > maxWidths[i])
-                        {
-                            maxWidths[i] = row[i].Length;
-                        }
-                    }
-                }
-
-                // print the table heading
-                // the - sign aligns the values to the left
-                Console.WriteLine(string.Format(
-                    "{0,-" + (maxWidths[0] + 4) + "} {1,-" + (maxWidths[1] + 4) + "} {2,-" + (maxWidths[2] + 4) + "} {3}",
-                    "Patient", "Email Address", "Phone", "Address")
-                );
-
-                // print the table horizontal bar
-                Console.WriteLine(new string('-', maxWidths.Sum() + 16));
-
-                // print the table rows
-                foreach (var row in rows)
-                {
-                    Console.WriteLine(String.Format(
-                        "{0,-" + (maxWidths[0] + 4) + "} {1,-" + (maxWidths[1] + 4) + "} {2,-" + (maxWidths[2] + 4) + "} {3}",
-                        row[0], row[1], row[2], row[3])
-                    );
-                }
+                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                Utilities.ReturnToMenu(admin);
             }
             else
             {
                 Console.WriteLine("There are no patients registered in the system yet.");
+                Utilities.ReturnToMenu(admin);
             }
-
-            Console.Write($"\nPress any key to return: ");
-            Console.ReadKey();
-
-            Administrator admin = new Administrator();
-            Utilities.ShowUserMenu(admin);
         }
 
         public static void GetPatientDetails()
         {
-            // NEED TO COMPLETE FOR DOCTOR INFO
             Console.Clear();
 
-            Menu patientDetailsMenu = new Menu();
-            patientDetailsMenu.Subtitle("Patient Details");
+            Administrator admin = new Administrator();
 
-            Console.WriteLine("Please enter the ID of the patient whose details you are checking, or press 'N' to return to menu: ");
-            
+            Menu menu = new Menu();
+            menu.Subtitle("Patient Details");
+
+            Console.Write("Please enter the ID of the patient whose details you are checking, or press 'N' to return to menu: ");   
             string id = Console.ReadLine()!;
+
+            if (id == "n")
+            {
+                Utilities.ReturnToMenu(admin, false);
+            }
+
+            List<string> tableHeaders = new List<string>()
+            {
+                "Patient", "Doctor", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
 
             try
             {
                 if (id != null && patientDB.ContainsKey(int.Parse(id)))
                 {
                     Patient patient = GetPatientById(int.Parse(id));
+                    Console.WriteLine($"\nDetails for {patient.FullName}");
 
-                    Console.WriteLine($"\nDetails for {patient.FirstName} {patient.LastName}\n");
-                    Console.WriteLine("Patient | Doctor | Email Address | Phone | Address");
-                    Console.WriteLine("----------------------------------------------------------------------");
-                    Console.WriteLine(patient.ToString());
+                    tableRows.Add(patient.ToStringArray());
+                    Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
-                    Console.Write($"\nPress 'N' to return to the menu: ");
-                    PromptToReturnToMenu();            
+                    Utilities.TryAgainOrReturn(admin, GetPatientDetails);
                 }
                 else
                 {
                     Console.WriteLine($"\nA patient with ID {id} does not exist.");
-                    Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
-
-                    PromptForPatientDetails();
+                    Utilities.TryAgainOrReturn(admin, GetPatientDetails);
                 }
             }
             catch (NullReferenceException e)
             {
-                // FIX THIS TO PROMPT THE USER AGAIN UNTIL INPUT IS CORRECT
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
-
-                PromptForPatientDetails();
+                Utilities.TryAgainOrReturn(admin, GetPatientDetails);
             }
             catch (FormatException e)
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Console.Write("\nPress 1 to try again or 'N' to return to the menu: ");
-
-                PromptForPatientDetails();
+                Utilities.TryAgainOrReturn(admin, GetPatientDetails);
             }
-        }
-
-        public static void PromptToReturnToMenu()
-        {
-            while (true)
-            {
-                Console.Write($"\nPress 'N' to return to the menu: ");
-                string key = Console.ReadLine()!;
-
-                if (key == "n")
-                {
-                    break;
-                }
-            }
-
-            Administrator admin = new Administrator();
-            Utilities.ShowUserMenu(admin);
-        }
-
-        public static void PromptForPatientDetails()
-        {
-            while (true)
-            {
-                string key = Console.ReadLine()!;
-
-                if (key == "1")
-                {
-                    GetPatientDetails();
-                }
-                else if (key == "n")
-                {
-                    break;
-                }
-            }
-
-            Administrator admin = new Administrator();
-            Utilities.ShowUserMenu(admin);
         }
     }
 }

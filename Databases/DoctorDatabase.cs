@@ -102,6 +102,8 @@ namespace HospitalSystem
         {
             Console.Clear();
 
+            Administrator admin = new Administrator();
+
             Menu menu = new Menu();
             menu.Subtitle("All doctors");
 
@@ -124,17 +126,13 @@ namespace HospitalSystem
                 }
 
                 Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                Utilities.ReturnToMenu(admin);
             }
             else
             {
                 Console.WriteLine("There are no doctors registered in the system yet.");
+                Utilities.ReturnToMenu(admin);
             }
-
-            Console.Write($"\nPress any key to return to the Admin Menu: ");
-            Console.ReadKey();
-
-            Administrator admin = new Administrator();
-            Utilities.ShowUserMenu(admin);
         }
 
         public static void GetDoctorDetails()
@@ -148,6 +146,11 @@ namespace HospitalSystem
 
             Console.Write("Please enter the ID of the doctor whose details you are checking, or press 'N' to return to menu: ");
             string id = Console.ReadLine()!;
+
+            if (id == "n")
+            {
+                Utilities.ReturnToMenu(admin, false);
+            }
 
             List<string> tableHeaders = new List<string>()
             {

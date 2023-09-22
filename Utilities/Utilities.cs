@@ -83,6 +83,18 @@ namespace HospitalSystem
             ShowUserMenu(user);
         }
 
+        public static void ReturnToMenu(User user, bool? defaultMessage = true)
+        {
+            string userType = user.GetType().Name;
+
+            if (!defaultMessage.HasValue)
+            {
+                Console.Write($"\nPress any key to return to the {userType} Menu: ");
+            }
+
+            ShowUserMenu(user);
+        }
+
         public static void FormatTable(string[] headers, List<string[]> rows)
         {
             int[] maxHeaderWidths = new int[headers.Length];
