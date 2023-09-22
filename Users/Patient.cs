@@ -118,14 +118,18 @@ namespace HospitalSystem
              */
             do
             {
-                Console.Write($"\nPlease select a doctor (1 to {totalDoctors}): ");
+                Console.Write($"\nPlease select a doctor (1 to {totalDoctors}), or press 'N' to exit: ");
 
                 /* 
-                 * ? indicates that it can be null.
                  * The null-coalescing operator ?? returns the value of its left-hand operand if it isn't null; 
                  * otherwise, it evaluates the right-hand operand and returns its result.
                  */
-                input = Console.ReadLine()?.Trim() ?? string.Empty;
+                input = Console.ReadLine()!.Trim().ToLower() ?? string.Empty;
+
+                if (input == "n")
+                {
+                    Utilities.ShowUserMenu(this);
+                }
             }
             while (!int.TryParse(input, out selection) || selection < 1 || selection > totalDoctors);
 
