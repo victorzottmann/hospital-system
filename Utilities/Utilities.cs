@@ -36,7 +36,7 @@ namespace HospitalSystem
                     Console.WriteLine("6. Logout");
                     Console.WriteLine("7. Exit\n");
                     break;
-                case "Admin":
+                case "Administrator":
                     menu.Subtitle("Administrator Menu");
                     Console.WriteLine($"Welcome to DOTNET Hospital Management {user.FirstName} {user.LastName}\n");
                     Console.WriteLine("Please choose an option:");
