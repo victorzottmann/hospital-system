@@ -71,7 +71,7 @@ namespace HospitalSystem
 
             Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
-            Console.Write("\n\nPress any key to the Doctor Menu: ");
+            Console.Write("\nPress any key to the Doctor Menu: ");
             Console.ReadKey();
 
             Utilities.ShowUserMenu(this);
@@ -113,7 +113,7 @@ namespace HospitalSystem
 
             Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
 
-            Console.Write("\n\nPress any key to return to the Doctor Menu: ");
+            Console.Write("\nPress any key to return to the Doctor Menu: ");
             Console.ReadKey();
 
             Utilities.ShowUserMenu(this);
@@ -190,9 +190,6 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("Check Patient Details");
 
-            Console.Write("Enter the ID of the patient to check: ");
-            string id = Console.ReadLine()!.Trim();
-
             List<string[]> tableRows = new List<string[]>();
             List<string> tableHeaders = new List<string>()
             {
@@ -203,9 +200,14 @@ namespace HospitalSystem
                 "Address"
             };
 
+            Console.Write("Enter the ID of the patient to check: ");
+            string id = Console.ReadLine()!.Trim();
+
             try
             {
-                if (int.TryParse(id, out int patientId))
+                id = id.Trim();
+
+                if ((int.TryParse(id, out int patientId) && patientId > 0) && id.Length == 5)
                 {
                     Patient patient = PatientDatabase.GetPatientById(patientId);
 
@@ -240,8 +242,8 @@ namespace HospitalSystem
                 }
                 else
                 {
-                    // if not an integer
-                    Console.WriteLine("\nInvalid ID. Only numeric values are accepted.");
+                    // if length is not 5 chars and not a positive number
+                    Console.WriteLine("\nInvalid ID. Please ensure that it has exactly 5 positive digits.");
 
                     // prompt to try again or return to menu
                     Utilities.TryAgainOrReturn(this, CheckPatient);
@@ -320,6 +322,7 @@ namespace HospitalSystem
                         else
                         {
                             Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                            Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
                         }
                     }
                     else
@@ -331,7 +334,7 @@ namespace HospitalSystem
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine($"File not found: {e.Message}");
+                Console.WriteLine($"\nFile not found: {e.Message}");
                 Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
             }
             catch (FormatException e)
