@@ -1,5 +1,4 @@
 ﻿using System;
-using HospitalSystem.Users;
 
 namespace HospitalSystem
 {
@@ -8,7 +7,7 @@ namespace HospitalSystem
         static void Main(string[] args)
         {
             Login login = new Login();
-            login.DisplayMenu();
+            login.LoginMenu();
         }
     }
 }

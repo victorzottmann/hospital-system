@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace HospitalSystem.Interfaces
+namespace HospitalSystem
 {
-    public interface IUserActions
-    {
+    public interface IUser
+    { 
         void Logout();
         void Exit();
     }

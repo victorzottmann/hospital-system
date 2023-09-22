@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using HospitalSystem.Users;
 
-namespace HospitalSystem.Databases
+namespace HospitalSystem
 {
     public class PatientDatabase
     {
@@ -163,7 +162,7 @@ namespace HospitalSystem.Databases
             Console.ReadKey();
 
             Administrator admin = new Administrator();
-            admin.DisplayMenu();
+            Utilities.ShowUserMenu(admin);
         }
 
         public static void GetPatientDetails()
@@ -231,7 +230,7 @@ namespace HospitalSystem.Databases
             }
 
             Administrator admin = new Administrator();
-            admin.DisplayMenu();
+            Utilities.ShowUserMenu(admin);
         }
 
         public static void PromptForPatientDetails()
@@ -251,7 +250,7 @@ namespace HospitalSystem.Databases
             }
 
             Administrator admin = new Administrator();
-            admin.DisplayMenu();
+            Utilities.ShowUserMenu(admin);
         }
     }
 }

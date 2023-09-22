@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using HospitalSystem.Users;
-using HospitalSystem.Databases;
 
 namespace HospitalSystem
 {
@@ -19,7 +17,7 @@ namespace HospitalSystem
             DoctorPatientDatabase.LoadDB(_doctorPatientsFilePath);
         }
 
-        public void DisplayMenu()
+        public void LoginMenu()
         {
             Console.Clear();
 
@@ -47,7 +45,7 @@ namespace HospitalSystem
             if (isAdmin)
             {
                 Administrator admin = new Administrator();
-                admin.DisplayMenu();
+                Utilities.ShowUserMenu(admin);
             }
             else if (isDoctor)
             {
@@ -57,7 +55,7 @@ namespace HospitalSystem
 
                 if (doctor != null)
                 {
-                    doctor.DisplayMenu();
+                    Utilities.ShowUserMenu(doctor);
                 }
             }
             else if (isPatient)
@@ -68,7 +66,7 @@ namespace HospitalSystem
 
                 if (patient != null)
                 {
-                    patient.DisplayMenu();
+                    Utilities.ShowUserMenu(patient);
                 }
             }
           
@@ -199,7 +197,7 @@ namespace HospitalSystem
 
                 if (input == "1")
                 {
-                    this.DisplayMenu();
+                    this.LoginMenu();
                     break;
                 }
                 else if (input == "0")

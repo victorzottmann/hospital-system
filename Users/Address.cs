@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HospitalSystem.Users
+namespace HospitalSystem
 {
     public class Address
     {

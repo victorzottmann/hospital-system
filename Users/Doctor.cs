@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Net;
-using System.Numerics;
-using HospitalSystem.Databases;
 
-namespace HospitalSystem.Users
+namespace HospitalSystem
 {
     public class Doctor : User
     {
@@ -138,28 +134,6 @@ namespace HospitalSystem.Users
             }
         }
 
-        public override void DisplayMenu()
-        {
-            Console.Clear();
-
-            Menu doctorMenu = new Menu();
-            doctorMenu.Subtitle("Doctor Menu");
-
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
-
-            Console.WriteLine("Please choose an option:");
-            Console.WriteLine("1. List doctor details");
-            Console.WriteLine("2. List patients");
-            Console.WriteLine("3. List appointments");
-            Console.WriteLine("4. Check particular patient");
-            Console.WriteLine("5. List appointments with patient");
-            Console.WriteLine("6. Logout");
-            Console.WriteLine("7. Exit\n");
-
-            string input = Console.ReadLine()!;
-            ProcessSelectedOption(input);
-        }
-
         public void ListDoctorDetails()
         {
             Console.Clear();
@@ -179,7 +153,8 @@ namespace HospitalSystem.Users
             Console.Write("\nPress any key to the Doctor Menu: ");
             Console.ReadKey();
 
-            DisplayMenu();
+            //DisplayMenu();
+            Utilities.ShowUserMenu(this);
         }
 
         public void ListPatients()
@@ -213,7 +188,7 @@ namespace HospitalSystem.Users
             Console.Write("\nPress any key to return to the doctor menu: ");
             Console.ReadKey();
 
-            DisplayMenu();
+            Utilities.ShowUserMenu(this);
         }
 
         public void ListAppointments()
@@ -264,7 +239,8 @@ namespace HospitalSystem.Users
 
                     Console.Write("\nPress any key to return to the menu: ");
                     Console.ReadKey();
-                    DisplayMenu();
+                    
+                    Utilities.ShowUserMenu(this);
                 }
             }
             catch (FileNotFoundException e)
@@ -296,7 +272,7 @@ namespace HospitalSystem.Users
                         Console.WriteLine(patient.ToString());
 
                         // prompt to try again or return to menu
-                        PromptToTryAgain(CheckPatient);
+                        Utilities.TryAgainAndReturn(this, CheckPatient);
                     }
                     else
                     {
@@ -304,7 +280,7 @@ namespace HospitalSystem.Users
                         Console.WriteLine($"\nPatient with ID {id} does not exist.");
 
                         // prompt to try again or return to menu
-                        PromptToTryAgain(CheckPatient);
+                        Utilities.TryAgainAndReturn(this, CheckPatient);
                     }
                 }
                 else
@@ -313,7 +289,7 @@ namespace HospitalSystem.Users
                     Console.WriteLine("\nInvalid ID. Only numeric values are accepted.");
 
                     // prompt to try again or return to menu
-                    PromptToTryAgain(CheckPatient);
+                    Utilities.TryAgainAndReturn(this, CheckPatient);
                 }
             }
             catch (Exception e)
@@ -377,48 +353,26 @@ namespace HospitalSystem.Users
                         if (!found)
                         {
                             Console.WriteLine("\nNo appointments found for this patient");
-                            PromptToTryAgain(ListAppointmentsWithPatient);
+                            Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
                         }
                     }
                     else
                     {
                         Console.WriteLine($"\nPatient with ID {inputId} does not exist.");
-                        PromptToTryAgain(ListAppointmentsWithPatient);
+                        Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
                     }
                 }
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"File not found: {e.Message}");
-                PromptToTryAgain(ListAppointmentsWithPatient);
+                Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
             }
             catch (FormatException e)
             {
                 Console.WriteLine($"\n{e.Message}");
-                PromptToTryAgain(ListAppointmentsWithPatient);
+                Utilities.TryAgainAndReturn(this, ListAppointmentsWithPatient);
             }
-        }
-
-        public delegate void ActionDelegate();
-
-        public void PromptToTryAgain(ActionDelegate methodToExecute)
-        {
-            while (true)
-            {
-                Console.Write($"\nPress 1 to try again or 'N' to return to the Doctor Menu: ");
-                string key = Console.ReadLine()!;
-
-                if (key == "1")
-                {
-                    methodToExecute();
-                }
-                else if (key == "n")
-                {
-                    break;
-                }
-            }
-
-            DisplayMenu();
         }
 
         public override void ProcessSelectedOption(string input)

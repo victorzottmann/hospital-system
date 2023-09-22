@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using HospitalSystem.Interfaces;
 
-namespace HospitalSystem.Users
+namespace HospitalSystem
 {
-    public abstract class User : IUserActions
+    public abstract class User : IUser
     {
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
@@ -45,7 +44,7 @@ namespace HospitalSystem.Users
         public void Logout()
         {
             Login login = new Login();
-            login.DisplayMenu();
+            login.LoginMenu();
         }
 
         public void Exit()
@@ -53,7 +52,6 @@ namespace HospitalSystem.Users
             Environment.Exit(0);
         }
 
-        public abstract void DisplayMenu();
         public abstract void ProcessSelectedOption(string input);
     }
 }

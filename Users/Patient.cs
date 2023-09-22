@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using HospitalSystem.Databases;
-using HospitalSystem.Utilities;
 
-namespace HospitalSystem.Users
+namespace HospitalSystem
 {
     public class Patient : User
     {
@@ -35,27 +33,6 @@ namespace HospitalSystem.Users
         public override string ToString()
         {
             return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
-        }
-
-        public override void DisplayMenu()
-        {
-            Console.Clear();
-
-            Menu patientMenu = new Menu();
-            patientMenu.Subtitle("Patient Menu");
-
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
-
-            Console.WriteLine("Please choose an option:");
-            Console.WriteLine("1. List patient details");
-            Console.WriteLine("2. List my doctor details");
-            Console.WriteLine("3. List all appointments");
-            Console.WriteLine("4. Book appointment");
-            Console.WriteLine("5. Exit to login");
-            Console.WriteLine("6. Exit system\n");
-
-            string input = Console.ReadLine()!;
-            ProcessSelectedOption(input);
         }
 
         public void AddAppointment(Doctor doctor, string description, string textToFile)
@@ -91,7 +68,7 @@ namespace HospitalSystem.Users
             Console.Write("\n\nPress any key to the Patient Menu: ");
             Console.ReadKey();
 
-            DisplayMenu();
+            Utilities.ShowUserMenu(this);
         }
 
         public void ListMyDoctorDetails()
@@ -114,7 +91,7 @@ namespace HospitalSystem.Users
                     doctor.ToStringArray()
                 };
 
-                Utilities.Utilities.FormatTable(headers, doctorDetails);
+                Utilities.FormatTable(headers, doctorDetails);
             }
             else
             {
@@ -124,7 +101,7 @@ namespace HospitalSystem.Users
             Console.Write("\nPress any key to return to the Patient Menu: ");
             Console.ReadKey();
 
-            DisplayMenu();
+            Utilities.ShowUserMenu(this);
         }
 
 
@@ -143,8 +120,8 @@ namespace HospitalSystem.Users
                 {
                     string[] lines = File.ReadAllLines(_appointmentsFilePath);
 
-                    Console.WriteLine("Doctor | Patient | Description");
-                    Console.WriteLine("---------------------------------------------------");
+                    List<string[]> tableRows = new List<string[]>();
+                    List<string> headers = new List<string> { "Doctor", "Patient", "Description" };
 
                     bool appointmentsFound = false;
 
@@ -168,7 +145,7 @@ namespace HospitalSystem.Users
 
                             if (this.PatientID == int.Parse(patientId))
                             {
-                                Console.WriteLine($"{doctorFullName} | {patientFullName} | {description}");
+                                tableRows.Add(new string[] { doctorFullName, patientFullName, description });
                                 appointmentsFound = true;
                             }
                         }
@@ -178,10 +155,15 @@ namespace HospitalSystem.Users
                     {
                         Console.WriteLine("You do not have any appointments");
                     }
+                    else
+                    {
+                        Utilities.FormatTable(headers.ToArray(), tableRows);
+                    }
 
                     Console.Write("\nPress any key to return to the menu: ");
                     Console.ReadKey();
-                    DisplayMenu();
+
+                    Utilities.ShowUserMenu(this);
                 }
             }
             catch (FileNotFoundException e)
@@ -189,6 +171,7 @@ namespace HospitalSystem.Users
                 Console.WriteLine($"File not found: {e.Message}");
             }
         }
+
 
         public void BookAppointment()
         {
@@ -208,7 +191,7 @@ namespace HospitalSystem.Users
                 Console.WriteLine("There are no doctors available at the moment.\n");
                 Console.Write("Press any key to return to the Patient Menu: ");
                 Console.ReadKey();
-                this.DisplayMenu();
+                Utilities.ShowUserMenu(this);
             }
 
             Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with\n");
@@ -277,7 +260,7 @@ namespace HospitalSystem.Users
             Console.Write("Press any key to return to the Patient Menu: ");
 
             Console.ReadKey();
-            DisplayMenu();
+            Utilities.ShowUserMenu(this);
         }
 
         public override void ProcessSelectedOption(string input)

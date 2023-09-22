@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
-using HospitalSystem.Databases;
 
-namespace HospitalSystem.Users
+namespace HospitalSystem
 {
     public class Administrator : User
     {
@@ -20,29 +17,6 @@ namespace HospitalSystem.Users
         {
             this.SetFirstName("Victor");
             this.SetLastName("Zottmann");
-        }
-
-        public override void DisplayMenu()
-        {
-            Console.Clear();
-
-            Menu adminMenu = new Menu();
-            adminMenu.Subtitle("Administrator Menu");
-
-            Console.WriteLine($"Welcome to DOTNET Hospital Management {this.FirstName} {this.LastName}\n");
-
-            Console.WriteLine("Please choose an option:");
-            Console.WriteLine("1. List all doctors");
-            Console.WriteLine("2. Check doctor details");
-            Console.WriteLine("3. List all patients");
-            Console.WriteLine("4. Check patient details");
-            Console.WriteLine("5. Add doctor");
-            Console.WriteLine("6. Add patient");
-            Console.WriteLine("7. Logout");
-            Console.WriteLine("8. Exit\n");
-
-            string input = Console.ReadLine()!;
-            ProcessSelectedOption(input);
         }
 
         public void ListAllDoctors()
@@ -176,7 +150,7 @@ namespace HospitalSystem.Users
 
             Console.Write("Press any key to go back: ");
             Console.ReadKey();
-            DisplayMenu();
+            Utilities.ShowUserMenu(this);
         }
 
         public string GeneratePassword(string role)

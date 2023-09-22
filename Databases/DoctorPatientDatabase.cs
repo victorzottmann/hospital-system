@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Channels;
-using HospitalSystem.Users;
 
-
-namespace HospitalSystem.Databases
+namespace HospitalSystem
 {
     public class DoctorPatientDatabase
     {
