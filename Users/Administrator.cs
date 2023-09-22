@@ -8,6 +8,10 @@ namespace HospitalSystem.Users
 {
     public class Administrator : User
     {
+        /*
+         * The naming convention for when a variable is private but doesn't have
+         * auto-implemented propeties is _variable: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/fields
+         */
         private static string _patientsFilePath = "patients.txt";
         private static string _doctorsFilePath = "doctors.txt";
         private static string _loginFilePath = "login-credentials.txt";

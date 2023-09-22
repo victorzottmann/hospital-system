@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using HospitalSystem.Databases;
+using HospitalSystem.Utilities;
 
 namespace HospitalSystem.Users
 {
@@ -101,25 +102,31 @@ namespace HospitalSystem.Users
             menu.Subtitle("My Doctor");
 
             Console.WriteLine("Your doctors:\n");
-            Console.WriteLine("Name | Email Address | Phone | Address");
-            Console.WriteLine("------------------------------------------------------------------------");
 
             Doctor doctor = this.GetPatientDoctor();
+            
+            string[] headers = { "Name", "Email Address", "Phone", "Address" };
 
             if (doctor != null)
             {
-                Console.WriteLine(doctor.ToString());
+                List<string[]> doctorDetails = new List<string[]>()
+                {
+                    doctor.ToStringArray()
+                };
+
+                Utilities.Utilities.FormatTable(headers, doctorDetails);
             }
             else
             {
                 Console.WriteLine("\nDoctor not found");
             }
 
-            Console.Write("\nPress any key to the Patient Menu: ");
+            Console.Write("\nPress any key to return to the Patient Menu: ");
             Console.ReadKey();
 
             DisplayMenu();
         }
+
 
         public void ListAllAppointments()
         {

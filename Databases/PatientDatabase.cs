@@ -99,27 +99,66 @@ namespace HospitalSystem.Databases
             // NEED TO COMPLETE FOR INFO DOCTOR
             Console.Clear();
 
-            Menu adminMenu = new Menu();
-            adminMenu.Subtitle("All Patients");
+            Menu menu = new Menu();
+            menu.Subtitle("All Patients");
 
             Console.WriteLine("All patients registered to the DOTNET Hospital Management System\n");
 
             if (patientDB.Count > 0)
-            {             
-                Console.WriteLine("Patient | Email Address | Phone | Address");
-                Console.WriteLine("------------------------------------------------------------------------");
+            {
+                List<string[]> rows = new List<string[]>();
 
                 foreach (var kvp in patientDB)
                 {
                     var patient = kvp.Value;
-                    Console.WriteLine(patient.ToString());
+
+                    string fullName = patient.FullName;
+                    string email = patient.Email;
+                    string phone = patient.Phone;
+                    string address = patient.Address;
+
+                    string[] row = new string[] { fullName, email, phone, address };
+                    rows.Add(row);
+                }
+
+                // find the max width of each column
+                int[] maxWidths = new int[4];
+
+                foreach (var row in rows)
+                {
+                    for (int i = 0; i < row.Length; i++)
+                    {
+                        if (row[i].Length > maxWidths[i])
+                        {
+                            maxWidths[i] = row[i].Length;
+                        }
+                    }
+                }
+
+                // print the table heading
+                // the - sign aligns the values to the left
+                Console.WriteLine(string.Format(
+                    "{0,-" + (maxWidths[0] + 4) + "} {1,-" + (maxWidths[1] + 4) + "} {2,-" + (maxWidths[2] + 4) + "} {3}",
+                    "Patient", "Email Address", "Phone", "Address")
+                );
+
+                // print the table horizontal bar
+                Console.WriteLine(new string('-', maxWidths.Sum() + 16));
+
+                // print the table rows
+                foreach (var row in rows)
+                {
+                    Console.WriteLine(String.Format(
+                        "{0,-" + (maxWidths[0] + 4) + "} {1,-" + (maxWidths[1] + 4) + "} {2,-" + (maxWidths[2] + 4) + "} {3}",
+                        row[0], row[1], row[2], row[3])
+                    );
                 }
             }
             else
             {
                 Console.WriteLine("There are no patients registered in the system yet.");
             }
-            
+
             Console.Write($"\nPress any key to return: ");
             Console.ReadKey();
 

@@ -32,7 +32,18 @@ namespace HospitalSystem.Users
 
         public override string ToString()
         {
-            return $"{this.FirstName} {this.LastName} | {this.Email} | {this.Phone} | {this.Address}";
+            return $"{this.FirstName} {this.LastName},{this.Email},{this.Phone},{this.Address}";
+        }
+
+        public string[] ToStringArray()
+        {
+            return new string[]
+            {
+                this.FullName,
+                this.Email,
+                this.Phone,
+                this.Address
+            };
         }
 
         public void AssignPatient(Doctor doctor, Patient patient)
@@ -155,6 +166,11 @@ namespace HospitalSystem.Users
 
             Menu doctorDetails = new Menu();
             doctorDetails.Subtitle("My Details");
+
+            List<string[]> rows = new List<string[]>
+            {
+                new string[] { this.FullName, this.Email, this.Phone, this.Address }
+            };
 
             Console.WriteLine($"Name | Email Address | Phone | Address");
             Console.WriteLine("------------------------------------------------------------------------");
