@@ -62,11 +62,11 @@ namespace HospitalSystem
 
         public delegate void Action();
 
-        public static void TryAgainOrReturn(User user, Action methodToExecute)
+        public static void TryAgainOrReturn(User user, Action methodToExecute, string? message = "")
         {
             while (true)
             {
-                Console.Write($"\nPress 1 to try again or 'N' to return to the Doctor Menu: ");
+                Console.Write($"\nPress 1 to try again or 'N' to return to the {user} Menu: ");
                 string key = Console.ReadLine()!;
 
                 if (key == "1")

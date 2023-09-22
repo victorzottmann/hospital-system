@@ -40,7 +40,7 @@ namespace HospitalSystem
             return new string[] { this.FullName, this.Email, this.Phone, this.Address };
         }
 
-        public void AddAppointment(Doctor doctor, string description, string textToFile)
+        private void AddAppointment(Doctor doctor, string description, string textToFile)
         {
             if (!DoctorAppointments.ContainsKey(doctor))
             {
@@ -54,7 +54,85 @@ namespace HospitalSystem
             File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
         }
 
-        // Maybe overload this later to display details in relation to user permissions (admin vs user)
+        private void ShowPatientDoctor(Doctor doctor)
+        {
+            List<string> tableHeaders;
+            List<string[]> tableRows = new List<string[]>();
+
+            tableHeaders = new List<string>()
+            {
+                "Name", "Email", "Phone", "Address"
+            };
+
+            tableRows.Add(doctor.ToStringArray());
+
+            Console.WriteLine("Your doctor:");
+            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+
+            Console.WriteLine("\nPress any key to return to the Patient Menu: ");
+            Console.ReadKey();
+
+            Utilities.ShowUserMenu(this);
+        }
+
+        private void ShowDoctorTable(List<Doctor> doctors)
+        {
+            List<string> tableHeaders = new List<string>()
+            {
+                "No.", "Name", "Email", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
+
+            int totalDoctors = doctors.Count;
+
+            for (int i = 0; i < totalDoctors; i++)
+            {
+                Doctor doctor = doctors[i];
+                string[] doctorDetails = doctor.ToStringArray();
+
+                string[] row = new string[]
+                {
+                    $"{i + 1}. ", doctorDetails[0], doctorDetails[1], doctorDetails[2], doctorDetails[3]
+                };
+
+                tableRows.Add(row);
+            }
+
+            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+        }
+
+        private Doctor SelectDoctor(List<Doctor> doctors)
+        {
+            ShowDoctorTable(doctors);
+
+            string input;
+            int selection;
+
+            int totalDoctors = doctors.Count();
+
+            /* 
+             * this do while loop keeps prompting the user for a description
+             * while the input is null or empty
+             */
+            do
+            {
+                Console.Write($"\nPlease select a doctor (1 to {totalDoctors}): ");
+
+                /* 
+                 * ? indicates that it can be null.
+                 * The null-coalescing operator ?? returns the value of its left-hand operand if it isn't null; 
+                 * otherwise, it evaluates the right-hand operand and returns its result.
+                 */
+                input = Console.ReadLine()?.Trim() ?? string.Empty;
+            }
+            while (!int.TryParse(input, out selection) || selection < 1 || selection > totalDoctors);
+
+            Doctor selectedDoctor = doctors[selection - 1]; // -1 because the List starts at 0
+
+            return selectedDoctor;
+        }
+
         public void ListPatientDetails()
         {
             Console.Clear();
@@ -83,33 +161,53 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("My Doctor");
 
-            Console.WriteLine("Your doctors:\n");
+            List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
+            
+            Doctor patientDoctor = this.GetPatientDoctor();
 
-            Doctor doctor = this.GetPatientDoctor();
-
-            List<string> tableHeaders = new List<string>()
+            if (patientDoctor != null)
             {
-                "Name", "Email Address", "Phone", "Address"
-            };
-
-            List<string[]> tableRows = new List<string[]>();
-
-            if (doctor != null)
-            {
-                tableRows.Add(doctor.ToStringArray());
-                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                ShowPatientDoctor(patientDoctor);
             }
             else
             {
-                Console.WriteLine("\nDoctor not found");
+                bool confirmed = false;
+                Doctor selectedDoctor; ;
+
+                Console.WriteLine("\nIt appears that you do not have a doctor yet.");
+
+                do
+                {
+                    selectedDoctor = SelectDoctor(doctors);
+                    Console.WriteLine($"\nYou selected Dr. {selectedDoctor.FirstName} {selectedDoctor.LastName}");
+
+                    Console.Write("\nPress 1 to confirm, or '0' to select a different doctor: ");
+                    string input = Console.ReadLine()!;
+
+                    if (input == "1")
+                    {
+                        confirmed = true;
+                    }
+                    else if (input != "0")
+                    {
+                        Console.WriteLine("Invalid input. Please enter either '1' or '0'.");
+                    }
+                } while (!confirmed);
+
+                ConfirmDoctor(selectedDoctor);
             }
-
-            Console.Write("\nPress any key to return to the Patient Menu: ");
-            Console.ReadKey();
-
-            Utilities.ShowUserMenu(this);
         }
 
+        private void ConfirmDoctor(Doctor selectedDoctor)
+        {
+            AssignDoctor(selectedDoctor);
+
+            Console.WriteLine("Confirmed!\n");
+            Console.Write("Press any key to return to the Patient Menu: ");
+
+            Console.ReadKey();
+            Utilities.ShowUserMenu(this);
+        }
 
         public void ListAllAppointments()
         {
@@ -182,81 +280,16 @@ namespace HospitalSystem
             }
         }
 
-
         public void BookAppointment()
         {
             Console.Clear();
 
-            Menu bookAppointment = new Menu();
-            bookAppointment.Subtitle("Book Appointment");
+            Menu menu = new Menu();
+            menu.Subtitle("Book Appointment");
 
-            List<Doctor> allDoctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
-            List<string> tableHeaders = new List<string>()
-            {
-                "No.", "Name", "Email", "Phone", "Address"
-            };
-
-            List<string[]> tableRows = new List<string[]>();
-
-            int totalDoctors = allDoctors.Count;
-
-            if (totalDoctors == 0)
-            {
-                Console.WriteLine("There are no doctors available at the moment.\n");
-                Console.Write("Press any key to return to the Patient Menu: ");
-
-                Console.ReadKey();
-                Utilities.ShowUserMenu(this);
-            }
-
-            Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with.\n");
-
-            for (int i = 0; i < totalDoctors; i++)
-            {
-                Doctor doctor = allDoctors[i];
-                string[] doctorDetails = doctor.ToStringArray();
-
-                try
-                {
-                    string[] row = new string[]
-                    {
-                        $"{i + 1}.", doctorDetails[0], doctorDetails[1], doctorDetails[2], doctorDetails[3]
-                    };
-
-                    tableRows.Add(row);
-                }
-                catch (IndexOutOfRangeException e)
-                {
-                    Console.WriteLine($"An error occurred: {e.Message}\n");
-                    Console.WriteLine("Please check if the number of headers match their corresponding data.\n");
-
-                    Utilities.TryAgainOrReturn(this, BookAppointment);
-                }
-            }
-
-            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-
-            string input;
-            int selection;
-
-            /* 
-             * this do while loop keeps prompting the user for a description
-             * while the input is null or empty
-             */
-            do
-            {
-                Console.Write($"\nPlease choose a doctor (1 to {totalDoctors}): ");
-
-                /* 
-                 * ? indicates that it can be null.
-                 * The null-coalescing operator ?? returns the value of its left-hand operand if it isn't null; 
-                 * otherwise, it evaluates the right-hand operand and returns its result.
-                 */
-                input = Console.ReadLine()?.Trim() ?? string.Empty;
-
-            } while (!int.TryParse(input, out selection) || selection < 1 || selection > totalDoctors);
-
-            Doctor selectedDoctor = allDoctors[selection - 1]; // -1 because the List starts at 0
+            List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
+            
+            Doctor selectedDoctor = SelectDoctor(doctors);
             Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.FirstName} {selectedDoctor.LastName}\n");
 
             string description;
