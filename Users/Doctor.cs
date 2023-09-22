@@ -81,8 +81,10 @@ namespace HospitalSystem
         {
             Console.Clear();
 
-            Menu myPatients = new Menu();
-            myPatients.Subtitle("My Patients");
+            Menu menu = new Menu();
+            menu.Subtitle("My Patients");
+
+            Console.WriteLine($"Patients assigned to {this.FullName}");
 
             List<string> tableHeaders = new List<string>()
             {
@@ -162,6 +164,8 @@ namespace HospitalSystem
                         }
                     }
 
+                    Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+
                     if (!appointmentsFound)
                     {
                         Console.WriteLine("You do not have any appointments");
@@ -189,42 +193,58 @@ namespace HospitalSystem
             Console.Write("Enter the ID of the patient to check: ");
             string id = Console.ReadLine()!.Trim();
 
+            List<string[]> tableRows = new List<string[]>();
+            List<string> tableHeaders = new List<string>()
+            {
+                "Patient",
+                "Doctor",
+                "Email Address",
+                "Phone",
+                "Address"
+            };
+
             try
             {
                 if (int.TryParse(id, out int patientId))
                 {
                     Patient patient = PatientDatabase.GetPatientById(patientId);
 
-                    List<string[]> tableRows = new List<string[]>();
-                    List<string> tableHeaders = new List<string>()
-                    {
-                        "Patient",
-                        "Doctor",
-                        "Email Address",
-                        "Phone",
-                        "Address"
-                    };
-
                     if (patient != null)
                     {
-                        tableRows.Add(new string[]
+                        try
+                        {
+                            if (patient.GetPatientDoctor() != null)
                             {
-                                patient.FullName,
-                                patient.GetPatientDoctor().FullName,
-                                patient.Email,
-                                patient.Phone,
-                                patient.Address
+                                // Patient and assigned doctor both exist
+                                tableRows.Add(new string[]
+                                    {
+                                        patient.FullName,
+                                        patient.GetPatientDoctor().FullName,
+                                        patient.Email,
+                                        patient.Phone,
+                                        patient.Address
+                                    }
+                                );
+
+                                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+
+                                // prompt to try again or return to menu
+                                Utilities.TryAgainOrReturn(this, CheckPatient);
                             }
-                        );
-
-                        Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-
-                        // prompt to try again or return to menu
-                        Utilities.TryAgainOrReturn(this, CheckPatient);
+                            else
+                            {
+                                Console.WriteLine($"\nPatient {patient.FullName} does not have a doctor yet.");
+                                Utilities.TryAgainOrReturn(this, CheckPatient);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"An error occurred: {e.Message}");
+                        }
                     }
                     else
                     {
-                        // not null by format doesn't match 1xxxx
+                        // Patient with given ID does not exist
                         Console.WriteLine($"\nPatient with ID {id} does not exist.");
 
                         // prompt to try again or return to menu
@@ -239,6 +259,7 @@ namespace HospitalSystem
                     // prompt to try again or return to menu
                     Utilities.TryAgainOrReturn(this, CheckPatient);
                 }
+
             }
             catch (Exception e)
             {
@@ -331,6 +352,19 @@ namespace HospitalSystem
                 Console.WriteLine($"\n{e.Message}");
                 Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
             }
+        }
+
+        public override void Logout()
+        {
+            this.AssociatedPatients.Clear();
+            Login login = new Login();
+            login.LoginMenu();
+        }
+
+        public override void Exit()
+        {
+            this.AssociatedPatients.Clear();
+            base.Exit();
         }
 
         public override void ProcessSelectedOption(string input)

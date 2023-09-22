@@ -64,9 +64,10 @@ namespace HospitalSystem
 
         public static void TryAgainOrReturn(User user, Action methodToExecute, string? message = "")
         {
+            string userType = user.GetType().Name;
             while (true)
             {
-                Console.Write($"\nPress 1 to try again or 'N' to return to the {user} Menu: ");
+                Console.Write($"\nPress 1 to try again or 'N' to return to the {userType} Menu: ");
                 string key = Console.ReadLine()!;
 
                 if (key == "1")

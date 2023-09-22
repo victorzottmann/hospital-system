@@ -41,13 +41,13 @@ namespace HospitalSystem
             this.LastName = lastName;
         }
 
-        public void Logout()
+        public virtual void Logout()
         {
             Login login = new Login();
             login.LoginMenu();
         }
 
-        public void Exit()
+        public virtual void Exit()
         {
             Environment.Exit(0);
         }
