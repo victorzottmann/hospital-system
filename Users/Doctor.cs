@@ -95,7 +95,7 @@ namespace HospitalSystem
             {
                 Doctor doctor = kvp.Key;
                 List<Patient> patients = kvp.Value;
-
+                
                 foreach (var patient in patients)
                 {
                     tableRows.Add(new string[]

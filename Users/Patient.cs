@@ -52,7 +52,33 @@ namespace HospitalSystem
 
             doctor.AssignPatient(doctor, this);
 
-            File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
+            List<string> existingAppointments = File.ReadAllLines(_appointmentsFilePath).ToList();
+
+            int insertionIndex = -1;
+            bool doctorExists = false;
+            int doctorId = doctor.GetDoctorId();
+
+            for (int i = existingAppointments.Count - 1; i >= 0; i--)
+            {
+                if (existingAppointments[i].StartsWith(doctorId.ToString()))
+                {
+                    doctorExists = true;
+                    insertionIndex = i;
+                    break;
+                }
+            }
+
+            if (doctorExists)
+            {
+                List<string> updatedLines = new List<string>(existingAppointments);
+                updatedLines.Insert(insertionIndex + 1, textToFile);
+
+                File.WriteAllLines(_appointmentsFilePath, updatedLines);
+            }
+            else
+            {
+                File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
+            }
         }
 
         private void ShowPatientDoctor(Doctor doctor)
