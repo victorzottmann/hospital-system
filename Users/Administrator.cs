@@ -56,9 +56,7 @@ namespace HospitalSystem
 
             Console.WriteLine($"Registering a new {userType.ToLower()} with the DOTNET Hospital Management System\n");
 
-            (string firstName, string lastName, string email, string phone, string streetNumber, string street, string city, string state) = GetUserInputs();
-
-            Address address = new Address(streetNumber, street, city, state);
+            (string firstName, string lastName, string email, string phone, Address address) = GetUserInputs();
 
             string filepath = GetFilePath(userType);
             int newUserId = GetNewUserId(filepath);
@@ -77,7 +75,12 @@ namespace HospitalSystem
 
             string role = userType == "Patient" ? "patient" : "doctor";
 
-            string userInfo = $"{newUserId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
+            string userInfo =
+                $"{newUserId},{firstName},{lastName},{email},{phone}," +
+                $"{address.StreetNumber},{address.Street},{address.City},{address.State}" + 
+                Environment.NewLine
+            ;
+
             string password = GeneratePassword(role);
 
             string userCredentials = $"{newUserId},{password},{role}";
@@ -102,11 +105,11 @@ namespace HospitalSystem
 
         private string GeneratePassword(string role)
         {
-            string password = role == "Patient" ? "pat" : "doc";
+            string password = role == "patient" ? "pat" : "doc";
             return password;
         }
 
-        private (string firstName, string lastName, string email, string phone, string streetNumber, string street, string city, string state) GetUserInputs()
+        private (string firstName, string lastName, string email, string phone, Address address) GetUserInputs()
         {
             string[] prompts =
             {
@@ -153,7 +156,9 @@ namespace HospitalSystem
             string city = inputs[6];
             string state = inputs[7];
 
-            return (firstName, lastName, email, phone, streetNumber, street, city, state);
+            Address address = new Address(streetNumber, street, city, state);
+
+            return (firstName, lastName, email, phone, address);
         }
 
         private void AddLoginCredential(string role, string filepath, string credentials)
