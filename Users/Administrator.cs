@@ -104,9 +104,8 @@ namespace HospitalSystem
 
             Address address = new Address(streetNumber, street, city, state);
 
-            string filepath = userType == "Patient" ? _patientsFilePath : _doctorsFilePath;
-            int id = FindLargestUserID(filepath);
-            int newUserId = ++id;
+            string filepath = GetFilePath(userType);
+            int newUserId = GetNewUserId(filepath);
 
             if (userType == "Patient")
             {
@@ -120,7 +119,7 @@ namespace HospitalSystem
                 DoctorDatabase.AddDoctor(newUserId, newDoctor);
             }
 
-            string role = userType == "Patient" ? "Patient" : "Doctor";
+            string role = userType == "Patient" ? "patient" : "doctor";
 
             string userInfo = $"{newUserId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
             string password = GeneratePassword(role);
@@ -132,6 +131,17 @@ namespace HospitalSystem
 
             Console.WriteLine($"{firstName} {lastName} added to the system!");
             Utils.ReturnToMenu(this, true);
+        }
+
+        private string GetFilePath(string userType)
+        {
+            return userType == "Patient" ? _patientsFilePath : _doctorsFilePath;
+        }
+
+        private int GetNewUserId(string filepath)
+        {
+            int id = FindLargestUserID(filepath);
+            return ++id;
         }
 
         private string GeneratePassword(string role)
