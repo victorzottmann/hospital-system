@@ -150,22 +150,99 @@ namespace HospitalSystem
             // creating an array of inputs to store them
             string[] inputs = new string[prompts.Length];
 
+            /*
+             * This delegate Func variable declares an array of functions that
+             * receive a string as input and return a string as output
+             * 
+             * Validators.CapitaliseString receive a string as input,
+             * capitalise the first letter, and return the formatted string
+             * 
+             * str => str simply takes a string and returns a string without any changes
+             * 
+             * str => str.ToUpper() takes a string and returns it in upper case
+             */
+            Func<string, string>[] formatters =
+            {
+                Validators.CapitaliseString, // For First Name
+                Validators.CapitaliseString, // For Last Name
+                str => str,                  // No string formatting needed for email
+                str => str,                  // No string formatting needed for phone
+                str => str,                  // No string formatting needed for street number
+                Validators.CapitaliseString, // For Street
+                Validators.CapitaliseString, // For City
+                str => str.ToUpper()         // For State
+            };
+
+            /*
+             * This delegate Func variable declares an array of functions that
+             * take a string as input, a boolean, and return a string (the error message)
+             * 
+             * Each lambda expression takes both input and isValid as parameters.
+             * If isValid is true, return an empty string, else return a custom error message
+             */
+            Func<string, bool, string>[] errorMessages =
+            {
+                (input, isValid) => isValid ? string.Empty : "The first name can only contain letters\n",
+                (input, isValid) => isValid ? string.Empty : "The first name can only contain letters\n",
+                (input, isValid) => isValid ? string.Empty : "Please ensure that the email matches the format: name@example.com\n",
+                (input, isValid) => isValid ? string.Empty : "The phone number must contain 10 straight digits\n",
+                (input, isValid) => isValid ? string.Empty : "The street number must contain up to 3 digits\n",
+                (input, isValid) => isValid ? string.Empty : "The street name must only contain letters\n",
+                (input, isValid) => isValid ? string.Empty : "The city cannot contain numbers or punctuation\n",
+                (input, isValid) => isValid ? string.Empty : "Please enter an abbreviate state of up to 3 letters. For example: NSW\n"
+            };
+
+            /*
+             * This Func delegate variable declares an array of functions that 
+             * take a string as input and return a boolean.
+             * 
+             * Each function runs a Regex check against the expected format of the corresponding inputs
+             * If the Regex evaluates to true, they return true, else they return false
+             */
+            Func<string, bool>[] validators =
+            {
+                Validators.ValidateName, // first name
+                Validators.ValidateName, // last name follows the same format as first name
+                Validators.ValidateEmail,
+                Validators.ValidatePhone,
+                Validators.ValidateStreetNumber,
+                Validators.ValidateStreet,
+                Validators.ValidateCity,
+                Validators.ValidateState
+            };
+
             // this loop prints the prompt in order and only proceeds to the next one if the input is not blank
             for (int i = 0; i < prompts.Length; i++)
             {
                 Console.Write($"{prompts[i]}: ");
                 string currentInput = Console.ReadLine()!.Trim();
 
-                // if the input is not blank
-                if (!string.IsNullOrWhiteSpace(currentInput))
+                /*
+                 * Check if the input is not blank and if the input matches the Regex in each validator
+                 * Example: 
+                 *      validators[0](currentInput) is the same as Validators.ValidateName(currentInput) 
+                 */
+                bool isValid = !string.IsNullOrWhiteSpace(currentInput) && validators[i](currentInput);
+
+                if (isValid)
                 {
-                    // the current input is stored in the inputs array
-                    inputs[i] = currentInput;
+                    /*
+                     * The formatters array execute each function that corresponds to the index of the current input. 
+                     * This operation works because the input is a string and the functions stored in formatters 
+                     * take a string as input.
+                     * 
+                     * Example: inputs[i] = Validators.CapitaliseString(currentInput)
+                     * 
+                     * While the validators check for a Regex match, it is necessary to run 
+                     * each formatter function individually in order to assign the formatted
+                     * input into inputs[i]
+                     */
+                    inputs[i] = formatters[i](currentInput);
                 }
                 else
                 {
                     // otherwise prompt the user to re-enter the value and repeat the same prompt
-                    Console.WriteLine($"The field cannot be empty!\n");
+                    Console.WriteLine(errorMessages[i](currentInput, isValid));
                     i--;
                 }
             }
