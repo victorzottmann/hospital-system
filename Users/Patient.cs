@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace HospitalSystem
 {
@@ -38,6 +39,7 @@ namespace HospitalSystem
             return $"{this.FirstName} {this.LastName}, {this.Email}, {this.Phone}, {this.Address}";
         }
 
+        // this alternative to ToString() is used when tables need to be formatted
         public string[] ToStringArray()
         {
             return new string[] { this.FullName, this.Email, this.Phone, this.Address };
@@ -45,13 +47,18 @@ namespace HospitalSystem
 
         private void AddAppointment(Doctor doctor, string description, string textToFile)
         {
+            // in case the dictionary doesn't have any appointments for a given doctor,
+            // add a new key as the doctor object, and a value as a list
             if (!DoctorAppointments.ContainsKey(doctor))
             {
                 DoctorAppointments[doctor] = new List<string>();
             }
 
+            // the key is the doctor object, and value a list of descriptions
+            // this is because a doctor can have multiple appointments
             DoctorAppointments[doctor].Add(description);
 
+            // create an association between the chosen doctor and the current patient
             doctor.AssignPatient(doctor, this);
 
             List<string> existingAppointments = File.ReadAllLines(_appointmentsFilePath).ToList();
@@ -62,8 +69,10 @@ namespace HospitalSystem
 
             for (int i = existingAppointments.Count - 1; i >= 0; i--)
             {
+                // check if the first "cell" in a given line starts with the doctor ID
                 if (existingAppointments[i].StartsWith(doctorId.ToString()))
                 {
+                    // if so, target that line as the insertionIndex
                     doctorExists = true;
                     insertionIndex = i;
                     break;
@@ -72,13 +81,23 @@ namespace HospitalSystem
 
             if (doctorExists)
             {
+                // create a new list with all the existing appointments
                 List<string> updatedLines = new List<string>(existingAppointments);
+
+                /*
+                 * Insert the new appointment below the target line
+                 * the +1 moves the insertionIndex beneath the target line
+                 * Environment.Newline is not needed in this case, it'll add a new blank line after
+                 * the newly inserted line
+                 */
                 updatedLines.Insert(insertionIndex + 1, textToFile);
 
                 File.WriteAllLines(_appointmentsFilePath, updatedLines);
             }
             else
             {
+                // If the doctor doesn't exist, then just append the appointment at the end of the file.
+                // This assumes that every new doctor will have an ID larger than the largest one found in the file.
                 File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
             }
         }
@@ -104,7 +123,7 @@ namespace HospitalSystem
             Utils.ShowUserMenu(this);
         }
 
-        private void ShowDoctorTable(List<Doctor> doctors)
+        private void ShowDoctorsTable(List<Doctor> doctors)
         {
             List<string> tableHeaders = new List<string>()
             {
@@ -118,10 +137,14 @@ namespace HospitalSystem
             for (int i = 0; i < totalDoctors; i++)
             {
                 Doctor doctor = doctors[i];
+
+                // Using toStringArray() here because the details need to be loaded into an array
+                // instead of just being printed as a single string
                 string[] doctorDetails = doctor.ToStringArray();
 
                 string[] row = new string[]
                 {
+                    // The index is being included in order to correctly match the 'No.' column in the headers
                     $"{i + 1}. ", doctorDetails[0], doctorDetails[1], doctorDetails[2], doctorDetails[3]
                 };
 
@@ -133,7 +156,7 @@ namespace HospitalSystem
 
         private Doctor SelectDoctor(List<Doctor> doctors)
         {
-            ShowDoctorTable(doctors);
+            ShowDoctorsTable(doctors);
 
             string input;
             int selection;
@@ -159,6 +182,11 @@ namespace HospitalSystem
                     Utils.ShowUserMenu(this);
                 }
             }
+            /*
+             * This while loop tries to parse the input and output it as an int to selection
+             * It also keeps on looping if the selection is less than 1, or if it's larger than the 
+             * total number of doctors available in the list
+             */
             while (!int.TryParse(input, out selection) || selection < 1 || selection > totalDoctors);
 
             Doctor selectedDoctor = doctors[selection - 1]; // -1 because the List starts at 0
@@ -210,12 +238,21 @@ namespace HospitalSystem
                 Console.WriteLine("It appears that you do not have a doctor yet.\n");
                 Console.WriteLine("Please select one from the list below:");
 
+                /*
+                 * A do...while seemed appropriate here because if a patient doesn't have a doctor yet,
+                 * they are prompted to choose one from the list
+                 */
                 do
                 {
+                    // run the list of doctors, prompt the user to select one, then assign the
+                    // return value to selectedDoctor
                     selectedDoctor = SelectDoctor(doctors);
-                    Console.WriteLine($"\nYou selected Dr. {selectedDoctor.FirstName} {selectedDoctor.LastName}");
 
+                    Console.WriteLine($"\nYou selected Dr. {selectedDoctor.FirstName} {selectedDoctor.LastName}");
+                    
+                    // provide the patient a chance to change their mind before confirming
                     Console.Write("\nPress 1 to confirm, or '0' to select a different doctor: ");
+                    
                     string input = Console.ReadLine()!;
 
                     if (input == "1")
@@ -226,6 +263,7 @@ namespace HospitalSystem
                     {
                         Console.WriteLine("Invalid input. Please enter either '1' or '0'.");
                     }
+                    // keep prompting for a doctor to be selected while confirmed = false
                 } while (!confirmed);
 
                 ConfirmDoctor(selectedDoctor);
@@ -234,6 +272,8 @@ namespace HospitalSystem
 
         private void ConfirmDoctor(Doctor selectedDoctor)
         {
+            // once a doctor is selected, assign it to the patient and include the relationship in the
+            // doctor-patients.txt file
             AssignDoctor(selectedDoctor);
             Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
 
@@ -251,7 +291,7 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("My Appointments");
 
-            Console.WriteLine($"Appointments for {this.FirstName} {this.LastName}");
+            Console.WriteLine($"Appointments for {this.FullName}");
 
             try
             {
@@ -268,6 +308,13 @@ namespace HospitalSystem
 
                     bool appointmentsFound = false;
 
+
+                    /*
+                     * File structure:
+                     * 
+                     * i = 0    i = 1           i = 2          i = 3     i = 4            i = 5           i = 6
+                     * doctorId,doctorFirstName,doctorLastName,patientId,patientFirstName,patientLastName,description
+                     */
                     foreach (string line in lines)
                     {
                         string[] arr = line.Split(',');
@@ -286,6 +333,7 @@ namespace HospitalSystem
                             string doctorFullName = $"{doctorFirstName} {doctorLastName}";
                             string patientFullName = $"{patientFirstName} {patientLastName}";
 
+                            // only add the data to the table if the current patient ID matches that of the file
                             if (this.PatientID == int.Parse(patientId))
                             {
                                 appointmentsFound = true;
@@ -322,42 +370,54 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("Book Appointment");
 
-            List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
-            
-            Doctor selectedDoctor = SelectDoctor(doctors);
-            Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.FirstName} {selectedDoctor.LastName}\n");
-
-            string description;
-
-            do
+            try
             {
-                Console.Write("Description of the appointment: ");
-                description = Console.ReadLine()?.Trim() ?? string.Empty;
+                List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
+                
+                // SelectDoctor displays a list of all doctors and after the patient selects it,
+                // the doctor is stored in selectedDoctor 
+                Doctor selectedDoctor = SelectDoctor(doctors);
+                Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.FirstName} {selectedDoctor.LastName}\n");
 
-                if (string.IsNullOrWhiteSpace(description))
-                {
-                    Console.WriteLine("The description cannot be blank\n");
+                string description;
+
+                // keep prompting for a description while the input is invalid
+                while (true)
+                { 
+                    Console.Write("Description of the appointment: ");
+                    description = Console.ReadLine()!.Trim();
+
+                    // only break the loop if the description is not null or blank
+                    if (!string.IsNullOrWhiteSpace(description))
+                    {
+                        break;
+                    }
+
+                    Console.WriteLine("The description cannot be blank!\n");
                 }
 
-            } while (string.IsNullOrWhiteSpace(description));
+                string textToFile =
+                    $"{selectedDoctor.GetDoctorId()}," +
+                    $"{selectedDoctor.FirstName}," +
+                    $"{selectedDoctor.LastName}," +
+                    $"{this.GetPatientId()}," +
+                    $"{this.FirstName}," +
+                    $"{this.LastName}," +
+                    $"{description}"
+                ;
 
-            string textToFile =
-                $"{selectedDoctor.GetDoctorId()}," +
-                $"{selectedDoctor.FirstName}," +
-                $"{selectedDoctor.LastName}," +
-                $"{this.GetPatientId()}," +
-                $"{this.FirstName}," +
-                $"{this.LastName}," +
-                $"{description}"
-            ;
+                AddAppointment(selectedDoctor, description, textToFile);
 
-            AddAppointment(selectedDoctor, description, textToFile);
+                Console.WriteLine("The appointment was booked successfully\n\n");
+                Console.Write("Press any key to return to the Patient Menu: ");
 
-            Console.WriteLine("The appointment was booked successfully\n\n");
-            Console.Write("Press any key to return to the Patient Menu: ");
-
-            Console.ReadKey();
-            Utils.ShowUserMenu(this);
+                Console.ReadKey();
+                Utils.ShowUserMenu(this);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"An error occured: {e.Message}");
+            }
         }
 
         public override void ProcessSelectedOption(string input)
