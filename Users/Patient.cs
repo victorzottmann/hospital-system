@@ -14,6 +14,8 @@ namespace HospitalSystem
 
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
+        public Patient() { }
+
         public Patient(int id, string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {

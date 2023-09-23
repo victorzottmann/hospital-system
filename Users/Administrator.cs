@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 
 namespace HospitalSystem
 {
@@ -15,6 +16,11 @@ namespace HospitalSystem
 
         public Administrator() 
         {
+            /*
+             * It was opted to set the names automatically when creating new instances of
+             * an Admin to make doing so easier since there is currently only one Admin
+             * registered in the system
+             */
             this.SetFirstName("Victor");
             this.SetLastName("Zottmann");
         }
@@ -39,26 +45,16 @@ namespace HospitalSystem
             PatientDatabase.GetPatientDetails();
         }
 
-        public void AddUser(string role)
+        public void AddUser(User user)
         {
             Console.Clear();
 
-            Menu addUserMenu = new Menu();
+            string userType = user.GetType().Name;
 
-            if (role != null)
-            {
-                if (role == "patient")
-                {
-                    addUserMenu.Subtitle("Add Patient");
-                }
+            Menu menu = new Menu();
+            menu.Subtitle(userType == "Patient" ? "Add Patient" : "Add Doctor");
 
-                if (role == "doctor")
-                {
-                    addUserMenu.Subtitle("Add Doctor");
-                }
-            }
-
-            Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System\n");
+            Console.WriteLine($"Registering a new {userType.ToLower()} with the DOTNET Hospital Management System\n");
 
             // organising the prompts in an array to loop through them
             string[] prompts =
@@ -91,7 +87,7 @@ namespace HospitalSystem
                 else
                 {
                     // otherwise prompt the user to re-enter the value and repeat the same prompt
-                    Console.WriteLine($"\nThe field cannot be empty!");
+                    Console.WriteLine($"The field cannot be empty!\n");
                     i--;
                 }
             }
@@ -108,53 +104,39 @@ namespace HospitalSystem
 
             Address address = new Address(streetNumber, street, city, state);
 
-            if (role == "patient")
+            string filepath = userType == "Patient" ? _patientsFilePath : _doctorsFilePath;
+            int id = FindLargestUserID(filepath);
+            int newUserId = ++id;
+
+            if (userType == "Patient")
             {
-                int id = FindLargestUserID(_patientsFilePath);
-                int newPatientId = ++id;
-
-                Patient newPatient = new Patient(newPatientId, firstName, lastName, email, phone, address.ToString());
-                PatientDatabase.AddPatient(newPatientId, newPatient);
-
-                string patientInfo = $"{newPatientId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
-                
-                string password = GeneratePassword(role);
-                string patientCredentials = $"{newPatientId},{password},{role}";
-
-                File.AppendAllText(_patientsFilePath, patientInfo);
-
-                AddLoginCredential(role, _loginFilePath, patientCredentials);
+                Patient newPatient = new Patient(newUserId, firstName, lastName, email, phone, address.ToString());
+                PatientDatabase.AddPatient(newUserId, newPatient);   
             }   
 
-            if (role == "doctor")
+            if (userType == "Doctor")
             {
-                int id = FindLargestUserID(_doctorsFilePath);
-                int newDoctorId = ++id;
-
-                Doctor newDoctor = new Doctor(newDoctorId, firstName, lastName, email, phone, address.ToString());
-                DoctorDatabase.AddDoctor(newDoctorId, newDoctor);
-
-                string doctorInfo = $"{newDoctorId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
-                
-                string password = GeneratePassword(role);
-                string doctorCredentials = $"{newDoctorId},{password},{role}";
-
-                // append the new doctor with a new ID at the end of doctors.txt
-                File.AppendAllText(_doctorsFilePath, doctorInfo);
-
-                // insert the new doctor below the last doctor in login-credentials.txt
-                AddLoginCredential(role, _loginFilePath, doctorCredentials);
+                Doctor newDoctor = new Doctor(newUserId, firstName, lastName, email, phone, address.ToString());
+                DoctorDatabase.AddDoctor(newUserId, newDoctor);
             }
 
-            Console.WriteLine($"{firstName} {lastName} added to the system!");
+            string role = userType == "Patient" ? "Patient" : "Doctor";
 
-            
+            string userInfo = $"{newUserId},{firstName},{lastName},{email},{phone},{streetNumber},{street},{city},{state}" + Environment.NewLine;
+            string password = GeneratePassword(role);
+
+            string userCredentials = $"{newUserId},{password},{role}";
+
+            File.AppendAllText(filepath, userInfo);
+            AddLoginCredential(role, _loginFilePath, userCredentials);
+
+            Console.WriteLine($"{firstName} {lastName} added to the system!");
             Utils.ReturnToMenu(this, true);
         }
 
         public string GeneratePassword(string role)
         {
-            string password = (role == "patient") ? "pat" : "doc";
+            string password = role == "Patient" ? "pat" : "doc";
             return password;
         }
 
@@ -170,10 +152,10 @@ namespace HospitalSystem
 
                     switch (role)
                     {
-                        case "patient":
+                        case "Patient":
                             insertionIndex = FindLoginIdIndex(lines, "1");
                             break;
-                        case "doctor":
+                        case "Doctor":
                             insertionIndex = FindLoginIdIndex(lines, "2");
                             break;
                         default:
@@ -252,10 +234,10 @@ namespace HospitalSystem
                     CheckPatientDetails();
                     break;
                 case "5":
-                    AddUser("doctor");
+                    AddUser(new Doctor());
                     break;
                 case "6":
-                    AddUser("patient");
+                    AddUser(new Patient());
                     break;
                 case "7":
                     Logout();
