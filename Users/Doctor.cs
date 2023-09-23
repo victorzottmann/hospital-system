@@ -8,9 +8,9 @@ namespace HospitalSystem
     {
         private static string _appointmentsFilePath = "appointments.txt";
 
-        private int DoctorID { get; set; }
+        public int DoctorID { get; private set; }
 
-        private Dictionary<Doctor, List<Patient>> AssociatedPatients { get; }
+        public Dictionary<Doctor, List<Patient>> AssociatedPatients { get; private set; }
 
         public Doctor()
         {
@@ -49,7 +49,14 @@ namespace HospitalSystem
                 AssociatedPatients[doctor] = new List<Patient>();
             }
 
-            AssociatedPatients[doctor].Add(patient);
+            if (!AssociatedPatients[doctor].Contains(patient))
+            {
+                AssociatedPatients[doctor].Add(patient);
+            }
+            else
+            {
+                return;
+            }
         }
 
         public void ListDoctorDetails()
@@ -342,19 +349,6 @@ namespace HospitalSystem
                 Console.WriteLine($"\n{e.Message}");
                 Utils.TryAgainOrReturn(this, ListAppointmentsWithPatient);
             }
-        }
-
-        public override void Logout()
-        {
-            this.AssociatedPatients.Clear();
-            Login login = new Login();
-            login.LoginMenu();
-        }
-
-        public override void Exit()
-        {
-            this.AssociatedPatients.Clear();
-            base.Exit();
         }
 
         public override void ProcessSelectedOption(string input)

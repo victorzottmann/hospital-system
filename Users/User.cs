@@ -53,10 +53,8 @@ namespace HospitalSystem
             this.LastName = lastName;
         }
 
-        // both Logout and Exit are declared as virtual in order for them to be
-        // overriden when necessary by the derived classes
         public virtual void Logout()
-        {
+        {  
             Login login = new Login();
             login.LoginMenu();
         }
