@@ -2,7 +2,7 @@
 
 namespace HospitalSystem
 {
-    public class Utilities
+    public static class Utils
     {
         public static void ShowUserMenu(User user)
         {

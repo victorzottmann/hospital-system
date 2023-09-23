@@ -148,7 +148,8 @@ namespace HospitalSystem
 
             Console.WriteLine($"{firstName} {lastName} added to the system!");
 
-            Utilities.ReturnToMenu(this, true);
+            
+            Utils.ReturnToMenu(this, true);
         }
 
         public string GeneratePassword(string role)

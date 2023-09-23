@@ -45,7 +45,7 @@ namespace HospitalSystem
             if (isAdmin)
             {
                 Administrator admin = new Administrator();
-                Utilities.ShowUserMenu(admin);
+                Utils.ShowUserMenu(admin);
             }
             else if (isDoctor)
             {
@@ -55,7 +55,7 @@ namespace HospitalSystem
 
                 if (doctor != null)
                 {
-                    Utilities.ShowUserMenu(doctor);
+                    Utils.ShowUserMenu(doctor);
                 }
             }
             else if (isPatient)
@@ -66,7 +66,7 @@ namespace HospitalSystem
 
                 if (patient != null)
                 {
-                    Utilities.ShowUserMenu(patient);
+                    Utils.ShowUserMenu(patient);
                 }
             }
           

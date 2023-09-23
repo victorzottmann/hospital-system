@@ -69,12 +69,12 @@ namespace HospitalSystem
                 new string[] { this.FullName, this.Email, this.Phone, this.Address }
             };
 
-            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+            Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
             Console.Write("\nPress any key to the Doctor Menu: ");
             Console.ReadKey();
 
-            Utilities.ShowUserMenu(this);
+            Utils.ShowUserMenu(this);
         }
 
         public void ListPatients()
@@ -111,12 +111,12 @@ namespace HospitalSystem
                 }
             }
 
-            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+            Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
             Console.Write("\nPress any key to return to the Doctor Menu: ");
             Console.ReadKey();
 
-            Utilities.ShowUserMenu(this);
+            Utils.ShowUserMenu(this);
         }
 
         public void ListAppointments()
@@ -164,7 +164,7 @@ namespace HospitalSystem
                         }
                     }
 
-                    Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                    Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
                     if (!appointmentsFound)
                     {
@@ -174,7 +174,7 @@ namespace HospitalSystem
                     Console.Write("\nPress any key to return to the menu: ");
                     Console.ReadKey();
 
-                    Utilities.ShowUserMenu(this);
+                    Utils.ShowUserMenu(this);
                 }
             }
             catch (FileNotFoundException e)
@@ -226,10 +226,10 @@ namespace HospitalSystem
                             patient.Address
                         });
 
-                        Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                        Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
                         // prompt to try again or return to menu
-                        Utilities.TryAgainOrReturn(this, CheckPatient);
+                        Utils.TryAgainOrReturn(this, CheckPatient);
                     }
                     else
                     {
@@ -237,7 +237,7 @@ namespace HospitalSystem
                         Console.WriteLine($"\nPatient with ID {id} does not exist.");
 
                         // prompt to try again or return to menu
-                        Utilities.TryAgainOrReturn(this, CheckPatient);
+                        Utils.TryAgainOrReturn(this, CheckPatient);
                     }
                 }
                 else
@@ -246,7 +246,7 @@ namespace HospitalSystem
                     Console.WriteLine("\nInvalid ID. Please ensure that it has exactly 5 positive digits.");
 
                     // prompt to try again or return to menu
-                    Utilities.TryAgainOrReturn(this, CheckPatient);
+                    Utils.TryAgainOrReturn(this, CheckPatient);
                 }
             }
             catch (Exception e)
@@ -317,30 +317,30 @@ namespace HospitalSystem
                         if (!found)
                         {
                             Console.WriteLine("\nNo appointments found for this patient");
-                            Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
+                            Utils.TryAgainOrReturn(this, ListAppointmentsWithPatient);
                         }
                         else
                         {
-                            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-                            Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
+                            Utils.FormatTable(tableHeaders.ToArray(), tableRows);
+                            Utils.TryAgainOrReturn(this, ListAppointmentsWithPatient);
                         }
                     }
                     else
                     {
                         Console.WriteLine($"\nPatient with ID {inputId} does not exist.");
-                        Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
+                        Utils.TryAgainOrReturn(this, ListAppointmentsWithPatient);
                     }
                 }
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"\nFile not found: {e.Message}");
-                Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
+                Utils.TryAgainOrReturn(this, ListAppointmentsWithPatient);
             }
             catch (FormatException e)
             {
                 Console.WriteLine($"\n{e.Message}");
-                Utilities.TryAgainOrReturn(this, ListAppointmentsWithPatient);
+                Utils.TryAgainOrReturn(this, ListAppointmentsWithPatient);
             }
         }
 

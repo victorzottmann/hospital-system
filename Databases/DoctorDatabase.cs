@@ -125,13 +125,14 @@ namespace HospitalSystem
                     tableRows.Add(doctor.ToStringArray());
                 }
 
-                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-                Utilities.ReturnToMenu(admin, true);
+                Utils.FormatTable(tableHeaders.ToArray(), tableRows);
+                Utils.ReturnToMenu(admin, true);
             }
             else
             {
                 Console.WriteLine("There are no doctors registered in the system yet.");
-                Utilities.ReturnToMenu(admin, true);
+                
+                Utils.ReturnToMenu(admin, true);
             }
         }
 
@@ -149,7 +150,7 @@ namespace HospitalSystem
 
             if (id == "n")
             {
-                Utilities.ReturnToMenu(admin, false);
+                Utils.ReturnToMenu(admin, false);
             }
 
             List<string> tableHeaders = new List<string>()
@@ -167,25 +168,25 @@ namespace HospitalSystem
                     Console.WriteLine($"\nDetails for {doctor.FullName}");
 
                     tableRows.Add(doctor.ToStringArray());
-                    Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                    Utils.FormatTable(tableHeaders.ToArray(), tableRows);
                     
-                    Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
+                    Utils.TryAgainOrReturn(admin, GetDoctorDetails);
                 }
                 else
                 {
                     Console.WriteLine($"\nA doctor with ID {id} does not exist.");
-                    Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
+                    Utils.TryAgainOrReturn(admin, GetDoctorDetails);
                 }
             }
             catch (NullReferenceException e)
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
+                Utils.TryAgainOrReturn(admin, GetDoctorDetails);
             }
             catch (FormatException e)
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utilities.TryAgainOrReturn(admin, GetDoctorDetails);
+                Utils.TryAgainOrReturn(admin, GetDoctorDetails);
             }
         }
     }

@@ -119,13 +119,13 @@ namespace HospitalSystem
                     tableRows.Add(patient.ToStringArray());
                 }
 
-                Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
-                Utilities.ReturnToMenu(admin, true);
+                Utils.FormatTable(tableHeaders.ToArray(), tableRows);
+                Utils.ReturnToMenu(admin, true);
             }
             else
             {
                 Console.WriteLine("There are no patients registered in the system yet.");
-                Utilities.ReturnToMenu(admin, true);
+                Utils.ReturnToMenu(admin, true);
             }
         }
 
@@ -143,7 +143,7 @@ namespace HospitalSystem
 
             if (id == "n")
             {
-                Utilities.ReturnToMenu(admin, false);
+                Utils.ReturnToMenu(admin, false);
             }
 
             List<string> tableHeaders = new List<string>()
@@ -172,25 +172,25 @@ namespace HospitalSystem
                             patient.Address
                     });
 
-                    Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+                    Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
-                    Utilities.TryAgainOrReturn(admin, GetPatientDetails);
+                    Utils.TryAgainOrReturn(admin, GetPatientDetails);
                 }
                 else
                 {
                     Console.WriteLine($"\nA patient with ID {id} does not exist.");
-                    Utilities.TryAgainOrReturn(admin, GetPatientDetails);
+                    Utils.TryAgainOrReturn(admin, GetPatientDetails);
                 }
             }
             catch (NullReferenceException e)
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utilities.TryAgainOrReturn(admin, GetPatientDetails);
+                Utils.TryAgainOrReturn(admin, GetPatientDetails);
             }
             catch (FormatException e)
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utilities.TryAgainOrReturn(admin, GetPatientDetails);
+                Utils.TryAgainOrReturn(admin, GetPatientDetails);
             }
         }
     }

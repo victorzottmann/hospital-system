@@ -94,12 +94,12 @@ namespace HospitalSystem
             tableRows.Add(doctor.ToStringArray());
 
             Console.WriteLine("Your doctor:");
-            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+            Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
             Console.WriteLine("\nPress any key to return to the Patient Menu: ");
             Console.ReadKey();
 
-            Utilities.ShowUserMenu(this);
+            Utils.ShowUserMenu(this);
         }
 
         private void ShowDoctorTable(List<Doctor> doctors)
@@ -126,7 +126,7 @@ namespace HospitalSystem
                 tableRows.Add(row);
             }
 
-            Utilities.FormatTable(tableHeaders.ToArray(), tableRows);
+            Utils.FormatTable(tableHeaders.ToArray(), tableRows);
         }
 
         private Doctor SelectDoctor(List<Doctor> doctors)
@@ -154,7 +154,7 @@ namespace HospitalSystem
 
                 if (input == "n")
                 {
-                    Utilities.ShowUserMenu(this);
+                    Utils.ShowUserMenu(this);
                 }
             }
             while (!int.TryParse(input, out selection) || selection < 1 || selection > totalDoctors);
@@ -182,7 +182,7 @@ namespace HospitalSystem
             Console.Write("\n\nPress any key to the Patient Menu: ");
             Console.ReadKey();
 
-            Utilities.ShowUserMenu(this);
+            Utils.ShowUserMenu(this);
         }
 
         public void ListMyDoctorDetails()
@@ -233,13 +233,13 @@ namespace HospitalSystem
         private void ConfirmDoctor(Doctor selectedDoctor)
         {
             AssignDoctor(selectedDoctor);
-            Utilities.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
+            Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
 
             Console.WriteLine("Confirmed!\n");
             Console.Write("Press any key to return to the Patient Menu: ");
 
             Console.ReadKey();
-            Utilities.ShowUserMenu(this);
+            Utils.ShowUserMenu(this);
         }
 
         public void ListAllAppointments()
@@ -298,13 +298,13 @@ namespace HospitalSystem
                     }
                     else
                     {
-                        Utilities.FormatTable(headers.ToArray(), tableRows);
+                        Utils.FormatTable(headers.ToArray(), tableRows);
                     }
 
                     Console.Write("\nPress any key to return to the menu: ");
                     Console.ReadKey();
 
-                    Utilities.ShowUserMenu(this);
+                    Utils.ShowUserMenu(this);
                 }
             }
             catch (FileNotFoundException e)
@@ -355,7 +355,7 @@ namespace HospitalSystem
             Console.Write("Press any key to return to the Patient Menu: ");
 
             Console.ReadKey();
-            Utilities.ShowUserMenu(this);
+            Utils.ShowUserMenu(this);
         }
 
         public override void ProcessSelectedOption(string input)
