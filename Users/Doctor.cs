@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace HospitalSystem
@@ -6,7 +7,6 @@ namespace HospitalSystem
     public class Doctor : User
     {
         private static string _appointmentsFilePath = "appointments.txt";
-        private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
         private int DoctorID { get; set; }
 
