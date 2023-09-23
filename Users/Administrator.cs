@@ -134,13 +134,13 @@ namespace HospitalSystem
             Utils.ReturnToMenu(this, true);
         }
 
-        public string GeneratePassword(string role)
+        private string GeneratePassword(string role)
         {
             string password = role == "Patient" ? "pat" : "doc";
             return password;
         }
 
-        public void AddLoginCredential(string role, string filepath, string credentials)
+        private void AddLoginCredential(string role, string filepath, string credentials)
         {
             try
             {
@@ -176,7 +176,7 @@ namespace HospitalSystem
             }
         }
 
-        public int FindLoginIdIndex(string[] arr, string num)
+        private int FindLoginIdIndex(string[] arr, string num)
         {
             int index = -1;
 
@@ -192,7 +192,7 @@ namespace HospitalSystem
             return index;
         }
 
-        public static int FindLargestUserID(string filepath)
+        private int FindLargestUserID(string filepath)
         {
             int largestId = 0;
             string[] lines = File.ReadAllLines(filepath);
