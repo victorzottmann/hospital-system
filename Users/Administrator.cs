@@ -162,10 +162,10 @@ namespace HospitalSystem
 
                     switch (role)
                     {
-                        case "Patient":
+                        case "patient":
                             insertionIndex = FindLoginIdIndex(lines, "1");
                             break;
-                        case "Doctor":
+                        case "doctor":
                             insertionIndex = FindLoginIdIndex(lines, "2");
                             break;
                         default:
