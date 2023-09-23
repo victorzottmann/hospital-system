@@ -5,6 +5,15 @@ namespace HospitalSystem
 {
     public abstract class User : IUser
     {
+        // to disable CS8618 non-nullable warnings in constructors
+        // that don't initialise all fields
+        #nullable disable
+
+        /*
+         * Using auto-implemented properties with felt more appropriate
+         * in order to make it easier to access these fields without getter and setter methods
+         * { private set; } restricts assigning a new value only from within this class.
+         */
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string Email { get; private set; }
@@ -12,6 +21,7 @@ namespace HospitalSystem
         public string Address { get; private set; }
         public string FullName { get; private set; }
 
+        
         public User() { }
 
         public User(string firstName, string lastName) 
@@ -31,6 +41,8 @@ namespace HospitalSystem
             this.FullName = $"{this.FirstName} {this.LastName}";
         }
 
+        // Setter methods for setting a User's first and last names are required because
+        // modifying their value is needed in another class
         public void SetFirstName(string firstName)
         {
             this.FirstName = firstName;
@@ -41,6 +53,8 @@ namespace HospitalSystem
             this.LastName = lastName;
         }
 
+        // both Logout and Exit are declared as virtual in order for them to be
+        // overriden when necessary by the derived classes
         public virtual void Logout()
         {
             Login login = new Login();
@@ -52,6 +66,8 @@ namespace HospitalSystem
             Environment.Exit(0);
         }
 
+        // this method must be abstract because each derived class from User has its own
+        // custom implementation of it
         public abstract void ProcessSelectedOption(string input);
     }
 }
