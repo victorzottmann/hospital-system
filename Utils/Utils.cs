@@ -2,6 +2,15 @@
 
 namespace HospitalSystem
 {
+    /*
+     * this static class is meant to handle several global methods that manage
+     * features shared among all users, such as:
+     * 
+     * 1. showing their menu options after logging in,
+     * 2. prompting to try again or return to the previous menu
+     * 3. formatting tables when selecting to view certain details
+     * 4. writing data to file
+     */
     public static class Utils
     {
         public static void ShowUserMenu(User user)
@@ -72,6 +81,10 @@ namespace HospitalSystem
 
                 if (key == "1")
                 {
+                    /*
+                     * Depending on the user executing this method, it references another method
+                     * with a view of prompting the user to try again or return to the {userType} menu
+                     */
                     methodToExecute();
                 }
                 else if (key == "n")
@@ -80,26 +93,32 @@ namespace HospitalSystem
                 }
             }
 
+            // if n is pressed and the loop breaks, show the user menu
             ShowUserMenu(user);
         }
 
-        public static void ReturnToMenu(User user, bool? defaultMessage)
+        public static void ReturnToMenu(User user, bool? message)
         {
             string userType = user.GetType().Name;
 
-            if (defaultMessage.HasValue)
+            // defaultMessage is an optional value
+            // if passed as "true", show the message below
+            if (message.HasValue)
             {
                 Console.Write($"\nPress any key to return to the {userType} Menu: ");
                 Console.ReadKey();
                 ShowUserMenu(user);
             }
 
+            // otherwise show custom message
+            Console.WriteLine($"\n{message}");
             Console.ReadKey();
             ShowUserMenu(user);
         }
 
         public static void FormatTable(string[] headers, List<string[]> rows)
         {
+            // make an array with the widths of each header
             int[] maxHeaderWidths = new int[headers.Length];
 
             // Calculate max width for each column based on the rows
@@ -109,6 +128,8 @@ namespace HospitalSystem
                 {
                     try
                     {
+                        // assign the largest length of the rows for each corresponding column
+                        // in order to dynamically adjust the size of each column
                         if (row[i].Length > maxHeaderWidths[i])
                         {
                             maxHeaderWidths[i] = row[i].Length;
@@ -123,18 +144,26 @@ namespace HospitalSystem
 
             Console.WriteLine();
 
-            // Print the table headers
             for (int i = 0; i < headers.Length; i++)
             {
+                /* 
+                 * String.Format helps with aligning the content in a particular way
+                 * Here, the dash in "{0,-" aligns the content to the left 
+                 * maxHeaderWidths[i] places the content on the left,
+                 * and + 4 increases the width by 4 to give just enough room between each column
+                 * Reference: https://learn.microsoft.com/en-us/dotnet/api/system.string.format?view=net-7.0
+                 */
+
+                // print each table header and align them to the left
                 Console.Write(String.Format("{0,-" + (maxHeaderWidths[i] + 4) + "}", headers[i]));
             }
 
             Console.WriteLine();
 
-            // Print the table horizontal bar
+            // print the table horizontal bar according to the sum of the length of all headers and their max widths
             Console.WriteLine(new string('-', maxHeaderWidths.Sum() + 4 * headers.Length));
 
-            // Print the table rows
+            // format the rows in accordance with the headers (to the left and with enough space in between columns)
             foreach (var row in rows)
             {
                 for (int i = 0; i < row.Length; i++)
@@ -149,6 +178,24 @@ namespace HospitalSystem
         {
             try
             {
+                /*
+                 * This method inserts a new record into the doctor-patients.txt file
+                 * 
+                 * File format:
+                 * doctorId,doctorFirstName,doctorLastName,patientId,patientFirstName,patientLastName
+                 * 
+                 * Since doctors can have many patients, if a doctor is assigned to another patient,
+                 * that relationship must be inserted below the previously existing ones.
+                 * The IDs should maintain an ascending order.
+                 * 
+                 * For example:
+                 * 20001,Gregory,House,10001,Rebecca,Adler
+                 * 20001,Gregory,House,10015,Mara,Keaton     => same doctor, different patient
+                 * 20002,Lisa,Cuddy,10002,Clancy,Harris
+                 * 20003,James,Wilson,10003,Joe,Luria
+                 * ...
+                 * 20025,Nathan,Riggs,10025,Henry,Burton 
+                 */
                 if (File.Exists(filepath))
                 {
                     string[] lines = File.ReadAllLines(filepath);
