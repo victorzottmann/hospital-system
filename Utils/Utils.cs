@@ -180,13 +180,13 @@ namespace HospitalSystem
             {
                 /*
                  * This method inserts a new record into the doctor-patients.txt file
+                 * and sorts it in ascending order relative to both the doctor and patient IDs
                  * 
                  * File format:
                  * doctorId,doctorFirstName,doctorLastName,patientId,patientFirstName,patientLastName
                  * 
                  * Since doctors can have many patients, if a doctor is assigned to another patient,
                  * that relationship must be inserted below the previously existing ones.
-                 * The IDs should maintain an ascending order.
                  * 
                  * For example:
                  * 20001,Gregory,House,10001,Rebecca,Adler
@@ -198,8 +198,6 @@ namespace HospitalSystem
                  */
                 if (File.Exists(filepath))
                 {
-                    string[] lines = File.ReadAllLines(filepath);
-
                     string doctorId = doctor.GetDoctorId().ToString();
                     string doctorFirstName = doctor.FirstName;
                     string doctorLastName = doctor.LastName;
@@ -207,6 +205,17 @@ namespace HospitalSystem
                     string patientId = patient.GetPatientId().ToString();
                     string patientFirstName = patient.FirstName;
                     string patientLastName = patient.LastName;
+
+                    string textToFile =
+                       $"{doctorId}," +
+                       $"{doctorFirstName}," +
+                       $"{doctorLastName}," +
+                       $"{patientId}," +
+                       $"{patientFirstName}," +
+                       $"{patientLastName}"
+                    ;
+
+                    List<string> lines = File.ReadAllLines(filepath).ToList();
 
                     int insertionIndex = -1;
                     bool doctorExists = false;
@@ -228,7 +237,7 @@ namespace HospitalSystem
                      * NOTE: it must be lines.Length - 1 because line 1 is actually line 0 in terms of Arrays
                      * So, if a file has 27 lines, it's not that it goes from 1-27, but from 0-26
                      */
-                    for (int i = lines.Length - 1; i >= 0; i--)
+                    for (int i = lines.Count - 1; i >= 0; i--)
                     {
                         if (lines[i].StartsWith(doctorId))
                         {
@@ -238,36 +247,49 @@ namespace HospitalSystem
                         }
                     }
 
-                    string textToFile =
-                        $"{doctorId}," +
-                        $"{doctorFirstName}," +
-                        $"{doctorLastName}," +
-                        $"{patientId}," +
-                        $"{patientFirstName}," +
-                        $"{patientLastName}"
-                    ;
-
+                    /*
+                     * If a doctor matching the ID exists, insert the new record below it
+                     * otherwise simply add the record to the lines List
+                     */
                     if (doctorExists)
                     {
-                        // initialising the list with the elements of the lines array
-                        List<string> updatedLines = new List<string>(lines);
-
-                        /*
-                         * Here it's necessary to add 1 to insertionIndex because, unlike an array,
-                         * a file starts at line 1, not 0.
-                         * 
-                         * So, if you consider that the indexes of an array go from 0-26,
-                         * and a text file actually goes from 1-27, you need to add 1 to the insertion index
-                         * in order to correctly append the new line relative to the target doctorId.
-                         */
-                        updatedLines.Insert(insertionIndex + 1, textToFile);
-
-                        File.WriteAllLines(filepath, updatedLines);
-                    }
+                        lines.Insert(insertionIndex + 1, textToFile);
+                    }        
                     else
                     {
-                        File.AppendAllText(filepath, textToFile + Environment.NewLine);
+                        lines.Add(textToFile);
                     }
+
+                    /*
+                     * The Sort() method iterates through a List and compares two values at a time
+                     * In the case of this implementation, if the IDs don't match, it'll sort them in
+                     * ascending order. For reference, this is similar to sort() in JS
+                     */
+                    lines.Sort((a, b) =>
+                    {
+                        int docIdA = int.Parse(a.Split(',')[0]);
+                        int docIdB = int.Parse(b.Split(",")[0]);
+
+                        // first ensure that the doctor IDs are equal and sort them
+                        if (docIdA != docIdB)
+                        {
+                            return docIdA.CompareTo(docIdB);
+                        }
+
+                        // and only then sort the patient IDs
+                        int patIdA = int.Parse(a.Split(',')[3]);
+                        int patIdB = int.Parse(b.Split(',')[3]);
+
+                        /* CompareTo() returns a value indicating the relative order of a and b based on the IDs
+                         * 
+                         * if a < b,  it returns -1
+                         * if a == b, it returns 0
+                         * if a > b,  it returns 1
+                         */
+                        return patIdA.CompareTo(patIdB);
+                    });
+
+                    File.WriteAllLines(filepath, lines);
                 }
             }
             catch (FileNotFoundException e)
