@@ -6,6 +6,8 @@ namespace HospitalSystem
     {
         private string Title = "DOTNET Hospital Management System";
 
+        // Add a custom subtitle to a menu heading depending on the context
+        // (i.e. Patient, Doctor, Admin, etc)
         public void Subtitle(string subtitle)
         {
             // 33 chars for "DOTNET Hospital Management System"

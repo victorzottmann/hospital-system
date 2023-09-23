@@ -10,6 +10,7 @@ namespace HospitalSystem
         private static string _patientsFilePath = "patients.txt";
         private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
+        // load all existing databases (text files) on login
         public Login() 
         {
             DoctorDatabase.LoadDB(_doctorsFilePath);
@@ -155,10 +156,12 @@ namespace HospitalSystem
                 {
                     string[] lines = File.ReadAllLines(filepath);
 
+                    // assuming that the position of each element is known in the file
                     foreach (var line in lines)
                     {
                         string[] arr = line.Split(',');
 
+                        // using Trim() to remove any white spaces from their boundaries
                         string targetUserId = arr[0].Trim();
                         string targetPassword = arr[1].Trim();
                         string targetRole = arr[2].Trim();
@@ -170,14 +173,10 @@ namespace HospitalSystem
                         }
                     }
                 }
-                else
-                {
-                    Console.WriteLine($"File not found: {filepath}");
-                }
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine($"File not found: {e.Message}");
             }
 
             Console.WriteLine("Invalid Credentials\n");
