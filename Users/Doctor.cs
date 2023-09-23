@@ -6,10 +6,11 @@ namespace HospitalSystem
 {
     public class Doctor : User
     {
+        // this file is stored at ./bin/Debug/net6.0
         private static string _appointmentsFilePath = "appointments.txt";
 
+        // these are public to enable easy access through auto-implemented properties
         public int DoctorID { get; private set; }
-
         public Dictionary<Doctor, List<Patient>> AssociatedPatients { get; private set; }
 
         public Doctor()

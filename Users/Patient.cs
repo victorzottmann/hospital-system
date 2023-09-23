@@ -7,12 +7,12 @@ namespace HospitalSystem
 {
     public class Patient : User
     {
+        // these files are stored at ./bin/Debug/net6.0
         private static string _appointmentsFilePath = "appointments.txt";
         private static string _doctorPatientsFilePath = "doctor-patients.txt";
 
         private int PatientID { get; set; }
         private Doctor PatientDoctor { get; set; }
-
         private Dictionary<Doctor, List<string>> DoctorAppointments { get; } = new Dictionary<Doctor, List<string>>();
 
         public Patient() { }

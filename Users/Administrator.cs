@@ -9,6 +9,7 @@ namespace HospitalSystem
     public class Administrator : User
     {
         /*
+         * these files are stored at ./bin/Debug/net6.0
          * The naming convention for when a variable is private but doesn't have
          * auto-implemented propeties is _variable: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/fields
          */

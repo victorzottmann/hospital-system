@@ -5,6 +5,7 @@ namespace HospitalSystem
 {
     public class Login
     {
+        // these files are stored at ./bin/Debug/net6.0
         private static string _loginFilePath = "login-credentials.txt";
         private static string _doctorsFilePath = "doctors.txt";
         private static string _patientsFilePath = "patients.txt";
