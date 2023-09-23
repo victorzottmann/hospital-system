@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Numerics;
 using System.Security.Principal;
 
 namespace HospitalSystem
@@ -49,30 +51,24 @@ namespace HospitalSystem
         {
             Console.Clear();
 
-            string userType = user.GetType().Name;
-
             Menu menu = new Menu();
-            menu.Subtitle(userType == "Patient" ? "Add Patient" : "Add Doctor");
+            menu.Subtitle(user is Patient ? "Add Patient" : "Add Doctor");
 
+            string userType = user.GetType().Name;
             Console.WriteLine($"Registering a new {userType.ToLower()} with the DOTNET Hospital Management System\n");
 
+            // this notation destructures the return value (tuple) into their respective variables for further use
             (string firstName, string lastName, string email, string phone, Address address) = GetUserInputs();
 
-            string filepath = GetFilePath(userType);
+            // depending on the user type (Patient or Doctor), the filepath will point to each respective file
+            string filepath = GetFilePath(user);
+
+            // then the newUserId will add 1 to the largest ID found in that file
             int newUserId = GetNewUserId(filepath);
 
-            if (userType == "Patient")
-            {
-                Patient newPatient = new Patient(newUserId, firstName, lastName, email, phone, address.ToString());
-                PatientDatabase.AddPatient(newUserId, newPatient);   
-            }   
-
-            if (userType == "Doctor")
-            {
-                Doctor newDoctor = new Doctor(newUserId, firstName, lastName, email, phone, address.ToString());
-                DoctorDatabase.AddDoctor(newUserId, newDoctor);
-            }
-
+            // then this method will add a new Patient or Doctor with the correct details
+            CreateUser(user, newUserId, firstName, lastName, email, phone, address);
+            
             string role = userType == "Patient" ? "patient" : "doctor";
 
             string userInfo =
@@ -86,19 +82,26 @@ namespace HospitalSystem
             string userCredentials = $"{newUserId},{password},{role}";
 
             File.AppendAllText(filepath, userInfo);
-            AddLoginCredential(role, _loginFilePath, userCredentials);
+
+            /* add the credential where the role matches either "patient" or "doctor"
+             *
+             * role = "patient" => 1XXXX,"pat","patient"
+             * role = "doctor"  => 2XXXX,"doc","doctor"
+             */
+            AddLoginCredentials(role, _loginFilePath, userCredentials);
 
             Console.WriteLine($"{firstName} {lastName} added to the system!");
             Utils.ReturnToMenu(this, true);
         }
 
-        private string GetFilePath(string userType)
+        private string GetFilePath(User user)
         {
-            return userType == "Patient" ? _patientsFilePath : _doctorsFilePath;
+            return user is Patient ? _patientsFilePath : _doctorsFilePath;
         }
 
         private int GetNewUserId(string filepath)
         {
+            // find the largest ID on the given filepath (Patient or Doctor), add 1 to it and return
             int id = FindLargestUserID(filepath);
             return ++id;
         }
@@ -109,6 +112,26 @@ namespace HospitalSystem
             return password;
         }
 
+        private void CreateUser(User user, int id, string firstName, string lastName, string email, string phone, Address address)
+        {
+            if (user is Patient)
+            {
+                Patient newPatient = new Patient(id, firstName, lastName, email, phone, address.ToString());
+                PatientDatabase.AddPatient(id, newPatient);
+            }
+
+            if (user is Doctor)
+            {
+                Doctor newDoctor = new Doctor(id, firstName, lastName, email, phone, address.ToString());
+                DoctorDatabase.AddDoctor(id, newDoctor);
+            }
+        }
+
+        /* 
+         * This method of type Tuple returns all the arguments as a single value.
+         * It seemed appropriate to design it this way because the objective is to get all the
+         * values inputted by the Admin when adding a new user.
+         */
         private (string firstName, string lastName, string email, string phone, Address address) GetUserInputs()
         {
             string[] prompts =
@@ -161,7 +184,7 @@ namespace HospitalSystem
             return (firstName, lastName, email, phone, address);
         }
 
-        private void AddLoginCredential(string role, string filepath, string credentials)
+        private void AddLoginCredentials(string role, string filepath, string credentials)
         {
             try
             {
@@ -174,9 +197,12 @@ namespace HospitalSystem
                     switch (role)
                     {
                         case "patient":
+                            // find the index of the last ID in the file that starts with 1
+                            // because IDs that start with 1 correspond to patient IDs
                             insertionIndex = FindLoginIdIndex(lines, "1");
                             break;
                         case "doctor":
+                            // similarly, IDs that start with 2 correspond to doctor IDs
                             insertionIndex = FindLoginIdIndex(lines, "2");
                             break;
                         default:
@@ -185,6 +211,9 @@ namespace HospitalSystem
                     }
 
                     List<string> updatedLines = new List<string>(lines);
+
+                    // once found, insert the new credentials below the last one
+                    // the +1 is needed for that very reason
                     updatedLines.Insert(insertionIndex + 1, credentials);
 
                     // No + Environment.Newline because the credentials will be inserted
@@ -201,6 +230,7 @@ namespace HospitalSystem
         {
             int index = -1;
 
+            // iterate in reverse order to find the last ID starting with the specified number
             for (int i = arr.Length - 1; i >= 0; i--)
             {
                 if (arr[i].StartsWith(num))
@@ -210,31 +240,29 @@ namespace HospitalSystem
                 }
             }
 
+            // once found, return the index position of where that ID is
             return index;
         }
 
         private int FindLargestUserID(string filepath)
         {
-            int largestId = 0;
             string[] lines = File.ReadAllLines(filepath);
+            
+            int id;
+            int largestId = 0;
 
             foreach (string line in lines)
             {
-                string[] data = line.Split(',');
-
-                if (data.Length > 0)
+                id = int.Parse(line.Split(',')[0]); // get only the first value
+  
+                // Assign the id to the largestId if it's larger than largestID.
+                // Since it iterates in ascending order, it is easy to predict that the largestID will be in the last row.
+                if (id > largestId)
                 {
-                    int id;
-
-                    if (int.TryParse(data[0], out id))
-                    {
-                        if (id > largestId)
-                        {
-                            largestId = id;
-                        }
-                    }
+                    largestId = id;
                 }
             }
+
             return largestId;
         }
 
