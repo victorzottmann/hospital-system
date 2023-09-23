@@ -94,32 +94,39 @@ namespace HospitalSystem
 
             Console.WriteLine($"Patients assigned to {this.FullName}");
 
-            List<string> tableHeaders = new List<string>()
+            if (AssociatedPatients.Count > 0)
             {
-                "Patient", "Doctor", "Email Address", "Phone", "Address"
-            };
-
-            List<string[]> tableRows = new List<string[]>();
-
-            foreach (var kvp in AssociatedPatients)
-            {
-                Doctor doctor = kvp.Key;
-                List<Patient> patients = kvp.Value;
-                
-                foreach (var patient in patients)
+                List<string> tableHeaders = new List<string>()
                 {
-                    tableRows.Add(new string[]
-                    {
-                        patient.FullName,
-                        doctor.FullName,
-                        patient.Email,
-                        patient.Phone,
-                        patient.Address
-                    });
-                }
-            }
+                    "Patient", "Doctor", "Email Address", "Phone", "Address"
+                };
 
-            Utils.FormatTable(tableHeaders.ToArray(), tableRows);
+                List<string[]> tableRows = new List<string[]>();
+
+                foreach (var kvp in AssociatedPatients)
+                {
+                    Doctor doctor = kvp.Key;
+                    List<Patient> patients = kvp.Value;
+                
+                    foreach (var patient in patients)
+                    {
+                        tableRows.Add(new string[]
+                        {
+                            patient.FullName,
+                            doctor.FullName,
+                            patient.Email,
+                            patient.Phone,
+                            patient.Address
+                        });
+                    }
+                }
+
+                Utils.FormatTable(tableHeaders.ToArray(), tableRows);
+            }
+            else
+            {
+                Console.WriteLine("\nThere are no patients assigned to you yet...");
+            }
 
             Console.Write("\nPress any key to return to the Doctor Menu: ");
             Console.ReadKey();
