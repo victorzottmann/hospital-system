@@ -2,12 +2,14 @@
 
 namespace HospitalSystem
 {
+    // It was preferred to isolate the Address into a class in order to minimise 
+    // the complexity of creating a new address a new user in the User class
     public class Address
     {
-        private string StreetNumber { get; set; }
-        private string Street { get; set; }
-        private string City { get; set; }
-        private string State { get; set; }
+        public string StreetNumber { get; private set; }
+        public string Street { get; private set; }
+        public string City { get; private set; }
+        public string State { get; private set; }
 
         public Address(string streetNumber, string street, string city, string state)
         {
