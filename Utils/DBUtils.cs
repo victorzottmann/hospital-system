@@ -132,6 +132,11 @@ namespace HospitalSystem
                     Utils.ReturnToMenu(admin);
                 }
 
+                /* 
+                 * if the input is not a number, 
+                 * or the id is less than 0, 
+                 * or the userDB doesn't have a user whose key is the id
+                 */
                 if (!int.TryParse(input, out int id) || id <= 0 || !userDB.ContainsKey(id))
                 {
                     Console.WriteLine($"\nInvalid input.");
@@ -144,16 +149,21 @@ namespace HospitalSystem
 
                 try
                 {
+                    // T can be either Doctor or Patient
                     T user = userDB[id];
+
                     Console.WriteLine($"\nDetails for {user.FullName}");
 
+                    // tableRow will have different data depending on whether the user is a Doctor or a Patient
                     if (user is Doctor doctor)
                     {
                         tableRows.Add(user.ToStringArray());
                     }
                     else if (user is Patient patient)
                     {
+                        // if a patient has no doctor, display "Not Assigned" or the doctor's name
                         string doctorName = patient.GetPatientDoctor() == null ? "Not Assigned" : patient.GetPatientDoctor().FullName;
+                        
                         tableRows.Add(new string[]
                         {
                             patient.FullName,
