@@ -153,6 +153,8 @@ This table is to be used for reference when looking up a patients' doctor. If th
 
 This table makes it easy to spot which doctors and patients you can manipulate in the program.
 
+For example, when adding a new doctor or a new patient, this relationship will not exist until a patient logs into the system and assigns a doctor to them. **Use this table (and the other ones above as well) as reference when choosing a doctor.**
+
 Reference file: `./bin/Debug/net6.0/doctor-patients.txt`
 
 | Doctor ID | Doctor           | Patient ID | Patient           |
