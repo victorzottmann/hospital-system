@@ -106,7 +106,7 @@ namespace HospitalSystem
             Console.WriteLine("Your doctor:");
             Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
-            Console.WriteLine("\nPress any key to return to the Patient Menu: ");
+            Console.Write("\nPress any key to return to the Patient Menu: ");
             Console.ReadKey();
 
             Utils.ShowUserMenu(this);
@@ -189,12 +189,6 @@ namespace HospitalSystem
             // doctor-patients.txt file
             AssignDoctor(selectedDoctor);
             Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
-
-            Console.WriteLine("Confirmed!\n");
-            Console.Write("Press any key to return to the Patient Menu: ");
-
-            Console.ReadKey();
-            Utils.ShowUserMenu(this);
         }
 
         public void ListPatientDetails()
@@ -212,7 +206,7 @@ namespace HospitalSystem
             Console.WriteLine($"Email: {this.Email}");
             Console.WriteLine($"Phone: {this.Phone}");
 
-            Console.Write("\n\nPress any key to the Patient Menu: ");
+            Console.Write("\nPress any key to the Patient Menu: ");
             Console.ReadKey();
 
             Utils.ShowUserMenu(this);
@@ -262,14 +256,28 @@ namespace HospitalSystem
                     {
                         confirmed = true;
                     }
-                    else if (input != "0")
+                    else if (input == "0")
+                    {
+                        ListMyDoctorDetails();
+                    }
+                    else
                     {
                         Console.WriteLine("Invalid input. Please enter either '1' or '0'.");
                     }
+
                     // keep prompting for a doctor to be selected while confirmed = false
                 } while (!confirmed);
 
-                ConfirmDoctor(selectedDoctor);
+                if (confirmed)
+                {
+                    ConfirmDoctor(selectedDoctor);
+
+                    Console.WriteLine("Confirmed!\n");
+                    Console.Write("Press any key to return to the Patient Menu: ");
+
+                    Console.ReadKey();
+                    Utils.ShowUserMenu(this);
+                }
             }
         }
 
@@ -332,7 +340,7 @@ namespace HospitalSystem
 
                     if (!appointmentsFound)
                     {
-                        Console.WriteLine("You do not have any appointments");
+                        Console.WriteLine("\nYou do not have any appointments");
                     }
                     else
                     {
@@ -347,7 +355,7 @@ namespace HospitalSystem
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine($"File not found: {e.Message}");
+                Console.WriteLine($"\nFile not found: {e.Message}");
             }
         }
 
@@ -396,7 +404,7 @@ namespace HospitalSystem
 
                 AddAppointment(selectedDoctor, description, textToFile);
 
-                Console.WriteLine("The appointment was booked successfully\n\n");
+                Console.WriteLine("The appointment was booked successfully\n");
                 Console.Write("Press any key to return to the Patient Menu: ");
 
                 Console.ReadKey();
@@ -404,7 +412,7 @@ namespace HospitalSystem
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occured: {e.Message}");
+                Console.WriteLine($"\nAn error occured: {e.Message}");
             }
         }
 
