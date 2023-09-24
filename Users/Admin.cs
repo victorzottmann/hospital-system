@@ -13,6 +13,7 @@ namespace HospitalSystem
         private static string _patientsFilePath = "patients.txt";
         private static string _doctorsFilePath = "doctors.txt";
         private static string _loginFilePath = "login-credentials.txt";
+        private static string _noFilePath = "no-file.txt";
 
         public Admin() 
         {
@@ -100,7 +101,7 @@ namespace HospitalSystem
         private int GetNewUserId(string filepath)
         {
             // find the largest ID on the given filepath (Patient or Doctor), add 1 to it and return
-            int id = FindLargestUserID(filepath);
+            int id = FindLargestUserId(filepath);
             return ++id;
         }
 
@@ -319,25 +320,35 @@ namespace HospitalSystem
             return index;
         }
 
-        private int FindLargestUserID(string filepath)
+        private int FindLargestUserId(string filepath)
         {
-            string[] lines = File.ReadAllLines(filepath);
-            
-            int id;
             int largestId = 0;
 
-            foreach (string line in lines)
+            try
             {
-                id = int.Parse(line.Split(',')[0]); // get only the first value
-  
-                // Assign the id to the largestId if it's larger than largestID.
-                // Since it iterates in ascending order, it is easy to predict that the largestID will be in the last row.
-                if (id > largestId)
+                string[] lines = File.ReadAllLines(filepath);
+
+                int id;
+
+                foreach (string line in lines)
                 {
-                    largestId = id;
+                    id = int.Parse(line.Split(',')[0]); // get only the first value
+  
+                    // Assign the id to the largestId if it's larger than largestID.
+                    // Since it iterates in ascending order, it is easy to predict that the largestID will be in the last row.
+                    if (id > largestId)
+                    {
+                        largestId = id;
+                    }
                 }
             }
-
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"\nOops... {e.Message}");
+                Console.WriteLine($"\nPlease ensure that the file exists and the path is set correctly");
+                Utils.ReturnToMenu(this);
+            }
+            
             return largestId;
         }
 

@@ -98,6 +98,14 @@ namespace HospitalSystem
             ShowUserMenu(user);
         }
 
+        public static void ReturnToMenu(User user)
+        {
+            string userType = user.GetType().Name;
+            Console.Write($"\nPress any key to return to the {userType} Menu: ");
+            Console.ReadKey();
+            ShowUserMenu(user);
+        }
+
         public static void ReturnToMenu(User user, bool? message)
         {
             string userType = user.GetType().Name;
