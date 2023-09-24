@@ -21,7 +21,6 @@ namespace HospitalSystem
         public string Address { get; private set; }
         public string FullName { get; private set; }
 
-        
         public User() { }
 
         public User(string firstName, string lastName) 
@@ -39,6 +38,24 @@ namespace HospitalSystem
             this.Phone = phone;
             this.Address = address;
             this.FullName = $"{this.FirstName} {this.LastName}";
+        }
+
+        /*
+         * This method creates an instance of either a Doctor or a Patient.
+         * It is particularly helpful for loading the corresponding database of either type of user
+         * 
+         * For example, this would be the same as either:
+         * 
+         * Doctor doctor = new Doctor(doctorId, firstName, lastName, email, phone, address.ToString());
+         * Patient patient = new Patient(patientId, firstName, lastName, email, phone, address.ToString());                 
+         * 
+         * Please refer to ./Utils/DBUtils.cs for reference of its usage
+         * 
+         * For reference: https://learn.microsoft.com/en-us/dotnet/api/system.activator.createinstance?view=net-7.0
+         */
+        public static T CreateInstanceOfUser<T>(int userId, string firstName, string lastName, string email, string phone, string address) where T : User
+        {
+            return (T)Activator.CreateInstance(typeof(T), userId, firstName, lastName, email, phone, address);
         }
 
         // Setter methods for setting a User's first and last names are required because

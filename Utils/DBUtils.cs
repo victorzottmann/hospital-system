@@ -5,6 +5,69 @@ namespace HospitalSystem
 {
     public class DBUtils
     {
+        public static void LoadUserDB<T>(string filepath, Dictionary<int, T> db) where T : User
+        {
+            Admin admin = new Admin();
+
+            try
+            {
+                if (File.Exists(filepath))
+                {
+                    string[] lines = File.ReadAllLines(filepath);
+
+                    foreach (var line in lines)
+                    {
+                        string[] arr = line.Split(',');
+
+                        int userId = int.Parse(arr[0]);
+                        string firstName = arr[1];
+                        string lastName = arr[2];
+                        string email = arr[3];
+                        string phone = arr[4];
+                        string streetNumber = arr[5];
+                        string street = arr[6];
+                        string city = arr[7];
+                        string state = arr[8];
+
+                        Address address = new Address(streetNumber, street, city, state);
+
+                        try
+                        {
+                            /*
+                             * Defined in the User class, this static method creates a new instance of User
+                             * that is either a Doctor or a Patient.
+                             * This is necessary for loading the correct database file
+                             * 
+                             * For example, this would be the same as either:
+                             * 
+                             * Doctor doctor = new Doctor(doctorId, firstName, lastName, email, phone, address.ToString());
+                             * Patient patient = new Patient(patientId, firstName, lastName, email, phone, address.ToString());
+                             * 
+                             * For reference: https://learn.microsoft.com/en-us/dotnet/api/system.activator.createinstance?view=net-7.0
+                             */
+                            T user = User.CreateInstanceOfUser<T>(userId, firstName, lastName, email, phone, address.ToString());
+
+                            if (!db.ContainsKey(userId))
+                            {
+                                db.Add(userId, user);
+                            }
+                        }
+                        catch (ArgumentException e)
+                        {
+                            Console.WriteLine($"Error creating user: {e.Message}");
+                            Utils.ReturnToMenu(admin);
+
+                        }
+                    }
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"File not found: {e.Message}");
+                Utils.ReturnToMenu(admin);
+            }
+        }
+
         /*
         * This is a generic method to get either all patients or doctors from their respective
         * databases. Both PatientDatabase and DoctorDatabase had the same method, but the only
@@ -44,7 +107,7 @@ namespace HospitalSystem
             }
             else
             {
-                Console.WriteLine($"There are no {userType}s registered in the system yet.");
+                Console.WriteLine($"\nThere are no {userType}s registered in the system yet.");
                 Utils.ReturnToMenu(admin, true);
             }
         }
