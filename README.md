@@ -22,10 +22,10 @@ The system only contain three types of users: Admin, Doctor, and Patient. The cr
   - ID: `30001`
   - Password: `admin`
 - **Doctor**:
-  - ID Range: `20001` - `20025` (there are 25 doctor credentials in the file)
+  - ID Range: `20001` - `20026` (there are 26 doctor credentials in the file)
   - All Passwords: `doc`
 - **Patient**
-  - ID Range: `10001` - `10025` (there are 25 patient credentials in the file)
+  - ID Range: `10001` - `10026` (there are 26 patient credentials in the file)
   - All Passwords: `pat`
 
 
@@ -76,6 +76,37 @@ Patients can:
 4. Book an appointment with a doctor
 
 ![patient-menu](./Screenshots/patient-menu.jpeg)
+
+## Current list of doctors
+
+| Doctor ID | Name        | Last Name  | Email                | Phone    | Address |
+| --------- | ----------- | ---------- | -------------------- | -------- | ------- |
+| 20001     | Gregor      | House      | g.house@doc.com      | 04320001 |         |
+| 20002     | Lisa        | Cuddy      | l.cuddy@doc.com      | 04320002 |         |
+| 20003     | James       | Wilson     | j.wilson@doc.com     | 04320003 |         |
+| 20004     | Eric        | Foreman    | e.foreman@doc.com    | 04320004 |         |
+| 20005     | Robert      | Chase      | r.chase@doc.com      | 04320005 |         |
+| 20006     | Allison     | Cameron    | a.cameron@doc.com    | 04320006 |         |
+| 20007     | Remy        | Hadley     | r.hadley@doc.com     | 04320007 |         |
+| 20008     | Chris       | Taub       | c.taub@doc.com       | 04320008 |         |
+| 20009     | Lawrence    | Kutner     | l.kutner@doc.com     | 04320009 |         |
+| 20010     | Jasseica    | Addams     | j.adams@doc.com      | 04320010 |         |
+| 20011     | Chi         | Park       | c.park@doc.com       | 04320011 |         |
+| 20012     | Dominika    | Petrova    | d.petrova@doc.com    | 04320012 |         |
+| 20013     | Derek       | Shepherd   | d.shepherd@doc.com   | 04320013 |         |
+| 20014     | Lisa        | Addison    | l.addison@doc.com    | 04320014 |         |
+| 20015     | John        | Carter     | j.carter@doc.com     | 04320015 |         |
+| 20016     | Christina   | Yang       | c.yang@doc.com       | 04320016 |         |
+| 20017     | Meredith    | Grey       | m.grey@doc.com       | 04320017 |         |
+| 20018     | Alex        | Karev      | a.karev@doc.com      | 04320018 |         |
+| 20019     | Izzie       | Stevens    | i.stevens@doc.com    | 04320019 |         |
+| 20020     | Miranda     | Bailey     | m.bailey@doc.com     | 04320020 |         |
+| 20021     | Richard     | Webber     | r.webber@doc.com     | 04320021 |         |
+| 20022     | George      | O'Malley   | g.omalley@doc.com    | 04320022 |         |
+| 20023     | April       | Kepner     | a.kepner@doc.com     | 04320023 |         |
+| 20024     | Amelia      | Shepherd   | a.shepherd@doc.com   | 04320024 |         |
+| 20025     | Nathan      | Riggs      | n.riggs@doc.com      | 04320025 |         |
+| 20026     | Harvey      | Specter    | h.specter@doc.com    | 04320026 |         |
 
 ## Current list of doctor-patient relationships
 
