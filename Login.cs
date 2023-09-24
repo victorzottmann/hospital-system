@@ -146,31 +146,33 @@ namespace HospitalSystem
         {
             try
             {
-                if (File.Exists(filepath))
+                string[] lines = File.ReadAllLines(filepath);
+
+                // assuming that the position of each element is known in the file
+                foreach (var line in lines)
                 {
-                    string[] lines = File.ReadAllLines(filepath);
+                    string[] arr = line.Split(',');
 
-                    // assuming that the position of each element is known in the file
-                    foreach (var line in lines)
+                    // using Trim() to remove any white spaces from their boundaries
+                    string targetUserId = arr[0].Trim();
+                    string targetPassword = arr[1].Trim();
+                    string targetRole = arr[2].Trim();
+
+                    if (userId == targetUserId && password == targetPassword)
                     {
-                        string[] arr = line.Split(',');
-
-                        // using Trim() to remove any white spaces from their boundaries
-                        string targetUserId = arr[0].Trim();
-                        string targetPassword = arr[1].Trim();
-                        string targetRole = arr[2].Trim();
-
-                        if (userId == targetUserId && password == targetPassword)
-                        {
-                            Console.WriteLine("Valid Credentials");
-                            return targetRole;
-                        }
+                        Console.WriteLine("Valid Credentials. Logging in...");
+                        Thread.Sleep(1200);
+                        return targetRole;
                     }
                 }
             }
-            catch (FileNotFoundException e)
+            catch (Exception e)
             {
-                Console.WriteLine($"File not found: {e.Message}");
+                Console.WriteLine($"\nOops... {e.Message}");
+                Console.WriteLine("\nPlease ensure the file exists to log into the system.");
+                Console.Write("\nPress any key to exit: ");
+                Console.ReadKey();
+                Environment.Exit(0);
             }
 
             Console.WriteLine("Invalid Credentials\n");
