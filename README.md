@@ -1,6 +1,6 @@
 # Hospital Management System
 
-A simple command-line-based program to manage a hospital system. 
+A simple command-line-based program writtent in `C#` and `.NET 6.0` to manage a hospital system. 
 
 ## How to run the program
 
