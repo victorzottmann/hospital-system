@@ -13,7 +13,6 @@ namespace HospitalSystem
         private static string _patientsFilePath = "patients.txt";
         private static string _doctorsFilePath = "doctors.txt";
         private static string _loginFilePath = "login-credentials.txt";
-        private static string _noFilePath = "no-file.txt";
 
         public Admin() 
         {
@@ -60,7 +59,7 @@ namespace HospitalSystem
             (string firstName, string lastName, string email, string phone, Address address) = GetUserInputs();
 
             // depending on the user type (Patient or Doctor), the filepath will point to each respective file
-            string filepath = GetFilePath(user);
+            string filepath = GetUserFilePath(user);
 
             // then the newUserId will add 1 to the largest ID found in that file
             int newUserId = GetNewUserId(filepath);
@@ -93,7 +92,7 @@ namespace HospitalSystem
             Utils.ReturnToMenu(this, true);
         }
 
-        private string GetFilePath(User user)
+        private string GetUserFilePath(User user)
         {
             return user is Patient ? _patientsFilePath : _doctorsFilePath;
         }
