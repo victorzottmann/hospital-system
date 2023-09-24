@@ -53,7 +53,7 @@ namespace HospitalSystem
             {
                 // find the doctor from the static list of patients whose ID matches the one entered in the console
                 var doctorDB = DoctorDatabase.GetDoctorDatabase();
-                Doctor doctor = FindDoctorById(id, doctorDB);
+                Doctor doctor = FindUserById(id, doctorDB);
 
                 if (doctor != null)
                 {
@@ -64,7 +64,7 @@ namespace HospitalSystem
             {
                 // find the patient from the static list of patients whose ID matches the one entered in the console
                 var patientDB = PatientDatabase.GetPatientDatabase();
-                Patient patient = FindPatientById(id, patientDB);
+                Patient patient = FindUserById(id, patientDB);
 
                 if (patient != null)
                 {
@@ -75,24 +75,17 @@ namespace HospitalSystem
             Console.ReadKey(); 
         }
 
-        // simplified because the Dictionry passed is already the PatientDatabase
-        private Doctor FindDoctorById(int userId, Dictionary<int, Doctor> doctors)
+        /*
+         * Since the method for finding a user by ID would be the same for either Patient or Doctor,
+         * having a generic method that receives either the Patient or Doctor database is more suitable
+         */
+        private T FindUserById<T>(int userId, Dictionary<int, T> userDb) where T : User
         {
-            if (doctors.ContainsKey(userId))
+            if (userDb.ContainsKey(userId))
             {
-                return doctors[userId];
+                return userDb[userId];
             }
-            
-            return null;
-        }
 
-        // simplified because the Dictionry passed is already the PatientDatabase
-        private Patient FindPatientById(int userId, Dictionary<int, Patient> patients)
-        {
-            if (patients.ContainsKey(userId))
-            {
-                return patients[userId];
-            }
             return null;
         }
 
