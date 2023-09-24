@@ -34,28 +34,26 @@ namespace HospitalSystem
 
         public string[] ToStringArray()
         {
-            return new string[]
-            {
-                this.FullName,
-                this.Email,
-                this.Phone,
-                this.Address
-            };
+            return new string[] { this.FullName, this.Email, this.Phone, this.Address };
         }
 
         public void AssignPatient(Doctor doctor, Patient patient)
         {
+            // if the AssociatedPatients Dictionary doesn't have the current doctor as a key,
+            // add it and assign a new List of patient as the value
             if (!AssociatedPatients.ContainsKey(doctor))
             {
                 AssociatedPatients[doctor] = new List<Patient>();
             }
 
+            // if the doctor in the AssociatedPatients Dictionary is not linked to the target patient, add that patient to it
+            // otherwise return nothing
             if (!AssociatedPatients[doctor].Contains(patient))
             {
                 AssociatedPatients[doctor].Add(patient);
             }
             else
-            {
+            { 
                 return;
             }
         }
@@ -94,6 +92,7 @@ namespace HospitalSystem
 
             Console.WriteLine($"Patients assigned to {this.FullName}");
 
+            // ensure that the Dictionary is not empty
             if (AssociatedPatients.Count > 0)
             {
                 List<string> tableHeaders = new List<string>()
@@ -103,11 +102,14 @@ namespace HospitalSystem
 
                 List<string[]> tableRows = new List<string[]>();
 
+                // extract both the doctor and their patients for each entry in AssociatedPatients
                 foreach (var kvp in AssociatedPatients)
                 {
                     Doctor doctor = kvp.Key;
                     List<Patient> patients = kvp.Value;
                 
+                    // then iterate through each patient and add their respective data into the
+                    // tableRows list, including their doctor full name
                     foreach (var patient in patients)
                     {
                         tableRows.Add(new string[]
@@ -125,6 +127,7 @@ namespace HospitalSystem
             }
             else
             {
+                // if the current doctor has no associated patients, don't format the table but show this instead
                 Console.WriteLine("\nThere are no patients assigned to you yet...");
             }
 
@@ -160,8 +163,10 @@ namespace HospitalSystem
                     {
                         string[] arr = line.Split(',');
 
+                        // a current limitation is that it is assumed that the file will always be populated 
                         if (arr.Length > 0)
                         {
+                            int doctorId = int.Parse(arr[0]);
                             string doctorFirstName = arr[1];
                             string doctorLastName = arr[2];
                             string patientFirstName = arr[4];
@@ -171,7 +176,9 @@ namespace HospitalSystem
                             string doctorFullName = $"{doctorFirstName} {doctorLastName}";
                             string patientFullName = $"{patientFirstName} {patientLastName}";
 
-                            if (this.FullName == doctorFullName)
+                            // only add the details to tableRows if the ID of the current doctor
+                            // matches the one being read from the file
+                            if (this.DoctorID == doctorId)
                             {
                                 appointmentsFound = true;
                                 tableRows.Add(new string[] { doctorFullName, patientFullName, description });
@@ -205,7 +212,6 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("Check Patient Details");
 
-            List<string[]> tableRows = new List<string[]>();
             List<string> tableHeaders = new List<string>()
             {
                 "Patient",
@@ -215,13 +221,19 @@ namespace HospitalSystem
                 "Address"
             };
 
+            List<string[]> tableRows = new List<string[]>();
+
             Console.Write("Enter the ID of the patient to check: ");
             string id = Console.ReadLine()!.Trim();
 
             try
             {
-                id = id.Trim();
-
+                /*
+                 * This converts the id into an int and assigns it to patientId, and checks if patientId is positive.
+                 * Then it also checks if the length of the string id is equal to 5.
+                 * This is important because the ids must have a length of 5 digits.
+                 * If all of the above is true, then proceed.
+                 */
                 if ((int.TryParse(id, out int patientId) && patientId > 0) && id.Length == 5)
                 {
                     Patient patient = PatientDatabase.GetPatientById(patientId);
@@ -230,12 +242,13 @@ namespace HospitalSystem
 
                     if (patient != null)
                     {
+                        // print "Not Assigned" in the Doctor column if a patient has not been assigned to a doctor yet
                         string doctorName = noPatientDoctor ? "Not Assigned" : patient.GetPatientDoctor().FullName;
 
                         tableRows.Add(new string[]
                         {
                             patient.FullName,
-                            doctorName,
+                            doctorName, // either their name or "Not Assigned"
                             patient.Email,
                             patient.Phone,
                             patient.Address
@@ -297,9 +310,7 @@ namespace HospitalSystem
 
                         List<string> tableHeaders = new List<string>()
                         {
-                            "Doctor",
-                            "Patient",
-                            "Description"
+                            "Doctor", "Patient", "Description"
                         };
 
                         List<string[]> tableRows = new List<string[]>();
@@ -322,6 +333,7 @@ namespace HospitalSystem
                             // check if the patient IDs from the file and 
                             bool isPatientMatch = patientId == inputId;
 
+                            // only add the details to tableRows if the relationship between the doctor and the patient exists
                             if (isLoggedDoctor && isPatientMatch)
                             {
                                 found = true;
