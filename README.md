@@ -79,34 +79,34 @@ Patients can:
 
 ## Current list of doctors
 
-| Doctor ID | Name        | Last Name  | Email                | Phone    | Address |
-| --------- | ----------- | ---------- | -------------------- | -------- | ------- |
-| 20001     | Gregor      | House      | g.house@doc.com      | 04320001 |         |
-| 20002     | Lisa        | Cuddy      | l.cuddy@doc.com      | 04320002 |         |
-| 20003     | James       | Wilson     | j.wilson@doc.com     | 04320003 |         |
-| 20004     | Eric        | Foreman    | e.foreman@doc.com    | 04320004 |         |
-| 20005     | Robert      | Chase      | r.chase@doc.com      | 04320005 |         |
-| 20006     | Allison     | Cameron    | a.cameron@doc.com    | 04320006 |         |
-| 20007     | Remy        | Hadley     | r.hadley@doc.com     | 04320007 |         |
-| 20008     | Chris       | Taub       | c.taub@doc.com       | 04320008 |         |
-| 20009     | Lawrence    | Kutner     | l.kutner@doc.com     | 04320009 |         |
-| 20010     | Jasseica    | Addams     | j.adams@doc.com      | 04320010 |         |
-| 20011     | Chi         | Park       | c.park@doc.com       | 04320011 |         |
-| 20012     | Dominika    | Petrova    | d.petrova@doc.com    | 04320012 |         |
-| 20013     | Derek       | Shepherd   | d.shepherd@doc.com   | 04320013 |         |
-| 20014     | Lisa        | Addison    | l.addison@doc.com    | 04320014 |         |
-| 20015     | John        | Carter     | j.carter@doc.com     | 04320015 |         |
-| 20016     | Christina   | Yang       | c.yang@doc.com       | 04320016 |         |
-| 20017     | Meredith    | Grey       | m.grey@doc.com       | 04320017 |         |
-| 20018     | Alex        | Karev      | a.karev@doc.com      | 04320018 |         |
-| 20019     | Izzie       | Stevens    | i.stevens@doc.com    | 04320019 |         |
-| 20020     | Miranda     | Bailey     | m.bailey@doc.com     | 04320020 |         |
-| 20021     | Richard     | Webber     | r.webber@doc.com     | 04320021 |         |
-| 20022     | George      | O'Malley   | g.omalley@doc.com    | 04320022 |         |
-| 20023     | April       | Kepner     | a.kepner@doc.com     | 04320023 |         |
-| 20024     | Amelia      | Shepherd   | a.shepherd@doc.com   | 04320024 |         |
-| 20025     | Nathan      | Riggs      | n.riggs@doc.com      | 04320025 |         |
-| 20026     | Harvey      | Specter    | h.specter@doc.com    | 04320026 |         |
+| Doctor ID | Name      | Last Name | Email              | Phone    | Address                             |
+| --------- | --------- | --------- | ------------------ | -------- | ----------------------------------- |
+| 20001     | Gregor    | House     | g.house@doc.xyz    | 04320001 | 15 Pitt Street, Sydney, NSW         |
+| 20002     | Lisa      | Cuddy     | l.cuddy@doc.xyz    | 04320002 | 20 Oxford Street, Sydney, NSW       |
+| 20003     | James     | Wilson    | j.wilson@doc.xyz   | 04320003 | 25 Kent Street, Sydney, NSW         |
+| 20004     | Eric      | Foreman   | e.foreman@doc.xyz  | 04320004 | 30 Market Street, Sydney, NSW       |
+| 20005     | Robert    | Chase     | r.chase@doc.xyz    | 04320005 | 35 King Street, Sydney, NSW         |
+| 20006     | Allison   | Cameron   | a.cameron@doc.xyz  | 04320006 | 40 Elizabeth Street, Sydney, NSW    |
+| 20007     | Remy      | Hadley    | r.hadley@doc.xyz   | 04320007 | 45 Castlereagh Street, Sydney, NSW  |
+| 20008     | Chris     | Taub      | c.taub@doc.xyz     | 04320008 | 50 York Street, Sydney, NSW         |
+| 20009     | Lawrence  | Kutner    | l.kutner@doc.xyz   | 04320009 | 55 Sussex Street, Sydney, NSW       |
+| 20010     | Jasseica  | Addams    | j.adams@doc.xyz    | 04320010 | 60 Macquarie Street, Sydney, NSW    |
+| 20011     | Chi       | Park      | c.park@doc.xyz     | 04320011 | 65 Liverpool Street, Sydney, NSW    |
+| 20012     | Dominika  | Petrova   | d.petrova@doc.xyz  | 04320012 | 70 Albert Street, Sydney, NSW       |
+| 20013     | Derek     | Shepherd  | d.shepherd@doc.xyz | 04320013 | 75 George Street, Sydney, NSW       |
+| 20014     | Lisa      | Addison   | l.addison@doc.xyz  | 04320014 | 80 Clarence Street, Sydney, NSW     | 
+| 20015     | John      | Carter    | j.carter@doc.xyz   | 04320015 | 85 Murray Street, Sydney, NSW       |
+| 20016     | Christina | Yang      | c.yang@doc.xyz     | 04320016 | 90 Park Street, Sydney, NSW         |
+| 20017     | Meredith  | Grey      | m.grey@doc.xyz     | 04320017 | 95 Victoria Street, Sydney, NSW     |
+| 20018     | Alex      | Karev     | a.karev@doc.xyz    | 04320018 | 100 William Street, Sydney, NSW     |
+| 20019     | Izzie     | Stevens   | i.stevens@doc.xyz  | 04320019 | 105 Alberta Street, Sydney, NSW     |
+| 20020     | Miranda   | Bailey    | m.bailey@doc.xyz   | 04320020 | 110 Madison Street, Sydney, NSW     |
+| 20021     | Richard   | Webber    | r.webber@doc.xyz   | 04320021 | 115 Adelaide Street, Sydney, NSW    |
+| 20022     | George    | O'Malley  | g.omalley@doc.xyz  | 04320022 | 120 Spencer Street, Sydney, NSW     |
+| 20023     | April     | Kepner    | a.kepner@doc.xyz   | 04320023 | 125 Wellington Street, Sydney, NSW  |
+| 20024     | Amelia    | Shepherd  | a.shepherd@doc.xyz | 04320024 | 130 Bourke Street, Sydney, NSW      |
+| 20025     | Nathan    | Riggs     | n.riggs@doc.xyz    | 04320025 | 135 Pitt Street, Sydney, NSW        |
+| 20026     | Harvey    | Specter   | h.specter@doc.xyz  | 04320026 | 140 Violet Street, Sydney, NSW      |
 
 ## Current list of doctor-patient relationships
 
