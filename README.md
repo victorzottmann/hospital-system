@@ -116,8 +116,8 @@ Reference file: `./bin/Debug/net6.0/doctors.txt`
 
 Reference file: `./bin/Debug/net6.0/patients.txt`
 
-| Patient ID | Name    | Last Name  | Email                 | Phone    | Address                                 |
-| ---------- | ------- | ---------- | --------------------- | -------- | --------------------------------------- |
+| Patient ID | Name    | Last Name  | Email                  | Phone    | Address                                 |
+| ---------- | ------- | ---------- | ---------------------- | -------- | --------------------------------------- |
 | 10001      | Rebecca | Adler      | `r.adler@pat.xyz`      | 04310001 | 1 Pacific Highway, St Leonards, NSW     |
 | 10002      | Clancy  | Harris     | `c.harris@pat.xyz`     | 04310002 | 3 Raglan Street, Mosman, NSW            |
 | 10003      | Joe     | Luria      | `j.luria@pat.xyz`      | 04310003 | 5 Crystal Street, Petersham, NSW        |
@@ -144,6 +144,7 @@ Reference file: `./bin/Debug/net6.0/patients.txt`
 | 10024      | Ollie   | Warner     | `o.warner@pat.xyz`     | 04310024 | 47 Boundary Street, Roseville, NSW      |
 | 10025      | Henry   | Burton     | `o.warner@pat.xyz`     | 04310025 | 49 Beulah Street, Kingsford, NSW        |
 | 10026      | Mike    | Ross       | `m.ross@pat.xyz`       | 04310026 | 51 Green Street, Maroubra, NSW          |
+
 
 
 ## List of seeded doctor-patient relationships
