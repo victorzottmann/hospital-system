@@ -76,3 +76,34 @@ Patients can:
 4. Book an appointment with a doctor
 
 ![patient-menu](./Screenshots/patient-menu.jpeg)
+
+## Current list of doctor-patient relationships
+
+This table is to be used for reference when looking up a patients' doctor. If the field is displayed as `Not Assigned`, then it is because a patient is not assigned to a doctor yet. 
+
+This table makes it easy to spot which doctors and patients you can manipulate in the program.
+
+| Doctor ID | Doctor           | Patient ID | Patient           |
+| --------- | ---------------- | ---------- | ----------------- |
+| 20001     | Gregory House    | 10001      | Rebecca Adler     |
+| 20002     | Lisa Cuddy       | 10002      | Clancy Harris     |
+| 20005     | Robert Chase     | 10005      | John Thompson     |
+| 20006     | Allison Cameron  | 10006      | Patrick Obyedkov  |
+| 20007     | Remy Hadley      | 10007      | Lee Ross          |
+| 20009     | Lawrence Kutner  | 10009      | Ben Taylor        |
+| 20010     | Jessica Adams    | 10010      | David Young       |
+| 20011     | Chi Park         | 10015      | Mara Keaton       |
+| 20011     | Chi Park         | 10021      | Kyle Chandler     |
+| 20012     | Dominika Petrova | 10012      | Abraham Williams  |
+| 20013     | Derek Shepherd   | 10013      | Edward Mitchell   |
+| 20014     | Lisa Addison     | 10004      | Eve Anderson      |
+| 20014     | Lisa Addison     | 10026      | Mike Ross         |
+| 20017     | Meredith Grey    | 10017      | Hannah Morgenthal |
+| 20018     | Alex Karev       | 10018      | Irma Rodriguez    |
+| 20019     | Izzie Stevens    | 10019      | Dylan Crandall    |
+| 20022     | George O'Malley  | 10022      | Julia Carter      |
+| 20023     | April Kepner     | 10023      | Patrick Clark     |
+| 20025     | Nathan Riggs     | 10025      | Henry Burton      |
+
+
+
