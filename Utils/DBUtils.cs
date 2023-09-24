@@ -103,34 +103,46 @@ namespace HospitalSystem
                 }
 
                 Utils.FormatTable(tableHeaders.ToArray(), tableRows);
-                Utils.ReturnToMenu(admin, true);
+                Utils.ReturnToMenu(admin);
             }
             else
             {
                 Console.WriteLine($"\nThere are no {userType}s registered in the system yet.");
-                Utils.ReturnToMenu(admin, true);
+                Utils.ReturnToMenu(admin);
             }
         }
 
         public static void GetUserDetails<T>(Dictionary<int, T> userDB, List<string> tableHeaders) where T : User
         {
-            Console.Clear();
-
-            Admin admin = new Admin();
-            Menu menu = new Menu();
-
-            string userType = typeof(T).Name;
-            menu.Subtitle($"{userType}'s Details");
-
-            Console.Write($"Please enter the ID of the {userType.ToLower()} whose details you are checking, or press 'N' to return to menu: ");
-            string input = Console.ReadLine()!;
-            int id = int.Parse(input);
-
-            List<string[]> tableRows = new List<string[]>();
-
-            try
+            do
             {
-                if (input != null && userDB.ContainsKey(id))
+                Console.Clear();
+
+                Admin admin = new Admin();
+                Menu menu = new Menu();
+
+                string userType = typeof(T).Name;
+                menu.Subtitle($"{userType}'s Details");
+
+                Console.Write($"Please enter the ID of the {userType.ToLower()} whose details you are checking, or press 'N' to return to menu: ");
+                string input = Console.ReadLine()!;
+
+                if (input != null && input.ToLower() == "n")
+                {
+                    Utils.ReturnToMenu(admin);
+                }
+
+                if (!int.TryParse(input, out int id) || id <= 0 || !userDB.ContainsKey(id))
+                {
+                    Console.WriteLine($"\nInvalid input.");
+                    
+                    Utils.TryAgainOrReturn(admin, () => GetUserDetails(userDB, tableHeaders));
+                    continue;
+                }
+
+                List<string[]> tableRows = new List<string[]>();
+
+                try
                 {
                     T user = userDB[id];
                     Console.WriteLine($"\nDetails for {user.FullName}");
@@ -156,22 +168,18 @@ namespace HospitalSystem
 
                     Utils.TryAgainOrReturn(admin, () => GetUserDetails(userDB, tableHeaders));
                 }
-                else
+                catch (NullReferenceException e)
                 {
-                    Console.WriteLine($"\nA {userType.ToLower()} with ID {id} does not exist.");
+                    Console.WriteLine($"\nAn error occurred: {e.Message}");
                     Utils.TryAgainOrReturn(admin, () => GetUserDetails(userDB, tableHeaders));
                 }
-            }
-            catch (NullReferenceException e)
-            {
-                Console.WriteLine($"\nAn error occurred: {e.Message}");
-                Utils.TryAgainOrReturn(admin, () => GetUserDetails(userDB, tableHeaders));
-            }
-            catch (FormatException e)
-            {
-                Console.WriteLine($"\nAn error occurred: {e.Message}");
-                Utils.TryAgainOrReturn(admin, () => GetUserDetails(userDB, tableHeaders));
-            }
+                catch (FormatException e)
+                {
+                    Console.WriteLine($"\nAn error occurred: {e.Message}");
+                    Utils.TryAgainOrReturn(admin, () => GetUserDetails(userDB, tableHeaders));
+                }
+
+            } while (true);
         }
     }
 }
