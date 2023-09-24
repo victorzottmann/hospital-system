@@ -366,6 +366,8 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("Book Appointment");
 
+            Console.WriteLine("Choose which doctor you would like to make an appointment with:");
+
             try
             {
                 List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
