@@ -44,10 +44,10 @@ Admin can view details about all doctors and patients registered in the system, 
 
 **Notes:** 
 
-- Pre-defined doctors are listed in `./bin/Debug/net6.0/doctors.txt`
-- Pre-defined patients are listed in `./bin/Debug/net6.0/patients.txt`
-- Pre-defined appointments are listed in `./bin/Debug/net6.0/appointments.txt`
-- Pre-defined doctor-patient relationships are listed in `./bin/Debug/net6.0/doctor-patients.txt`
+- Seeded doctors are listed in `./bin/Debug/net6.0/doctors.txt`
+- Seeded patients are listed in `./bin/Debug/net6.0/patients.txt`
+- Seeded appointments are listed in `./bin/Debug/net6.0/appointments.txt`
+- Seeded doctor-patient relationships are listed in `./bin/Debug/net6.0/doctor-patients.txt`
 
 Doctors can: 
 
@@ -61,10 +61,10 @@ Doctors can:
 
 ### Patients
 
-- Pre-defined doctors are listed in `./bin/Debug/net6.0/doctors.txt`
-- Pre-defined patients are listed in `./bin/Debug/net6.0/patients.txt`
-- Pre-defined appointments are listed in `./bin/Debug/net6.0/appointments.txt`
-- Pre-defined doctor-patient relationships are listed in `./bin/Debug/net6.0/doctor-patients.txt`
+- Seeded doctors are listed in `./bin/Debug/net6.0/doctors.txt`
+- Seeded patients are listed in `./bin/Debug/net6.0/patients.txt`
+- Seeded appointments are listed in `./bin/Debug/net6.0/appointments.txt`
+- Seeded doctor-patient relationships are listed in `./bin/Debug/net6.0/doctor-patients.txt`
 
 Patients can:
 
@@ -77,38 +77,76 @@ Patients can:
 
 ![patient-menu](./Screenshots/patient-menu.jpeg)
 
-## Current list of doctors
+## List of seeded doctors
 
-| Doctor ID | Name      | Last Name | Email              | Phone    | Address                             |
-| --------- | --------- | --------- | ------------------ | -------- | ----------------------------------- |
-| 20001     | Gregor    | House     | g.house@doc.xyz    | 04320001 | 15 Pitt Street, Sydney, NSW         |
-| 20002     | Lisa      | Cuddy     | l.cuddy@doc.xyz    | 04320002 | 20 Oxford Street, Sydney, NSW       |
-| 20003     | James     | Wilson    | j.wilson@doc.xyz   | 04320003 | 25 Kent Street, Sydney, NSW         |
-| 20004     | Eric      | Foreman   | e.foreman@doc.xyz  | 04320004 | 30 Market Street, Sydney, NSW       |
-| 20005     | Robert    | Chase     | r.chase@doc.xyz    | 04320005 | 35 King Street, Sydney, NSW         |
-| 20006     | Allison   | Cameron   | a.cameron@doc.xyz  | 04320006 | 40 Elizabeth Street, Sydney, NSW    |
-| 20007     | Remy      | Hadley    | r.hadley@doc.xyz   | 04320007 | 45 Castlereagh Street, Sydney, NSW  |
-| 20008     | Chris     | Taub      | c.taub@doc.xyz     | 04320008 | 50 York Street, Sydney, NSW         |
-| 20009     | Lawrence  | Kutner    | l.kutner@doc.xyz   | 04320009 | 55 Sussex Street, Sydney, NSW       |
-| 20010     | Jasseica  | Addams    | j.adams@doc.xyz    | 04320010 | 60 Macquarie Street, Sydney, NSW    |
-| 20011     | Chi       | Park      | c.park@doc.xyz     | 04320011 | 65 Liverpool Street, Sydney, NSW    |
-| 20012     | Dominika  | Petrova   | d.petrova@doc.xyz  | 04320012 | 70 Albert Street, Sydney, NSW       |
-| 20013     | Derek     | Shepherd  | d.shepherd@doc.xyz | 04320013 | 75 George Street, Sydney, NSW       |
-| 20014     | Lisa      | Addison   | l.addison@doc.xyz  | 04320014 | 80 Clarence Street, Sydney, NSW     | 
-| 20015     | John      | Carter    | j.carter@doc.xyz   | 04320015 | 85 Murray Street, Sydney, NSW       |
-| 20016     | Christina | Yang      | c.yang@doc.xyz     | 04320016 | 90 Park Street, Sydney, NSW         |
-| 20017     | Meredith  | Grey      | m.grey@doc.xyz     | 04320017 | 95 Victoria Street, Sydney, NSW     |
-| 20018     | Alex      | Karev     | a.karev@doc.xyz    | 04320018 | 100 William Street, Sydney, NSW     |
-| 20019     | Izzie     | Stevens   | i.stevens@doc.xyz  | 04320019 | 105 Alberta Street, Sydney, NSW     |
-| 20020     | Miranda   | Bailey    | m.bailey@doc.xyz   | 04320020 | 110 Madison Street, Sydney, NSW     |
-| 20021     | Richard   | Webber    | r.webber@doc.xyz   | 04320021 | 115 Adelaide Street, Sydney, NSW    |
-| 20022     | George    | O'Malley  | g.omalley@doc.xyz  | 04320022 | 120 Spencer Street, Sydney, NSW     |
-| 20023     | April     | Kepner    | a.kepner@doc.xyz   | 04320023 | 125 Wellington Street, Sydney, NSW  |
-| 20024     | Amelia    | Shepherd  | a.shepherd@doc.xyz | 04320024 | 130 Bourke Street, Sydney, NSW      |
-| 20025     | Nathan    | Riggs     | n.riggs@doc.xyz    | 04320025 | 135 Pitt Street, Sydney, NSW        |
-| 20026     | Harvey    | Specter   | h.specter@doc.xyz  | 04320026 | 140 Violet Street, Sydney, NSW      |
+Reference file: `./bin/Debug/net6.0/doctors.txt`
 
-## Current list of doctor-patient relationships
+| Doctor ID | Name      | Last Name | Email              | Phone    | Address                            |
+| --------- | --------- | --------- | ------------------ | -------- | ---------------------------------- |
+| 20001     | Gregor    | House     | g.house@doc.xyz    | 04320001 | 15 Pitt Street, Sydney, NSW        |
+| 20002     | Lisa      | Cuddy     | l.cuddy@doc.xyz    | 04320002 | 20 Oxford Street, Sydney, NSW      |
+| 20003     | James     | Wilson    | j.wilson@doc.xyz   | 04320003 | 25 Kent Street, Sydney, NSW        |
+| 20004     | Eric      | Foreman   | e.foreman@doc.xyz  | 04320004 | 30 Market Street, Sydney, NSW      |
+| 20005     | Robert    | Chase     | r.chase@doc.xyz    | 04320005 | 35 King Street, Sydney, NSW        |
+| 20006     | Allison   | Cameron   | a.cameron@doc.xyz  | 04320006 | 40 Elizabeth Street, Sydney, NSW   |
+| 20007     | Remy      | Hadley    | r.hadley@doc.xyz   | 04320007 | 45 Castlereagh Street, Sydney, NSW |
+| 20008     | Chris     | Taub      | c.taub@doc.xyz     | 04320008 | 50 York Street, Sydney, NSW        |
+| 20009     | Lawrence  | Kutner    | l.kutner@doc.xyz   | 04320009 | 55 Sussex Street, Sydney, NSW      |
+| 20010     | Jessica   | Addams    | j.adams@doc.xyz    | 04320010 | 60 Macquarie Street, Sydney, NSW   |
+| 20011     | Chi       | Park      | c.park@doc.xyz     | 04320011 | 65 Liverpool Street, Sydney, NSW   |
+| 20012     | Dominika  | Petrova   | d.petrova@doc.xyz  | 04320012 | 70 Albert Street, Sydney, NSW      |
+| 20013     | Derek     | Shepherd  | d.shepherd@doc.xyz | 04320013 | 75 George Street, Sydney, NSW      |
+| 20014     | Lisa      | Addison   | l.addison@doc.xyz  | 04320014 | 80 Clarence Street, Sydney, NSW    |
+| 20015     | John      | Carter    | j.carter@doc.xyz   | 04320015 | 85 Murray Street, Sydney, NSW      |
+| 20016     | Christina | Yang      | c.yang@doc.xyz     | 04320016 | 90 Park Street, Sydney, NSW        |
+| 20017     | Meredith  | Grey      | m.grey@doc.xyz     | 04320017 | 95 Victoria Street, Sydney, NSW    |
+| 20018     | Alex      | Karev     | a.karev@doc.xyz    | 04320018 | 100 William Street, Sydney, NSW    |
+| 20019     | Izzie     | Stevens   | i.stevens@doc.xyz  | 04320019 | 105 Alberta Street, Sydney, NSW    |
+| 20020     | Miranda   | Bailey    | m.bailey@doc.xyz   | 04320020 | 110 Madison Street, Sydney, NSW    |
+| 20021     | Richard   | Webber    | r.webber@doc.xyz   | 04320021 | 115 Adelaide Street, Sydney, NSW   |
+| 20022     | George    | O'Malley  | g.omalley@doc.xyz  | 04320022 | 120 Spencer Street, Sydney, NSW    |
+| 20023     | April     | Kepner    | a.kepner@doc.xyz   | 04320023 | 125 Wellington Street, Sydney, NSW |
+| 20024     | Amelia    | Shepherd  | a.shepherd@doc.xyz | 04320024 | 130 Bourke Street, Sydney, NSW     |
+| 20025     | Nathan    | Riggs     | n.riggs@doc.xyz    | 04320025 | 135 Pitt Street, Sydney, NSW       |
+| 20026     | Harvey    | Specter   | h.specter@doc.xyz  | 04320026 | 140 Violet Street, Sydney, NSW     |
+
+
+
+## List of seeded patients
+
+Reference file: `./bin/Debug/net6.0/patients.txt`
+
+| Patient ID | Name    | Last Name  | Email                | Phone    | Address                                |
+| ---------- | ------- | ---------- | -------------------- | -------- | -------------------------------------- |
+| 10001      | Rebecca | Adler      | r.adler@pat.xyz      | 04310001 | 1 Pacific Highway, St Leonards, NSW    |
+| 10002      | Clancy  | Harris     | c.harris@pat.xyz     | 04310002 | 3 Raglan Street, Mosman, NSW           |
+| 10003      | Joe     | Luria      | j.luria@pat.xyz      | 04310003 | 5 Crystal Street, Petersham, NSW       |
+| 10004      | Eve     | Anderson   | e.anderson@pat.xyz   | 04310004 | 7 Mount Street, North Sydney, NSW      |
+| 10005      | John    | Thompson   | j.thompson@pat.xyz   | 04310005 | 9 Archer Street, Chatswood, NSW        |
+| 10006      | Patrick | Obyedkov   | p.obyedkov@pat.xyz   | 04310006 | 11 Miller Street, North Sydney, NSW    |
+| 10007      | Lee     | Ross       | l.ross@pat.xyz       | 04310007 | 13 McDougall Street, Kirribilli, NSW   |
+| 10008      | Helena  | Martinez   | h.martinez@pat.xyz   | 04310008 | 15 Bondi Road, Bondi, NSW              |
+| 10009      | Ben     | Taylor     | b.taylor@pat.xyz     | 04310009 | 17 Flushcombe Road, Blacktown, NSW     |
+| 10010      | David   | Young      | d.young@pat.xyz      | 04310010 | 19 Milford Street, Randwick, NSW       |
+| 10011      | Adele   | Turner     | a.turner@pat.xyz     | 04310011 | 21 Station Street, Penrith, NSW        |
+| 10012      | Abraham | Williams   | a.williams@pat.xyz   | 04310012 | 23 Berry Street, North Sydney, NSW     |
+| 10013      | Edward  | Mitchell   | e.mitchell@pat.xyz   | 04310013 | 25 Shirley Street, Wollstonecraft, NSW |
+| 10014      | Della   | Jenkins    | d.jenkins@pat.xyz    | 04310014 | 27 Victoria  Street, Potts Point, NSW  |
+| 10015      | Mara    | Keaton     | m.keaton@pat.xyz     | 04310015 | 29 Walker Street, North Sydney, NSW    |
+| 10016      | Aaron   | Crasnoff   | a.crasnoff@pat.xyz   | 04310016 | 31 Dolphin Street, Randwick, NSW       |
+| 10017      | Hannah  | Morgenthal | h.morgenthal@pat.xyz | 04310017 | 33 Booth Street, Annadale, NSW         |
+| 10018      | Irma    | Rodriguez  | i.rodriguez@pat.xyz  | 04310018 | 35 Falcon Street, Crows Nest, NSW      |
+| 10019      | Dylan   | Crandall   | d.crandall@pat.xyz   | 04310019 | 37 Rozelle Street, Rozelle, NSW        |
+| 10020      | Emily   | Foster     | e.foster@pat.xyz     | 04310020 | 39 Dulwich Street, Dulwich Hill, NSW   |
+| 10021      | Kyle    | Chandler   | k.chandler@pat.xyz   | 04310021 | 41 Darley Street, Mona Vale, NSW       |
+| 10022      | Julia   | Carter     | j.carter@pat.xyz     | 04310022 | 43 Marion Street, Leichhardt, NSW      |
+| 10023      | Patrick | Clark      | p.clark@pat.xyz      | 04310023 | 45 Darling Street, Balmain, NSW        |
+| 10024      | Ollie   | Warner     | o.warner@pat.xyz     | 04310024 | 47 Boundary Street, Roseville, NSW     |
+| 10025      | Henry   | Burton     | o.warner@pat.xyz     | 04310025 | 49 Beulah Street, Kingsford, NSW       |
+| 10026      | Mike    | Ross       | m.ross@pat.xyz       | 04310026 | 51 Green Street, Maroubra, NSW         |
+
+
+## List of seeded doctor-patient relationships
 
 This table is to be used for reference when looking up a patients' doctor. If the field is displayed as `Not Assigned`, then it is because a patient is not assigned to a doctor yet. 
 
