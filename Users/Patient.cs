@@ -27,66 +27,7 @@ namespace HospitalSystem
 
         public Doctor GetPatientDoctor() => this.PatientDoctor;
 
-        public void AssignDoctor(Doctor doctor)
-        {
-            PatientDoctor = doctor;
-        }
-
         public Dictionary<Doctor, List<string>> GetDoctorAppointments() => this.DoctorAppointments;
-
-        private void AddAppointment(Doctor doctor, string description, string textToFile)
-        {
-            // in case the dictionary doesn't have any appointments for a given doctor,
-            // add a new key as the doctor object, and a value as a list
-            if (!DoctorAppointments.ContainsKey(doctor))
-            {
-                DoctorAppointments[doctor] = new List<string>();
-            }
-
-            // the key is the doctor object, and value a list of descriptions
-            // this is because a doctor can have multiple appointments
-            DoctorAppointments[doctor].Add(description);
-
-            List<string> existingAppointments = File.ReadAllLines(_appointmentsFilePath).ToList();
-
-            int insertionIndex = -1;
-            bool doctorExists = false;
-            int doctorId = doctor.GetDoctorId();
-
-            for (int i = existingAppointments.Count - 1; i >= 0; i--)
-            {
-                // check if the first "cell" in a given line starts with the doctor ID
-                if (existingAppointments[i].StartsWith(doctorId.ToString()))
-                {
-                    // if so, target that line as the insertionIndex
-                    doctorExists = true;
-                    insertionIndex = i;
-                    break;
-                }
-            }
-
-            if (doctorExists)
-            {
-                // create a new list with all the existing appointments
-                List<string> updatedLines = new List<string>(existingAppointments);
-
-                /*
-                 * Insert the new appointment below the target line
-                 * the +1 moves the insertionIndex beneath the target line
-                 * Environment.Newline is not needed in this case, it'll add a new blank line after
-                 * the newly inserted line
-                 */
-                updatedLines.Insert(insertionIndex + 1, textToFile);
-
-                File.WriteAllLines(_appointmentsFilePath, updatedLines);
-            }
-            else
-            {
-                // If the doctor doesn't exist, then just append the appointment at the end of the file.
-                // This assumes that every new doctor will have an ID larger than the largest one found in the file.
-                File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
-            }
-        }
 
         private void ShowPatientDoctor(Doctor doctor)
         {
@@ -180,17 +121,6 @@ namespace HospitalSystem
             return selectedDoctor;
         }
 
-        private void ConfirmDoctor(Doctor selectedDoctor)
-        {
-            // once a doctor is selected, assign it to the patient and include the relationship in the
-            // doctor-patients.txt file
-            AssignDoctor(selectedDoctor);
-
-            // also assign the current patient to the selected doctor
-            selectedDoctor.AssignPatient(selectedDoctor, this);
-            Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
-        }
-
         public void ListPatientDetails()
         {
             Console.Clear();
@@ -219,67 +149,25 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("My Doctor");
 
-            List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
-            
             Doctor patientDoctor = this.GetPatientDoctor();
 
             if (patientDoctor != null)
             {
                 ShowPatientDoctor(patientDoctor);
+
+                Console.Write("\nPress any key to return to the Patient Menu: ");
+                Console.ReadKey();
+                Utils.ShowUserMenu(this);
             }
             else
             {
-                bool confirmed = false;
-                Doctor selectedDoctor;
-
-                Console.WriteLine("It appears that you do not have a doctor yet.\n");
-                Console.WriteLine("Please select one from the list below:");
-
-                /*
-                 * A do...while seemed appropriate here because if a patient doesn't have a doctor yet,
-                 * they are prompted to choose one from the list
-                 */
-                do
-                {
-                    // run the list of doctors, prompt the user to select one, then assign the
-                    // return value to selectedDoctor
-                    selectedDoctor = SelectDoctor(doctors);
-
-                    Console.WriteLine($"\nYou selected Dr. {selectedDoctor.FirstName} {selectedDoctor.LastName}");
-                    
-                    // provide the patient a chance to change their mind before confirming
-                    Console.Write("\nPress 1 to confirm, or '0' to select a different doctor: ");
-                    
-                    string input = Console.ReadLine()!;
-
-                    if (input == "1")
-                    {
-                        confirmed = true;
-                    }
-                    else if (input == "0")
-                    {
-                        ListMyDoctorDetails();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input. Please enter either '1' or '0'.");
-                    }
-
-                    // keep prompting for a doctor to be selected while confirmed = false
-                } while (!confirmed);
-
-                if (confirmed)
-                {
-                    ConfirmDoctor(selectedDoctor);
-
-                    Console.WriteLine("Confirmed!\n");
-                    Console.Write("Press any key to return to the Patient Menu: ");
-
-                    Console.ReadKey();
-                    Utils.ShowUserMenu(this);
-                }
+                Console.WriteLine("It appears that you do not have a doctor assigned yet.");
+                Console.Write("\nPress any key to return to the Patient Menu: ");
+                Console.ReadKey();
+                Utils.ShowUserMenu(this);
             }
         }
+
 
         public void ListAllAppointments()
         {
@@ -366,24 +254,62 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("Book Appointment");
 
+            bool confirmed = false;
+            Doctor selectedDoctor;
+
+            if (this.PatientDoctor == null)
+            {
+                Console.WriteLine("You are not registered with any doctor! Please choose which doctor you would like to register with:");
+            }
+
             try
             {
                 List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
-                
-                // SelectDoctor displays a list of all doctors and after the patient selects it,
-                // the doctor is stored in selectedDoctor 
-                Doctor selectedDoctor = SelectDoctor(doctors);
+
+                do
+                {
+                    selectedDoctor = SelectDoctor(doctors);
+
+                    Console.WriteLine($"\nYou selected Dr. {selectedDoctor.FirstName} {selectedDoctor.LastName}");
+
+                    // Provide the patient a chance to change their mind before confirming
+                    Console.Write("\nPress 1 to confirm, 0 to select a different doctor, or 'N' to cancel: ");
+
+                    string choice = Console.ReadLine()!;
+
+                    if (choice == "1")
+                    {
+                        confirmed = true;
+                        Console.WriteLine("Confirmed!");
+
+                        ConfirmDoctor(selectedDoctor);
+                    }
+                    else if (choice == "0")
+                    {
+                        Console.Clear();
+                        menu.Subtitle("Book Appointment");
+                    }
+                    else if (choice == "n")
+                    {
+                        Utils.ShowUserMenu(this);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. Please enter either '1', '0', or 'N'.");
+                    }
+                } while (!confirmed);
+
                 Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.FirstName} {selectedDoctor.LastName}\n");
 
                 string description;
 
-                // keep prompting for a description while the input is invalid
+                // Keep prompting for a description while the input is invalid
                 while (true)
-                { 
+                {
                     Console.Write("Description of the appointment: ");
                     description = Console.ReadLine()!.Trim();
 
-                    // only break the loop if the description is not null or blank
+                    // Only break the loop if the description is not null or blank
                     if (!string.IsNullOrWhiteSpace(description))
                     {
                         break;
@@ -402,6 +328,7 @@ namespace HospitalSystem
                     $"{description}"
                 ;
 
+                // Add appointment booked to appointments.txt
                 AddAppointment(selectedDoctor, description, textToFile);
 
                 Console.WriteLine("The appointment was booked successfully\n");
@@ -414,6 +341,144 @@ namespace HospitalSystem
             {
                 Console.WriteLine($"\nAn error occured: {e.Message}");
             }
+        }
+
+
+        private void AddAppointment(Doctor doctor, string description, string textToFile)
+        {
+            // in case the dictionary doesn't have any appointments for a given doctor,
+            // add a new key as the doctor object, and a value as a list
+            if (!DoctorAppointments.ContainsKey(doctor))
+            {
+                DoctorAppointments[doctor] = new List<string>();
+            }
+
+            // the key is the doctor object, and value a list of descriptions
+            // this is because a doctor can have multiple appointments
+            DoctorAppointments[doctor].Add(description);
+
+            List<string> existingAppointments = File.ReadAllLines(_appointmentsFilePath).ToList();
+
+            int insertionIndex = -1;
+            bool doctorExists = false;
+            int doctorId = doctor.GetDoctorId();
+
+            for (int i = existingAppointments.Count - 1; i >= 0; i--)
+            {
+                // check if the first "cell" in a given line starts with the doctor ID
+                if (existingAppointments[i].StartsWith(doctorId.ToString()))
+                {
+                    // if so, target that line as the insertionIndex
+                    doctorExists = true;
+                    insertionIndex = i;
+                    break;
+                }
+            }
+
+            if (doctorExists)
+            {
+                // create a new list with all the existing appointments
+                List<string> updatedLines = new List<string>(existingAppointments);
+
+                /*
+                 * Insert the new appointment below the target line
+                 * the +1 moves the insertionIndex beneath the target line
+                 * Environment.Newline is not needed in this case, it'll add a new blank line after
+                 * the newly inserted line
+                 */
+                updatedLines.Insert(insertionIndex + 1, textToFile);
+
+                File.WriteAllLines(_appointmentsFilePath, updatedLines);
+            }
+            else
+            {
+                // If the doctor doesn't exist, then just append the appointment at the end of the file.
+                // This assumes that every new doctor will have an ID larger than the largest one found in the file.
+                File.AppendAllText(_appointmentsFilePath, textToFile + Environment.NewLine);
+            }
+        }
+
+        public void RegisterDoctor(Doctor doctor)
+        {
+            PatientDoctor = doctor;
+            UpdateRegistration();
+        }
+
+        private void UpdateRegistration()
+        {
+            try
+            {
+                List<string> updatedLines = new List<string>();
+
+                string docId = this.PatientDoctor.GetDoctorId().ToString();
+                string doctName = this.PatientDoctor.FirstName;
+                string doctLastName = this.PatientDoctor.LastName;
+
+                string patId = this.PatientID.ToString();
+                string patName = this.FirstName;
+                string patLastName = this.LastName;
+
+                string lineToAdd = $"{docId},{doctName},{doctLastName},{patId},{patName},{patLastName}";
+
+                foreach (string line in File.ReadLines(_doctorPatientsFilePath))
+                {
+                    // Check if the line contains both patient ID and doctor ID
+                    if (!line.Contains(patId) && !line.Contains(docId))
+                    {
+                        updatedLines.Add(line);
+                    }
+                }
+
+                updatedLines.Add(lineToAdd);
+
+                File.WriteAllLines(_doctorPatientsFilePath, updatedLines);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"\nAn error occurred while updating registration: {e.Message}");
+            }
+        }
+
+        public void UnregisterDoctor()
+        {
+            RemoveRegistration();
+        }
+
+        private void RemoveRegistration()
+        {
+            try
+            {
+                List<string> updatedLines = new List<string>();
+
+                string patId = this.PatientID.ToString();
+
+                foreach (string line in File.ReadLines(_doctorPatientsFilePath))
+                {
+                    // Check if the line contains patient ID
+                    if (!line.Contains(patId))
+                    {
+                        updatedLines.Add(line);
+                    }
+                }
+
+                File.WriteAllLines(_doctorPatientsFilePath, updatedLines);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"\nAn error occurred while removing registration: {e.Message}");
+            }
+        }
+
+
+        private void ConfirmDoctor(Doctor selectedDoctor)
+        {
+            // assign doctor to patient 
+            RegisterDoctor(selectedDoctor);
+
+            // also assign the current patient to the selected doctor
+            selectedDoctor.AssignPatient(selectedDoctor, this);
+
+            Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
         }
 
         public override void ProcessSelectedOption(string input)

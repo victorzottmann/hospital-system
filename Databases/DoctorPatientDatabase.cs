@@ -33,7 +33,7 @@ namespace HospitalSystem
                         if (doctor != null && patient != null)
                         {
                             doctor.AssignPatient(doctor, patient);
-                            patient.AssignDoctor(doctor);
+                            patient.RegisterDoctor(doctor);
                         }
                     }
                 }

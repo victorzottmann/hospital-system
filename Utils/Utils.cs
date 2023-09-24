@@ -217,6 +217,12 @@ namespace HospitalSystem
 
                     List<string> lines = File.ReadAllLines(filepath).ToList();
 
+                    // Check if the line already exists to prevent duplicates and return nothing
+                    if (lines.Any(line => line == textToFile))
+                    {
+                        return;
+                    }
+
                     int insertionIndex = -1;
                     bool doctorExists = false;
 
