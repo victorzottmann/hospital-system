@@ -104,62 +104,17 @@ namespace HospitalSystem
 
         public static void GetDoctors()
         {
-            Utils.GetUsersFromDatabase(doctorDB);
+            DBUtils.GetUsersFromDatabase(doctorDB);
         }
 
         public static void GetDoctorDetails()
         {
-            Console.Clear();
-
-            Admin admin = new Admin();
-
-            Menu menu = new Menu();
-            menu.Subtitle("Doctor's Details");
-
-            Console.Write("Please enter the ID of the doctor whose details you are checking, or press 'N' to return to menu: ");
-            string input = Console.ReadLine()!;
-            int id = int.Parse(input);
-
-            if (input == "n")
-            {
-                Utils.ReturnToMenu(admin, false);
-            }
-
-            List<string> tableHeaders = new List<string>()
+            List<string> headers = new List<string>()
             {
                 "Doctor", "Email Address", "Phone", "Address"
             };
 
-            List<string[]> tableRows = new List<string[]>();
-
-            try
-            {
-                if (input != null && doctorDB.ContainsKey(id))
-                {                 
-                    Doctor doctor = GetDoctorById(id);
-                    Console.WriteLine($"\nDetails for {doctor.FullName}");
-
-                    tableRows.Add(doctor.ToStringArray());
-                    Utils.FormatTable(tableHeaders.ToArray(), tableRows);
-                    
-                    Utils.TryAgainOrReturn(admin, GetDoctorDetails);
-                }
-                else
-                {
-                    Console.WriteLine($"\nA doctor with ID {id} does not exist.");
-                    Utils.TryAgainOrReturn(admin, GetDoctorDetails);
-                }
-            }
-            catch (NullReferenceException e)
-            {
-                Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utils.TryAgainOrReturn(admin, GetDoctorDetails);
-            }
-            catch (FormatException e)
-            {
-                Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utils.TryAgainOrReturn(admin, GetDoctorDetails);
-            }
+            DBUtils.GetUserDetails(doctorDB, headers);
         }
     }
 }

@@ -101,73 +101,17 @@ namespace HospitalSystem
 
         public static void GetPatients()
         {
-            Utils.GetUsersFromDatabase(patientDB);
+            DBUtils.GetUsersFromDatabase(patientDB);
         }
 
         public static void GetPatientDetails()
         {
-            Console.Clear();
-
-            Admin admin = new Admin();
-
-            Menu menu = new Menu();
-            menu.Subtitle("Patient Details");
-
-            Console.Write("Please enter the ID of the patient whose details you are checking, or press 'N' to return to menu: ");   
-            string input = Console.ReadLine()!;
-            int id = int.Parse(input);
-
-            if (input == "n")
-            {
-                Utils.ReturnToMenu(admin, false);
-            }
-
-            List<string> tableHeaders = new List<string>()
+            List<string> headers = new List<string>()
             {
                 "Patient", "Doctor", "Email Address", "Phone", "Address"
             };
 
-            List<string[]> tableRows = new List<string[]>();
-
-            try
-            {
-                if (input != null && patientDB.ContainsKey(id))
-                {
-                    Patient patient = GetPatientById(id);
-                    Console.WriteLine($"\nDetails for {patient.FullName}");
-
-                    bool noPatientDoctor = patient.GetPatientDoctor() == null;
-                    string doctorName = noPatientDoctor ? "Not Assigned" : patient.GetPatientDoctor().FullName;
-                    
-                    tableRows.Add(new string[]
-                    {
-                            patient.FullName,
-                            doctorName,
-                            patient.Email,
-                            patient.Phone,
-                            patient.Address
-                    });
-
-                    Utils.FormatTable(tableHeaders.ToArray(), tableRows);
-
-                    Utils.TryAgainOrReturn(admin, GetPatientDetails);
-                }
-                else
-                {
-                    Console.WriteLine($"\nA patient with ID {id} does not exist.");
-                    Utils.TryAgainOrReturn(admin, GetPatientDetails);
-                }
-            }
-            catch (NullReferenceException e)
-            {
-                Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utils.TryAgainOrReturn(admin, GetPatientDetails);
-            }
-            catch (FormatException e)
-            {
-                Console.WriteLine($"\nAn error occured: {e.Message}");
-                Utils.TryAgainOrReturn(admin, GetPatientDetails);
-            }
+            DBUtils.GetUserDetails(patientDB, headers);
         }
     }
 }
