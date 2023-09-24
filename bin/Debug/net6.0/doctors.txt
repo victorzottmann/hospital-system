@@ -23,4 +23,3 @@
 20023,April,Kepner,a.kepner@hospital.com,04320023,125,Wellington Street,Sydney,NSW
 20024,Amelia,Shepherd,a.shepherd@hospital.com,04320024,130,Bourke Street,Sydney,NSW
 20025,Nathan,Riggs,n.riggs@hospital.com,04320025,135,Pitt Street,Sydney,NSW
-20026,Harvey,Specter,h.specter@hospital.com,1234456789,45,Random,Stret,NSW
