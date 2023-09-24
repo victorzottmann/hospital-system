@@ -4,7 +4,7 @@ A simple command-line-based program writtent in `C#` and `.NET 6.0` to manage a 
 
 ## How to run the program
 
-To run the program, it is necessary that you are using **`Visual Studio IDE`** on Windows and have `.NET 6.0` installed.
+To run the program, it is necessary that you are using **Visual Studio IDE** on **Windows** and have `.NET 6.0` installed.
 
 - **Clone this repository**
 - **Open the solution in `Visual Studio`**
