@@ -89,7 +89,7 @@ namespace HospitalSystem
             AddLoginCredentials(role, _loginFilePath, userCredentials);
 
             Console.WriteLine($"{firstName} {lastName} added to the system!");
-            Utils.ReturnToMenu(this, true);
+            Utils.ReturnToMenu(this);
         }
 
         private string GetUserFilePath(User user)
