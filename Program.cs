@@ -6,9 +6,12 @@ namespace HospitalSystem
     {
         static void Main(string[] args)
         {
-            // simply load the login menu to interact with the whole app
-            Login login = new Login();
-            login.LoginMenu();
+            // the files are stored at ./bin/Debug/net6.0
+            string doctorsFile = "doctors.txt";
+            string patientsFile = "patients.txt";
+            string doctorPatientsFile = "doctor-patients.txt";
+
+            DatabaseFileManager.RunLogin(doctorsFile, patientsFile, doctorPatientsFile);
         }
     }
 }

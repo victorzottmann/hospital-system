@@ -5,18 +5,17 @@ namespace HospitalSystem
 {
     public class Login
     {
-        // these files are stored at ./bin/Debug/net6.0
-        private static string _loginFilePath = "login-credentials.txt";
-        private static string _doctorsFilePath = "doctors.txt";
-        private static string _patientsFilePath = "patients.txt";
-        private static string _doctorPatientsFilePath = "doctor-patients.txt";
+        // the file is stored at ./bin/Debug/net6.0
+        private static string _loginFile = "login-credentials.txt";
+
+        public Login() { }
 
         // load all existing databases (text files) on login
-        public Login() 
+        public Login(string doctorsFile, string patientsFile, string doctorPatientsFile)
         {
-            DoctorDatabase.LoadDB(_doctorsFilePath);
-            PatientDatabase.LoadDB(_patientsFilePath);
-            DoctorPatientDatabase.LoadDB(_doctorPatientsFilePath);
+            DoctorDatabase.LoadDB(doctorsFile);
+            PatientDatabase.LoadDB(patientsFile);
+            DoctorPatientDatabase.LoadDB(doctorPatientsFile);
         }
 
         public void LoginMenu()
@@ -35,9 +34,9 @@ namespace HospitalSystem
 
             // this will place the cursor right beside "Password: " after ID is read
             Console.SetCursorPosition(10, 5);
-            string password = this.ReadPassword();
+            string password = ReadPassword();
 
-            string role = ValidateCredentials(_loginFilePath, userId, password);           
+            string role = ValidateCredentials(_loginFile, userId, password);
             int id = int.Parse(userId);
 
             bool isAdmin = role == "admin";
@@ -71,8 +70,8 @@ namespace HospitalSystem
                     Utils.ShowUserMenu(patient);
                 }
             }
-          
-            Console.ReadKey(); 
+
+            Console.ReadKey();
         }
 
         /*
@@ -122,7 +121,7 @@ namespace HospitalSystem
                      * the second \b moves the cursor back to the position before the space char
                      */
                     Console.Write("\b \b");
-                } 
+                }
                 else if (keyInfo.Key != ConsoleKey.Enter)
                 {
                     // adds the pressed console key to the password string while Enter is not pressed
@@ -161,7 +160,7 @@ namespace HospitalSystem
                     if (userId == targetUserId && password == targetPassword)
                     {
                         Console.WriteLine("Valid Credentials. Logging in...");
-                        Thread.Sleep(1200);
+                        Thread.Sleep(1000);
                         return targetRole;
                     }
                 }
@@ -192,7 +191,7 @@ namespace HospitalSystem
 
                 if (input == "1")
                 {
-                    this.LoginMenu();
+                    LoginMenu();
                     break;
                 }
                 else if (input == "0")
