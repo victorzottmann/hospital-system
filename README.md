@@ -7,7 +7,7 @@ A simple command-line-based program writtent in `C#` and `.NET 6.0` to manage a 
 To run the program, it is necessary that you are using **Visual Studio IDE** on **Windows** and have `.NET 6.0` installed.
 
 - **Clone this repository**
-- **Open the solution in `Visual Studio`**
+- **Open the solution in Visual Studio**
 - **Click on the play icon to run it**
 
 As soon as you run it, the following screen should appear:
