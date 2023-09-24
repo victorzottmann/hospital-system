@@ -46,7 +46,7 @@ namespace HospitalSystem
              * \d{10} => Matches 10 digits(0-9)
              * $      => Asserts the end of the string
              */
-            bool isValid = Regex.IsMatch(phone, @"^\d{10}$");
+            bool isValid = Regex.IsMatch(phone, @"^\d{8}$");
             return isValid;
         }
 
