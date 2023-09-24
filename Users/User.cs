@@ -42,7 +42,7 @@ namespace HospitalSystem
         }
 
         // Setter methods for setting a User's first and last names are required because
-        // modifying their value is needed in another class
+        // modifying their value is needed in the Administrator class
         public void SetFirstName(string firstName)
         {
             this.FirstName = firstName;
@@ -53,6 +53,7 @@ namespace HospitalSystem
             this.LastName = lastName;
         }
 
+        // declared these methods as virtual in case they need to be overriden in derived classes
         public virtual void Logout()
         {  
             Login login = new Login();
