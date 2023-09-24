@@ -47,9 +47,6 @@ namespace HospitalSystem
             // this is because a doctor can have multiple appointments
             DoctorAppointments[doctor].Add(description);
 
-            // create an association between the chosen doctor and the current patient
-            doctor.AssignPatient(doctor, this);
-
             List<string> existingAppointments = File.ReadAllLines(_appointmentsFilePath).ToList();
 
             int insertionIndex = -1;
@@ -188,6 +185,9 @@ namespace HospitalSystem
             // once a doctor is selected, assign it to the patient and include the relationship in the
             // doctor-patients.txt file
             AssignDoctor(selectedDoctor);
+
+            // also assign the current patient to the selected doctor
+            selectedDoctor.AssignPatient(selectedDoctor, this);
             Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
         }
 

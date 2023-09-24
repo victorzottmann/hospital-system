@@ -4,3 +4,6 @@
 20004,Eric,Foreman,10010,David,Young,my head hurts
 20019,Izzie,Stevens,10001,Rebecca,Adler,my leg is a bit painful
 20014,Lisa,Addison,10004,Eve,Anderson,I feel a bit dizzy
+20014,Lisa,Addison,10026,Mike,Ross,lots of migraines
+20011,Chi,Park,10026,Mike,Ross,knee bursitits
+20011,Chi,Park,10017,Hannah,Morgenthal,lightheaded
