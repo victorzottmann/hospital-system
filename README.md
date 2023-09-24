@@ -178,6 +178,3 @@ Reference file: `./bin/Debug/net6.0/doctor-patients.txt`
 | 20022     | George O'Malley  | 10022      | Julia Carter      |
 | 20023     | April Kepner     | 10023      | Patrick Clark     |
 | 20025     | Nathan Riggs     | 10025      | Henry Burton      |
-
-
-
