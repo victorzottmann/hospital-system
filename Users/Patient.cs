@@ -194,6 +194,20 @@ namespace HospitalSystem
             return selectedDoctor;
         }
 
+        private void ConfirmDoctor(Doctor selectedDoctor)
+        {
+            // once a doctor is selected, assign it to the patient and include the relationship in the
+            // doctor-patients.txt file
+            AssignDoctor(selectedDoctor);
+            Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
+
+            Console.WriteLine("Confirmed!\n");
+            Console.Write("Press any key to return to the Patient Menu: ");
+
+            Console.ReadKey();
+            Utils.ShowUserMenu(this);
+        }
+
         public void ListPatientDetails()
         {
             Console.Clear();
@@ -270,20 +284,6 @@ namespace HospitalSystem
             }
         }
 
-        private void ConfirmDoctor(Doctor selectedDoctor)
-        {
-            // once a doctor is selected, assign it to the patient and include the relationship in the
-            // doctor-patients.txt file
-            AssignDoctor(selectedDoctor);
-            Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
-
-            Console.WriteLine("Confirmed!\n");
-            Console.Write("Press any key to return to the Patient Menu: ");
-
-            Console.ReadKey();
-            Utils.ShowUserMenu(this);
-        }
-
         public void ListAllAppointments()
         {
             Console.Clear();
@@ -308,11 +308,10 @@ namespace HospitalSystem
 
                     bool appointmentsFound = false;
 
-
                     /*
                      * File structure:
                      * 
-                     * i = 0    i = 1           i = 2          i = 3     i = 4            i = 5           i = 6
+                     * [0]      [1]             [2]            [3]       [4]              [5]             [6]
                      * doctorId,doctorFirstName,doctorLastName,patientId,patientFirstName,patientLastName,description
                      */
                     foreach (string line in lines)
