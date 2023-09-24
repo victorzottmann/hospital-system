@@ -83,6 +83,8 @@ This table is to be used for reference when looking up a patients' doctor. If th
 
 This table makes it easy to spot which doctors and patients you can manipulate in the program.
 
+Reference file: `./bin/Debug/net6.0/doctor-patients.txt`
+
 | Doctor ID | Doctor           | Patient ID | Patient           |
 | --------- | ---------------- | ---------- | ----------------- |
 | 20001     | Gregory House    | 10001      | Rebecca Adler     |
