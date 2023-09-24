@@ -114,9 +114,10 @@ namespace HospitalSystem
             menu.Subtitle("Patient Details");
 
             Console.Write("Please enter the ID of the patient whose details you are checking, or press 'N' to return to menu: ");   
-            string id = Console.ReadLine()!;
+            string input = Console.ReadLine()!;
+            int id = int.Parse(input);
 
-            if (id == "n")
+            if (input == "n")
             {
                 Utils.ReturnToMenu(admin, false);
             }
@@ -130,9 +131,9 @@ namespace HospitalSystem
 
             try
             {
-                if (id != null && patientDB.ContainsKey(int.Parse(id)))
+                if (input != null && patientDB.ContainsKey(id))
                 {
-                    Patient patient = GetPatientById(int.Parse(id));
+                    Patient patient = GetPatientById(id);
                     Console.WriteLine($"\nDetails for {patient.FullName}");
 
                     bool noPatientDoctor = patient.GetPatientDoctor() == null;
