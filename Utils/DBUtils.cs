@@ -85,7 +85,7 @@ namespace HospitalSystem
             // either "All Patients or "All Doctor"
             menu.Subtitle($"All {userType}s");
 
-            Console.WriteLine($"All {userType}s registered to the DOTNET Hospital Management System");
+            Console.WriteLine($"All {userType.ToLower()}s registered to the DOTNET Hospital Management System");
 
             List<string> tableHeaders = new List<string>()
             {
