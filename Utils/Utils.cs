@@ -98,32 +98,23 @@ namespace HospitalSystem
             ShowUserMenu(user);
         }
 
-        public static void ReturnToMenu(User user)
-        {
-            string userType = user.GetType().Name;
-            Console.Write($"\nPress any key to return to the {userType} Menu: ");
-            Console.ReadKey();
-            ShowUserMenu(user);
-        }
-
-        public static void ReturnToMenu(User user, bool? message)
+        public static void ReturnToMenu(User user, string customMessage = null)
         {
             string userType = user.GetType().Name;
 
-            // defaultMessage is an optional value
-            // if passed as "true", show the message below
-            if (message.HasValue)
+            if (customMessage != null)
+            {
+                Console.WriteLine($"\n{customMessage}");
+            }
+            else
             {
                 Console.Write($"\nPress any key to return to the {userType} Menu: ");
-                Console.ReadKey();
-                ShowUserMenu(user);
             }
 
-            // otherwise show custom message
-            Console.WriteLine($"\n{message}");
             Console.ReadKey();
             ShowUserMenu(user);
         }
+
 
         public static void FormatTable(string[] headers, List<string[]> rows)
         {
