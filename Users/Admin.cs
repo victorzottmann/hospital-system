@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Numerics;
-using System.Security.Principal;
 
 namespace HospitalSystem
 {
-    public class Administrator : User
+    public class Admin : User
     {
         /*
          * these files are stored at ./bin/Debug/net6.0
@@ -17,7 +14,7 @@ namespace HospitalSystem
         private static string _doctorsFilePath = "doctors.txt";
         private static string _loginFilePath = "login-credentials.txt";
 
-        public Administrator() 
+        public Admin() 
         {
             /*
              * It was opted to set the names automatically when creating new instances of
@@ -346,6 +343,8 @@ namespace HospitalSystem
 
         public override void ProcessSelectedOption(string input)
         {
+            // please refer to ShowUserMenu() in ./Utils for the list of options
+            // for the Admin
             switch (input)
             {
                 case "1":

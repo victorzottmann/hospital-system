@@ -101,7 +101,7 @@ namespace HospitalSystem
         {
             Console.Clear();
 
-            Administrator admin = new Administrator();
+            Admin admin = new Admin();
 
             Menu menu = new Menu();
             menu.Subtitle("All doctors");
@@ -139,7 +139,7 @@ namespace HospitalSystem
         {
             Console.Clear();
 
-            Administrator admin = new Administrator();
+            Admin admin = new Admin();
 
             Menu menu = new Menu();
             menu.Subtitle("Doctor's Details");

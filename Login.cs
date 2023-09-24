@@ -46,7 +46,7 @@ namespace HospitalSystem
 
             if (isAdmin)
             {
-                Administrator admin = new Administrator();
+                Admin admin = new Admin();
                 Utils.ShowUserMenu(admin);
             }
             else if (isDoctor)
