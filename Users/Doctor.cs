@@ -27,16 +27,6 @@ namespace HospitalSystem
 
         public int GetDoctorId() => this.DoctorID;
 
-        public override string ToString()
-        {
-            return $"{this.FirstName} {this.LastName}, {this.Email}, {this.Phone}, {this.Address}";
-        }
-
-        public string[] ToStringArray()
-        {
-            return new string[] { this.FullName, this.Email, this.Phone, this.Address };
-        }
-
         public void AssignPatient(Doctor doctor, Patient patient)
         {
             // if the AssociatedPatients Dictionary doesn't have the current doctor as a key,

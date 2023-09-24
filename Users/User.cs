@@ -54,6 +54,16 @@ namespace HospitalSystem
             this.LastName = lastName;
         }
 
+        public override string ToString()
+        {
+            return $"{this.FirstName} {this.LastName}, {this.Email}, {this.Phone}, {this.Address}";
+        }
+
+        public string[] ToStringArray()
+        {
+            return new string[] { this.FullName, this.Email, this.Phone, this.Address };
+        }
+        
         // declared these methods as virtual in case they need to be overriden in derived classes
         public virtual void Logout()
         {  

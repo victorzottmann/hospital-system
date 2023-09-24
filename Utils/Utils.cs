@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 
 namespace HospitalSystem
 {
@@ -295,6 +296,41 @@ namespace HospitalSystem
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"File not found: {e.Message}");
+            }
+        }
+
+        public static void GetUsersFromDatabase<T>(Dictionary<int, T> userDB) where T : User
+        {
+            Console.Clear();
+
+            Admin admin = new Admin();
+
+            Menu menu = new Menu();
+            menu.Subtitle($"All {typeof(T)}s");
+
+            Console.WriteLine($"All {typeof(T)}s registered to the DOTNET Hospital Management System");
+
+            List<string> tableHeaders = new List<string>()
+            {
+                "Name", "Email Address", "Phone", "Address"
+            };
+
+            List<string[]> tableRows = new List<string[]>();
+
+            if (userDB.Count > 0)
+            {
+                foreach (T user in userDB.Values)
+                {
+                    tableRows.Add(user.ToStringArray());
+                }
+
+                Utils.FormatTable(tableHeaders.ToArray(), tableRows);
+                Utils.ReturnToMenu(admin, true);
+            }
+            else
+            {
+                Console.WriteLine($"There are no {typeof(T)}s registered in the system yet.");
+                Utils.ReturnToMenu(admin, true);
             }
         }
     }

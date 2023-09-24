@@ -14,6 +14,11 @@ namespace HospitalSystem
             doctorDB.Add(id, doctor);
         }
 
+        /* 
+         * Note that this method is exactly the same as for the PatientDatabase
+         * I do not understand yet how to make this particular feature generic so as to load
+         * either the Patient or Doctor database from only one method
+         */
         public static void LoadDB(string filepath)
         {
             try
@@ -99,40 +104,7 @@ namespace HospitalSystem
 
         public static void GetDoctors()
         {
-            Console.Clear();
-
-            Admin admin = new Admin();
-
-            Menu menu = new Menu();
-            menu.Subtitle("All doctors");
-
-            Console.WriteLine("All doctors registered to the DOTNET Hospital Management System");
-
-            List<string> tableHeaders = new List<string>()
-            {
-                "Name", "Email Address", "Phone", "Address"
-            };
-
-            List<string[]> tableRows = new List<string[]>();
-
-            if (doctorDB.Count > 0)
-            {
-                foreach (var kvp in doctorDB)
-                {
-                    var doctor = kvp.Value;
-
-                    tableRows.Add(doctor.ToStringArray());
-                }
-
-                Utils.FormatTable(tableHeaders.ToArray(), tableRows);
-                Utils.ReturnToMenu(admin, true);
-            }
-            else
-            {
-                Console.WriteLine("There are no doctors registered in the system yet.");
-                
-                Utils.ReturnToMenu(admin, true);
-            }
+            Utils.GetUsersFromDatabase(doctorDB);
         }
 
         public static void GetDoctorDetails()

@@ -34,17 +34,6 @@ namespace HospitalSystem
 
         public Dictionary<Doctor, List<string>> GetDoctorAppointments() => this.DoctorAppointments;
 
-        public override string ToString()
-        {
-            return $"{this.FirstName} {this.LastName}, {this.Email}, {this.Phone}, {this.Address}";
-        }
-
-        // this alternative to ToString() is used when tables need to be formatted
-        public string[] ToStringArray()
-        {
-            return new string[] { this.FullName, this.Email, this.Phone, this.Address };
-        }
-
         private void AddAppointment(Doctor doctor, string description, string textToFile)
         {
             // in case the dictionary doesn't have any appointments for a given doctor,
