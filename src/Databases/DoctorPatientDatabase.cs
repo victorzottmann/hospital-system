@@ -17,7 +17,7 @@ namespace HospitalSystem
 
                     foreach (string line in lines)
                     {
-                        string[]arr = line.Split(',');
+                        string[] arr = line.Split(',');
 
                         /*
                          * File structure:
@@ -41,7 +41,7 @@ namespace HospitalSystem
             catch (FileNotFoundException e)
             {
                 Console.WriteLine($"File not found: {e.Message}");
-            }  
+            }
         }
     }
 }

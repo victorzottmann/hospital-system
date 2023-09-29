@@ -129,7 +129,7 @@ namespace HospitalSystem
 
                 if (input != null && input.ToLower() == "n")
                 {
-                    Utils.ReturnToMenu(admin);
+                    Utils.ShowUserMenu(admin);
                 }
 
                 /* 
@@ -139,8 +139,13 @@ namespace HospitalSystem
                  */
                 if (!int.TryParse(input, out int id) || id <= 0 || !userDB.ContainsKey(id))
                 {
-                    Console.WriteLine($"\nInvalid input.");
-                    
+                    Console.WriteLine($"\nInvalid input. {userType} ID {id} does not exist.");
+
+                    if (input == "n")
+                    {
+                        Utils.ShowUserMenu(admin);
+                    }
+
                     Utils.TryAgainOrReturn(admin, () => GetUserDetails(userDB, tableHeaders));
                     continue;
                 }
@@ -163,7 +168,7 @@ namespace HospitalSystem
                     {
                         // if a patient has no doctor, display "Not Assigned" or the doctor's name
                         string doctorName = patient.GetPatientDoctor() == null ? "Not Assigned" : patient.GetPatientDoctor().FullName;
-                        
+
                         tableRows.Add(new string[]
                         {
                             patient.FullName,

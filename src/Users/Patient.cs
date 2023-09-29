@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using System.Collections.Generic;
-using System.Xml;
 
 namespace HospitalSystem
 {
@@ -23,16 +22,16 @@ namespace HospitalSystem
             PatientID = id;
         }
 
-        public int GetPatientId() => this.PatientID;
+        public int GetPatientId() => PatientID;
 
-        public Doctor GetPatientDoctor() => this.PatientDoctor;
+        public Doctor GetPatientDoctor() => PatientDoctor;
 
         public void AssignDoctor(Doctor doctor)
         {
             PatientDoctor = doctor;
         }
 
-        public Dictionary<Doctor, List<string>> GetDoctorAppointments() => this.DoctorAppointments;
+        public Dictionary<Doctor, List<string>> GetDoctorAppointments() => DoctorAppointments;
 
         private void AddAppointment(Doctor doctor, string description, string textToFile)
         {
@@ -103,9 +102,8 @@ namespace HospitalSystem
             Console.WriteLine("Your doctor:");
             Utils.FormatTable(tableHeaders.ToArray(), tableRows);
 
-            Console.Write("\nPress any key to return to the Patient Menu: ");
+            Console.Write("Press any key to return to the menu: ");
             Console.ReadKey();
-
             Utils.ShowUserMenu(this);
         }
 
@@ -138,6 +136,224 @@ namespace HospitalSystem
             }
 
             Utils.FormatTable(tableHeaders.ToArray(), tableRows);
+        }
+
+        public void ListPatientDetails()
+        {
+            Console.Clear();
+
+            Menu patientDetails = new Menu();
+            patientDetails.Subtitle("My Details");
+
+            Console.WriteLine($"{FirstName} {LastName}'s Details\n");
+
+            Console.WriteLine($"Patient ID: {PatientID}");
+            Console.WriteLine($"Full name: {FirstName} {LastName}");
+            Console.WriteLine($"Address: {Address}");
+            Console.WriteLine($"Email: {Email}");
+            Console.WriteLine($"Phone: {Phone}");
+
+            Console.Write("\nPress any key to the Patient Menu: ");
+            Console.ReadKey();
+
+            Utils.ShowUserMenu(this);
+        }
+
+        public void ListMyDoctorDetails()
+        {
+            Console.Clear();
+
+            Menu menu = new Menu();
+            menu.Subtitle("My Doctor");
+
+            List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
+
+            Doctor patientDoctor = GetPatientDoctor();
+
+            if (patientDoctor != null)
+            {
+                ShowPatientDoctor(patientDoctor);
+            }
+            else
+            {
+                Console.WriteLine("You are not registered to any doctors yet.\n");
+                Console.Write("Press any key to return to the menu: ");
+                Console.ReadKey();
+                Utils.ShowUserMenu(this);
+            }
+        }
+
+        public void ListAllAppointments()
+        {
+            Console.Clear();
+
+            Menu menu = new Menu();
+            menu.Subtitle("My Appointments");
+
+            Console.WriteLine($"Appointments for {FullName}");
+
+            try
+            {
+                if (File.Exists(_appointmentsFilePath))
+                {
+                    string[] lines = File.ReadAllLines(_appointmentsFilePath);
+
+                    List<string> headers = new List<string>
+                    {
+                        "Doctor", "Patient", "Description"
+                    };
+
+                    List<string[]> tableRows = new List<string[]>();
+
+                    bool appointmentsFound = false;
+
+                    /*
+                     * File structure:
+                     * 
+                     * [0]      [1]             [2]            [3]       [4]              [5]             [6]
+                     * doctorId,doctorFirstName,doctorLastName,patientId,patientFirstName,patientLastName,description
+                     */
+                    foreach (string line in lines)
+                    {
+                        string[] arr = line.Split(',');
+
+                        if (arr.Length > 0)
+                        {
+                            string doctorFirstName = arr[1];
+                            string doctorLastName = arr[2];
+
+                            string patientId = arr[3];
+                            string patientFirstName = arr[4];
+                            string patientLastName = arr[5];
+
+                            string description = arr[6];
+
+                            string doctorFullName = $"{doctorFirstName} {doctorLastName}";
+                            string patientFullName = $"{patientFirstName} {patientLastName}";
+
+                            // only add the data to the table if the current patient ID matches that of the file
+                            if (PatientID == int.Parse(patientId))
+                            {
+                                appointmentsFound = true;
+                                tableRows.Add(new string[] { doctorFullName, patientFullName, description });
+                            }
+                        }
+                    }
+
+                    if (!appointmentsFound)
+                    {
+                        Console.WriteLine("\nYou do not have any appointments");
+                    }
+                    else
+                    {
+                        Utils.FormatTable(headers.ToArray(), tableRows);
+                    }
+
+                    Console.Write("\nPress any key to return to the menu: ");
+                    Console.ReadKey();
+
+                    Utils.ShowUserMenu(this);
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"\nFile not found: {e.Message}");
+            }
+        }
+
+        public void BookAppointment()
+        {
+            Console.Clear();
+
+            Menu menu = new Menu();
+            menu.Subtitle("Book Appointment");
+
+            Console.WriteLine("Choose which doctor you would like to make an appointment with:");
+
+            try
+            {
+                List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
+
+                // SelectDoctor displays a list of all doctors and after the patient selects it,
+                // the doctor is stored in selectedDoctor 
+                Doctor selectedDoctor;
+
+                bool confirmed = false;
+
+                do
+                {
+                    selectedDoctor = SelectDoctor(doctors);
+
+                    Console.WriteLine($"\nYou selected Dr. {selectedDoctor.FirstName} {selectedDoctor.LastName}");
+
+                    // Provide the patient a chance to change their mind before confirming
+                    Console.Write("\nPress 1 to confirm, 0 to select a different doctor, or 'N' to cancel: ");
+
+                    string choice = Console.ReadLine()!;
+
+                    if (choice == "1")
+                    {
+                        confirmed = true;
+                        Console.WriteLine("Confirmed!");
+
+                        ConfirmDoctor(selectedDoctor);
+                    }
+                    else if (choice == "0")
+                    {
+                        Console.Clear();
+                        menu.Subtitle("Book Appointment");
+                    }
+                    else if (choice == "n")
+                    {
+                        Utils.ShowUserMenu(this);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. Please enter either '1', '0', or 'N'.");
+                    }
+                } while (!confirmed);
+
+                Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.FirstName} {selectedDoctor.LastName}\n");
+
+                string description;
+
+                // keep prompting for a description while the input is invalid
+                while (true)
+                {
+                    Console.Write("Description of the appointment: ");
+                    description = Console.ReadLine()!.Trim();
+
+                    // only break the loop if the description is not null or blank
+                    if (!string.IsNullOrWhiteSpace(description))
+                    {
+                        break;
+                    }
+
+                    Console.WriteLine("The description cannot be blank!\n");
+                }
+
+                string textToFile =
+                    $"{selectedDoctor.GetDoctorId()}," +
+                    $"{selectedDoctor.FirstName}," +
+                    $"{selectedDoctor.LastName}," +
+                    $"{GetPatientId()}," +
+                    $"{FirstName}," +
+                    $"{LastName}," +
+                    $"{description}"
+                ;
+
+                AddAppointment(selectedDoctor, description, textToFile);
+
+                Console.WriteLine("The appointment was booked successfully\n");
+                Console.Write("Press any key to return to the Patient Menu: ");
+
+                Console.ReadKey();
+                Utils.ShowUserMenu(this);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"\nAn error occured: {e.Message}");
+            }
         }
 
         private Doctor SelectDoctor(List<Doctor> doctors)
@@ -188,234 +404,8 @@ namespace HospitalSystem
 
             // also assign the current patient to the selected doctor
             selectedDoctor.AssignPatient(selectedDoctor, this);
+
             Utils.WriteToFile(_doctorPatientsFilePath, selectedDoctor, this);
-        }
-
-        public void ListPatientDetails()
-        {
-            Console.Clear();
-
-            Menu patientDetails = new Menu();
-            patientDetails.Subtitle("My Details");
-
-            Console.WriteLine($"{this.FirstName} {this.LastName}'s Details\n");
-
-            Console.WriteLine($"Patient ID: {this.PatientID}");
-            Console.WriteLine($"Full name: {this.FirstName} {this.LastName}");
-            Console.WriteLine($"Address: {this.Address}");
-            Console.WriteLine($"Email: {this.Email}");
-            Console.WriteLine($"Phone: {this.Phone}");
-
-            Console.Write("\nPress any key to the Patient Menu: ");
-            Console.ReadKey();
-
-            Utils.ShowUserMenu(this);
-        }
-
-        public void ListMyDoctorDetails()
-        {
-            Console.Clear();
-
-            Menu menu = new Menu();
-            menu.Subtitle("My Doctor");
-
-            List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
-            
-            Doctor patientDoctor = this.GetPatientDoctor();
-
-            if (patientDoctor != null)
-            {
-                ShowPatientDoctor(patientDoctor);
-            }
-            else
-            {
-                bool confirmed = false;
-                Doctor selectedDoctor;
-
-                Console.WriteLine("It appears that you do not have a doctor yet.\n");
-                Console.WriteLine("Please select one from the list below:");
-
-                /*
-                 * A do...while seemed appropriate here because if a patient doesn't have a doctor yet,
-                 * they are prompted to choose one from the list
-                 */
-                do
-                {
-                    // run the list of doctors, prompt the user to select one, then assign the
-                    // return value to selectedDoctor
-                    selectedDoctor = SelectDoctor(doctors);
-
-                    Console.WriteLine($"\nYou selected Dr. {selectedDoctor.FirstName} {selectedDoctor.LastName}");
-                    
-                    // provide the patient a chance to change their mind before confirming
-                    Console.Write("\nPress 1 to confirm, or '0' to select a different doctor: ");
-                    
-                    string input = Console.ReadLine()!;
-
-                    if (input == "1")
-                    {
-                        confirmed = true;
-                    }
-                    else if (input == "0")
-                    {
-                        ListMyDoctorDetails();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input. Please enter either '1' or '0'.");
-                    }
-
-                    // keep prompting for a doctor to be selected while confirmed = false
-                } while (!confirmed);
-
-                if (confirmed)
-                {
-                    ConfirmDoctor(selectedDoctor);
-
-                    Console.WriteLine("Confirmed!\n");
-                    Console.Write("Press any key to return to the Patient Menu: ");
-
-                    Console.ReadKey();
-                    Utils.ShowUserMenu(this);
-                }
-            }
-        }
-
-        public void ListAllAppointments()
-        {
-            Console.Clear();
-
-            Menu menu = new Menu();
-            menu.Subtitle("My Appointments");
-
-            Console.WriteLine($"Appointments for {this.FullName}");
-
-            try
-            {
-                if (File.Exists(_appointmentsFilePath))
-                {
-                    string[] lines = File.ReadAllLines(_appointmentsFilePath);
-
-                    List<string> headers = new List<string>
-                    { 
-                        "Doctor", "Patient", "Description"
-                    };
-
-                    List<string[]> tableRows = new List<string[]>();
-
-                    bool appointmentsFound = false;
-
-                    /*
-                     * File structure:
-                     * 
-                     * [0]      [1]             [2]            [3]       [4]              [5]             [6]
-                     * doctorId,doctorFirstName,doctorLastName,patientId,patientFirstName,patientLastName,description
-                     */
-                    foreach (string line in lines)
-                    {
-                        string[] arr = line.Split(',');
-
-                        if (arr.Length > 0)
-                        {
-                            string doctorFirstName = arr[1];
-                            string doctorLastName = arr[2];
-
-                            string patientId = arr[3];
-                            string patientFirstName = arr[4];
-                            string patientLastName = arr[5];
-
-                            string description = arr[6];
-
-                            string doctorFullName = $"{doctorFirstName} {doctorLastName}";
-                            string patientFullName = $"{patientFirstName} {patientLastName}";
-
-                            // only add the data to the table if the current patient ID matches that of the file
-                            if (this.PatientID == int.Parse(patientId))
-                            {
-                                appointmentsFound = true;
-                                tableRows.Add(new string[] { doctorFullName, patientFullName, description });
-                            }
-                        }
-                    }
-
-                    if (!appointmentsFound)
-                    {
-                        Console.WriteLine("\nYou do not have any appointments");
-                    }
-                    else
-                    {
-                        Utils.FormatTable(headers.ToArray(), tableRows);
-                    }
-
-                    Console.Write("\nPress any key to return to the menu: ");
-                    Console.ReadKey();
-
-                    Utils.ShowUserMenu(this);
-                }
-            }
-            catch (FileNotFoundException e)
-            {
-                Console.WriteLine($"\nFile not found: {e.Message}");
-            }
-        }
-
-        public void BookAppointment()
-        {
-            Console.Clear();
-
-            Menu menu = new Menu();
-            menu.Subtitle("Book Appointment");
-
-            Console.WriteLine("Choose which doctor you would like to make an appointment with:");
-
-            try
-            {
-                List<Doctor> doctors = DoctorDatabase.GetDoctorDatabase().Values.ToList();
-                
-                // SelectDoctor displays a list of all doctors and after the patient selects it,
-                // the doctor is stored in selectedDoctor 
-                Doctor selectedDoctor = SelectDoctor(doctors);
-                Console.WriteLine($"\nYou are booking an appointment with {selectedDoctor.FirstName} {selectedDoctor.LastName}\n");
-
-                string description;
-
-                // keep prompting for a description while the input is invalid
-                while (true)
-                { 
-                    Console.Write("Description of the appointment: ");
-                    description = Console.ReadLine()!.Trim();
-
-                    // only break the loop if the description is not null or blank
-                    if (!string.IsNullOrWhiteSpace(description))
-                    {
-                        break;
-                    }
-
-                    Console.WriteLine("The description cannot be blank!\n");
-                }
-
-                string textToFile =
-                    $"{selectedDoctor.GetDoctorId()}," +
-                    $"{selectedDoctor.FirstName}," +
-                    $"{selectedDoctor.LastName}," +
-                    $"{this.GetPatientId()}," +
-                    $"{this.FirstName}," +
-                    $"{this.LastName}," +
-                    $"{description}"
-                ;
-
-                AddAppointment(selectedDoctor, description, textToFile);
-
-                Console.WriteLine("The appointment was booked successfully\n");
-                Console.Write("Press any key to return to the Patient Menu: ");
-
-                Console.ReadKey();
-                Utils.ShowUserMenu(this);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"\nAn error occured: {e.Message}");
-            }
         }
 
         public override void ProcessSelectedOption(string input)
@@ -442,6 +432,7 @@ namespace HospitalSystem
                     break;
                 default:
                     Console.WriteLine("Please select an option between 1 and 6");
+                    ProcessSelectedOption(Console.ReadLine()!);
                     break;
             }
         }

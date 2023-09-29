@@ -13,12 +13,12 @@ namespace HospitalSystem
 
         public Address(string streetNumber, string street, string city, string state)
         {
-            this.StreetNumber = streetNumber;
-            this.Street = street;
-            this.City = city;
-            this.State = state;
+            StreetNumber = streetNumber;
+            Street = street;
+            City = city;
+            State = state;
         }
 
-        public override string ToString() => $"{this.StreetNumber} {this.Street}, {this.City}, {this.State}";
+        public override string ToString() => $"{StreetNumber} {Street}, {City}, {State}";
     }
 }
