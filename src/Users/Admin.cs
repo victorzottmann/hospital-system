@@ -14,15 +14,15 @@ namespace HospitalSystem
         private static string _doctorsFilePath = "doctors.txt";
         private static string _loginFilePath = "login-credentials.txt";
 
-        public Admin() 
+        public Admin()
         {
             /*
              * It was opted to set the names automatically when creating new instances of
              * an Admin to make doing so easier since there is currently only one Admin
              * registered in the system
              */
-            this.SetFirstName("Victor");
-            this.SetLastName("Zottmann");
+            SetFirstName("Victor");
+            SetLastName("Zottmann");
         }
 
         public void ListAllDoctors()
@@ -66,12 +66,12 @@ namespace HospitalSystem
 
             // then this method will add a new Patient or Doctor with the correct details
             CreateUser(user, newUserId, firstName, lastName, email, phone, address);
-            
+
             string role = userType == "Patient" ? "patient" : "doctor";
 
             string userInfo =
                 $"{newUserId},{firstName},{lastName},{email},{phone}," +
-                $"{address.StreetNumber},{address.Street},{address.City},{address.State}" + 
+                $"{address.StreetNumber},{address.Street},{address.City},{address.State}" +
                 Environment.NewLine
             ;
 
@@ -182,7 +182,7 @@ namespace HospitalSystem
                 (input, isValid) => isValid ? string.Empty : "The first name can only contain letters\n",
                 (input, isValid) => isValid ? string.Empty : "The first name can only contain letters\n",
                 (input, isValid) => isValid ? string.Empty : "Please ensure that the email matches the format: name@example.com\n",
-                (input, isValid) => isValid ? string.Empty : "The phone number must contain 10 straight digits\n",
+                (input, isValid) => isValid ? string.Empty : "The phone number must contain only 8 digits\n",
                 (input, isValid) => isValid ? string.Empty : "The street number must contain up to 3 digits\n",
                 (input, isValid) => isValid ? string.Empty : "The street name must only contain letters\n",
                 (input, isValid) => isValid ? string.Empty : "The city cannot contain numbers or punctuation\n",
@@ -332,7 +332,7 @@ namespace HospitalSystem
                 foreach (string line in lines)
                 {
                     id = int.Parse(line.Split(',')[0]); // get only the first value
-  
+
                     // Assign the id to the largestId if it's larger than largestID.
                     // Since it iterates in ascending order, it is easy to predict that the largestID will be in the last row.
                     if (id > largestId)
@@ -347,7 +347,7 @@ namespace HospitalSystem
                 Console.WriteLine($"\nPlease ensure that the file exists and the path is set correctly");
                 Utils.ReturnToMenu(this);
             }
-            
+
             return largestId;
         }
 

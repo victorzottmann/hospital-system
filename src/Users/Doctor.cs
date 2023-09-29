@@ -15,17 +15,17 @@ namespace HospitalSystem
 
         public Doctor()
         {
-            this.AssociatedPatients = new Dictionary<Doctor, List<Patient>>();
+            AssociatedPatients = new Dictionary<Doctor, List<Patient>>();
         }
 
         public Doctor(int id, string firstName, string lastName, string email, string phone, string address)
             : base(firstName, lastName, email, phone, address)
         {
-            this.DoctorID = id;
-            this.AssociatedPatients = new Dictionary<Doctor, List<Patient>>();
+            DoctorID = id;
+            AssociatedPatients = new Dictionary<Doctor, List<Patient>>();
         }
 
-        public int GetDoctorId() => this.DoctorID;
+        public int GetDoctorId() => DoctorID;
 
         public void AssignPatient(Doctor doctor, Patient patient)
         {
@@ -43,7 +43,7 @@ namespace HospitalSystem
                 AssociatedPatients[doctor].Add(patient);
             }
             else
-            { 
+            {
                 return;
             }
         }
@@ -62,7 +62,7 @@ namespace HospitalSystem
 
             List<string[]> tableRows = new List<string[]>
             {
-                new string[] { this.FullName, this.Email, this.Phone, this.Address }
+                new string[] { FullName, Email, Phone, Address }
             };
 
             Utils.FormatTable(tableHeaders.ToArray(), tableRows);
@@ -80,7 +80,7 @@ namespace HospitalSystem
             Menu menu = new Menu();
             menu.Subtitle("My Patients");
 
-            Console.WriteLine($"Patients assigned to {this.FullName}");
+            Console.WriteLine($"Patients assigned to {FullName}");
 
             // ensure that the Dictionary is not empty
             if (AssociatedPatients.Count > 0)
@@ -97,7 +97,7 @@ namespace HospitalSystem
                 {
                     Doctor doctor = kvp.Key;
                     List<Patient> patients = kvp.Value;
-                
+
                     // then iterate through each patient and add their respective data into the
                     // tableRows list, including their doctor full name
                     foreach (var patient in patients)
@@ -168,7 +168,7 @@ namespace HospitalSystem
 
                             // only add the details to tableRows if the ID of the current doctor
                             // matches the one being read from the file
-                            if (this.DoctorID == doctorId)
+                            if (DoctorID == doctorId)
                             {
                                 appointmentsFound = true;
                                 tableRows.Add(new string[] { doctorFullName, patientFullName, description });
@@ -224,7 +224,7 @@ namespace HospitalSystem
                  * This is important because the ids must have a length of 5 digits.
                  * If all of the above is true, then proceed.
                  */
-                if ((int.TryParse(id, out int patientId) && patientId > 0) && id.Length == 5)
+                if (int.TryParse(id, out int patientId) && patientId > 0 && id.Length == 5)
                 {
                     Patient patient = PatientDatabase.GetPatientById(patientId);
 

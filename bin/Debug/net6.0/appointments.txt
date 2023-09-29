@@ -7,7 +7,3 @@
 20014,Lisa,Addison,10026,Mike,Ross,lots of migraines
 20011,Chi,Park,10026,Mike,Ross,knee bursitits
 20011,Chi,Park,10017,Hannah,Morgenthal,lightheaded
-20010,Jessica,Adams,10003,Joe,Luria,flu
-20007,Remy,Hadley,10003,Joe,Luria,toothache
-20017,Meredith,Grey,10003,Joe,Luria,flu
-20017,Meredith,Grey,10003,Joe,Luria,flue

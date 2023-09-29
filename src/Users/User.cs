@@ -23,21 +23,21 @@ namespace HospitalSystem
 
         public User() { }
 
-        public User(string firstName, string lastName) 
+        public User(string firstName, string lastName)
         {
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.FullName = $"{this.FirstName} {this.LastName}";
+            FirstName = firstName;
+            LastName = lastName;
+            FullName = $"{FirstName} {LastName}";
         }
 
         public User(string firstName, string lastName, string email, string phone, string address)
         {
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.Email = email;
-            this.Phone = phone;
-            this.Address = address;
-            this.FullName = $"{this.FirstName} {this.LastName}";
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Phone = phone;
+            Address = address;
+            FullName = $"{FirstName} {LastName}";
         }
 
         /*
@@ -63,27 +63,27 @@ namespace HospitalSystem
         // class
         public void SetFirstName(string firstName)
         {
-            this.FirstName = firstName;
+            FirstName = firstName;
         }
 
         public void SetLastName(string lastName)
         {
-            this.LastName = lastName;
+            LastName = lastName;
         }
 
         public override string ToString()
         {
-            return $"{this.FirstName} {this.LastName}, {this.Email}, {this.Phone}, {this.Address}";
+            return $"{FirstName} {LastName}, {Email}, {Phone}, {Address}";
         }
 
         public string[] ToStringArray()
         {
-            return new string[] { this.FullName, this.Email, this.Phone, this.Address };
+            return new string[] { FullName, Email, Phone, Address };
         }
-        
+
         // declared these methods as virtual in case they need to be overriden in derived classes
         public virtual void Logout()
-        {  
+        {
             Login login = new Login();
             login.LoginMenu();
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 
 namespace HospitalSystem
 {
@@ -155,7 +154,7 @@ namespace HospitalSystem
                  */
 
                 // print each table header and align them to the left
-                Console.Write(String.Format("{0,-" + (maxHeaderWidths[i] + 4) + "}", headers[i]));
+                Console.Write(string.Format("{0,-" + (maxHeaderWidths[i] + 4) + "}", headers[i]));
             }
 
             Console.WriteLine();
@@ -168,7 +167,7 @@ namespace HospitalSystem
             {
                 for (int i = 0; i < row.Length; i++)
                 {
-                    Console.Write(String.Format("{0,-" + (maxHeaderWidths[i] + 4) + "}", row[i]));
+                    Console.Write(string.Format("{0,-" + (maxHeaderWidths[i] + 4) + "}", row[i]));
                 }
                 Console.WriteLine();
             }
@@ -217,12 +216,6 @@ namespace HospitalSystem
 
                     List<string> lines = File.ReadAllLines(filepath).ToList();
 
-                    // Check if the line already exists to prevent duplicates and return nothing
-                    if (lines.Any(line => line == textToFile))
-                    {
-                        return;
-                    }
-
                     int insertionIndex = -1;
                     bool doctorExists = false;
 
@@ -243,28 +236,54 @@ namespace HospitalSystem
                      * NOTE: it must be lines.Length - 1 because line 1 is actually line 0 in terms of Arrays
                      * So, if a file has 27 lines, it's not that it goes from 1-27, but from 0-26
                      */
-                    for (int i = lines.Count - 1; i >= 0; i--)
+
+                    bool replaced = false;
+
+                    /*
+                     * Go through each line in the file to check is the patientId exists already
+                     */
+                    for (int i = 0; i < lines.Count; i++)
                     {
-                        if (lines[i].StartsWith(doctorId))
+                        string[] entry = lines[i].Split(',');
+
+                        if (entry[3] == patientId) // Check for matching patient ID
                         {
-                            doctorExists = true;
-                            insertionIndex = i;
+                            lines[i] = textToFile; // Replace the line
+                            replaced = true;
                             break;
                         }
                     }
 
-                    /*
-                     * If a doctor matching the ID exists, insert the new record below it
-                     * otherwise simply add the record to the lines List
-                     */
-                    if (doctorExists)
+                    if (!replaced)
                     {
-                        lines.Insert(insertionIndex + 1, textToFile);
-                    }        
-                    else
-                    {
-                        lines.Add(textToFile);
+                        /*
+                         * If a doctor already exists in the file, insert the new entry below
+                         * the last entry of that doctor
+                         */
+                        for (int i = lines.Count - 1; i >= 0; i--)
+                        {
+                            if (lines[i].StartsWith(doctorId))
+                            {
+                                doctorExists = true;
+                                insertionIndex = i;
+                                break;
+                            }
+                        }
+
+                        /*
+                         * If a doctor matching the ID exists, insert the new record below it
+                         * otherwise simply add the record to the lines List
+                         */
+                        if (doctorExists)
+                        {
+                            lines.Insert(insertionIndex + 1, textToFile);
+                        }
+                        else
+                        {
+                            lines.Add(textToFile);
+                        }
                     }
+
 
                     /*
                      * The Sort() method iterates through a List and compares two values at a time

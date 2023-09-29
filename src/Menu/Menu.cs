@@ -22,7 +22,7 @@ namespace HospitalSystem
             int padding = (titleLength - subtitleLength) / 2;
 
             // shifting MainHeading by 3 spaces because of line 28 below
-            Console.WriteLine($"   {this.Title}");
+            Console.WriteLine($"   {Title}");
 
             // expanding the dashes by 6 characters so that the Title starts and stops before and after 3 dashes
             Console.WriteLine(new string('-', titleLength + 6));
