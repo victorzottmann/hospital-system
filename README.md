@@ -9,7 +9,7 @@ To run the program, it is necessary that you are using **Visual Studio IDE** on 
 - **Clone this repository**
 - **Open the solution in Visual Studio**
 - **Click on the play icon to run it**
-- **[Alternative] Navigate to `bin/Debug/net6.0/` and run `HospitalSystem.exe`. This executable file holds the program, so there is no need to open the solution in Visual Studio.
+- **[Alternative] Navigate to `bin/Debug/net6.0/` and run `HospitalSystem.exe`. This executable file holds the program, so there is no need to open the solution in Visual Studio.**
 
 As soon as you run it, the following screen should appear:
 
